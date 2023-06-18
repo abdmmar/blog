@@ -8,6 +8,7 @@ import Coffee from "../components/Coffee.astro";
 import Computer from "../components/Computer.astro";
 // import { Masonry } from "../components/Masonry";
 import { Collection } from "../components/Collection";
+import CollectionFilter from "../components/CollectionFilter";
 import Sunflower from "../components/Sunflower.astro";
 import Sup from "../components/Sup.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
@@ -91,17 +92,7 @@ const blog = await getCollection("blog");
       </header>
       <main class="flex w-full flex-col mt-10 gap-10">
         <div class="grid grid-cols-8 gap-10">
-          <ul class="col-span-4 flex gap-10 items-center">
-            <li>
-              <button
-                class="rounded-sm font-ibmMono py-2 px-4 border border-gray-300"
-                >ALL</button
-              >
-            </li>
-            <li><button>CODE</button></li>
-            <!-- <li><button>GRAPHIC</button></li> -->
-            <li><button>WRITING</button></li>
-          </ul>
+          <CollectionFilter client:load />
           <div class="col-span-4 flex justify-end">
             <div
               class="rounded-sm font-ibmMono tabular-nums py-2 px-4 border border-gray-300"

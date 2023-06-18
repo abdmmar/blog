@@ -1,20 +1,25 @@
+import { useStore } from "@nanostores/react";
 import { CollectionEntry, getCollection } from "astro:content";
-import * as React from "react";
+import clsx from "clsx";
 import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2";
+import { $filterTag } from "../stores/collection";
 import { Masonry } from "./Masonry";
 
-type ContentProps = CollectionEntry<"blog">;
+type BlogProps = CollectionEntry<"blog">;
+type ProjectProps = CollectionEntry<"project">;
+type Collection = (BlogProps | ProjectProps)[];
 
 const blog = await getCollection("blog");
+const project = await getCollection("project");
 
 export function Collection() {
-  const items: ContentProps[] = blog.sort(
-    (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
-  );
+  const filterTag = useStore($filterTag);
 
-  React.useEffect(() => {
-    const url = window.location.search;
-  }, []);
+  const items: Collection = ([] as unknown as Collection)
+    .concat(project, blog)
+    .sort(
+      (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+    );
 
   return (
     <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
@@ -27,7 +32,12 @@ export function Collection() {
           >
             <div className="flex justify-between items-center w-full">
               <div className="flex gap-5 font-ibmMono">
-                <small className="text-green-600">
+                <small
+                  className={clsx({
+                    "text-green-600": post.data.tag.toLowerCase() === "writing",
+                    "text-blue-600": post.data.tag.toLowerCase() === "project",
+                  })}
+                >
                   {post.data.tag.toUpperCase()}
                 </small>
                 <small className="text-gray-600">
