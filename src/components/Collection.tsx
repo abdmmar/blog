@@ -33,10 +33,16 @@ export function Collection() {
   return (
     <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
       {items.map((post) => {
+        const link =
+          post.data.tag.toLowerCase() === "project"
+            ? post.data.link
+            : `/${post.data.tag.toLowerCase()}/${post.slug}`;
+
         return (
           <a
             key={post.id}
-            href={`/blog/${post.slug}`}
+            href={link}
+            target={post.data.tag.toLowerCase() === "project" ? "_blank" : ""}
             className="col-span-2 rounded-md border border-gray-200 p-4 flex flex-col gap-4 w-full"
           >
             <div className="flex justify-between items-center w-full">
