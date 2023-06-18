@@ -8,7 +8,9 @@ type ContentProps = CollectionEntry<"blog">;
 const blog = await getCollection("blog");
 
 export function Collection() {
-  const items: ContentProps[] = blog;
+  const items: ContentProps[] = blog.sort(
+    (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+  );
 
   React.useEffect(() => {
     const url = window.location.search;
