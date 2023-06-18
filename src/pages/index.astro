@@ -1,8 +1,6 @@
 ---
-import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { HiArrowRight, HiArrowUpRight, HiOutlineMoon } from "react-icons/hi2";
-import wcToast from "../assets/projects/wc-toast.webp";
+import { HiOutlineMoon } from "react-icons/hi2";
 import BaseHead from "../components/BaseHead.astro";
 import Coffee from "../components/Coffee.astro";
 import Computer from "../components/Computer.astro";
@@ -102,50 +100,6 @@ const blog = await getCollection("blog");
           </div>
         </div>
         <Collection client:load />
-        <div class="grid grid-cols-8 gap-10">
-          <div
-            class="col-span-2 rounded-md border border-gray-200 p-4 flex flex-col gap-4 w-full"
-          >
-            <div class="flex justify-between items-center w-full">
-              <div class="flex gap-10 font-ibmMono">
-                <small class="text-blue-600">CODE</small><small
-                  class="text-gray-600">2021</small
-                >
-              </div>
-              <HiArrowUpRight size="0.8rem" />
-            </div>
-            <Image
-              class="rounded-sm"
-              alt="A lot of toast components"
-              src={wcToast}
-            />
-            <div class="flex flex-col gap-2">
-              <h3 class="text-xl">wc-toast</h3>
-              <p class="text-gray-500">Universal toast component</p>
-            </div>
-          </div>
-          <div
-            class="col-span-2 rounded-md border border-gray-200 p-4 flex flex-col gap-4 w-full"
-          >
-            <div class="flex justify-between items-center w-full">
-              <div class="flex gap-10 font-ibmMono">
-                <small class="text-green-600">WRITING</small><small
-                  class="text-gray-600">2021</small
-                >
-              </div>
-              <HiArrowRight size="0.8rem" />
-            </div>
-            <Image
-              class="rounded-sm"
-              alt="A lot of toast components"
-              src={wcToast}
-            />
-            <div class="flex flex-col gap-2">
-              <h3 class="text-xl">wc-toast</h3>
-              <p class="text-gray-500">Universal toast component</p>
-            </div>
-          </div>
-        </div>
       </main>
     </div>
   </body>

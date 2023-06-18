@@ -17,9 +17,18 @@ export function Collection() {
 
   const items: Collection = ([] as unknown as Collection)
     .concat(project, blog)
-    .sort(
-      (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
-    );
+    .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+    .filter((item) => {
+      switch (filterTag) {
+        case "project":
+          return item.data.tag.toLowerCase() === filterTag;
+        case "blog":
+          return item.data.tag.toLowerCase() === filterTag;
+        case "all":
+        default:
+          return true;
+      }
+    });
 
   return (
     <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
@@ -31,22 +40,23 @@ export function Collection() {
             className="col-span-2 rounded-md border border-gray-200 p-4 flex flex-col gap-4 w-full"
           >
             <div className="flex justify-between items-center w-full">
-              <div className="flex gap-5 font-ibmMono">
+              <div className="font-ibmMono">
                 <small
                   className={clsx({
-                    "text-green-600": post.data.tag.toLowerCase() === "writing",
+                    "text-green-600": post.data.tag.toLowerCase() === "blog",
                     "text-blue-600": post.data.tag.toLowerCase() === "project",
                   })}
                 >
                   {post.data.tag.toUpperCase()}
                 </small>
+                <small className="text-gray-400"> • </small>
                 <small className="text-gray-600">
                   {new Intl.DateTimeFormat("id-ID", {
                     dateStyle: "short",
                   }).format(post.data.publishedAt)}
                 </small>
               </div>
-              {post.data.tag === "Writing" ? (
+              {post.data.tag === "Blog" ? (
                 <HiArrowRight size="0.8rem" />
               ) : (
                 <HiArrowUpRight size="0.8rem" />
