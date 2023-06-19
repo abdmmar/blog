@@ -1,8 +1,8 @@
 import { useStore } from "@nanostores/react";
 import { CollectionEntry, getCollection } from "astro:content";
 import clsx from "clsx";
-import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2";
-import { $filterTag } from "../stores/collection";
+import { $filterTag, FilterTag } from "../stores/collection";
+import { CollectionCard } from "./CollectionCard";
 import { Masonry } from "./Masonry";
 
 type BlogProps = CollectionEntry<"blog">;
@@ -11,6 +11,8 @@ type Collection = (BlogProps | ProjectProps)[];
 
 const blog = await getCollection("blog");
 const project = await getCollection("project");
+
+const filters: FilterTag[] = ["all", "blog", "project"];
 
 export function Collection() {
   const filterTag = useStore($filterTag);
@@ -29,59 +31,36 @@ export function Collection() {
           return true;
       }
     });
+  const itemsCount = items.length;
 
   return (
-    <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
-      {items.map((post) => {
-        const link =
-          post.data.tag.toLowerCase() === "project"
-            ? post.data.link
-            : `/${post.data.tag.toLowerCase()}/${post.slug}`;
-
-        return (
-          <a
-            key={post.id}
-            href={link}
-            target={post.data.tag.toLowerCase() === "project" ? "_blank" : ""}
-            className="col-span-2 rounded-md border border-gray-200 p-4 flex flex-col gap-4 w-full"
-          >
-            <div className="flex justify-between items-center w-full">
-              <div className="font-ibmMono">
-                <small
-                  className={clsx({
-                    "text-green-600": post.data.tag.toLowerCase() === "blog",
-                    "text-blue-600": post.data.tag.toLowerCase() === "project",
-                  })}
-                >
-                  {post.data.tag.toUpperCase()}
-                </small>
-                <small className="text-gray-400"> • </small>
-                <small className="text-gray-600">
-                  {new Intl.DateTimeFormat("id-ID", {
-                    dateStyle: "short",
-                  }).format(post.data.publishedAt)}
-                </small>
-              </div>
-              {post.data.tag === "Blog" ? (
-                <HiArrowRight size="0.8rem" />
-              ) : (
-                <HiArrowUpRight size="0.8rem" />
-              )}
-            </div>
-            {post.data.image ? (
-              <img
-                className="rounded-sm"
-                alt={post.data.imageAlt}
-                src={post.data.image.src}
-              />
-            ) : null}
-            <div className="flex flex-col gap-2">
-              <h3 className="text-xl">{post.data.title}</h3>
-              <p className="text-gray-500">{post.data.description}</p>
-            </div>
-          </a>
-        );
-      })}
-    </Masonry>
+    <>
+      <div className="grid grid-cols-8 gap-10">
+        <ul className="col-span-4 flex gap-10 items-center">
+          {filters.map((filter) => (
+            <li key={filter}>
+              <button
+                className={clsx("rounded-sm font-ibmMono py-2 px-4", {
+                  ["border border-gray-300"]: filter === filterTag,
+                })}
+                onClick={() => $filterTag.set(filter)}
+              >
+                {filter.toUpperCase()}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="col-span-4 flex justify-end">
+          <div className="rounded-sm font-ibmMono tabular-nums py-2 px-4 border border-gray-300">
+            {String(itemsCount).padStart(3, "0")}
+          </div>
+        </div>
+      </div>
+      <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
+        {items.map((post) => {
+          return <CollectionCard post={post} />;
+        })}
+      </Masonry>
+    </>
   );
 }
