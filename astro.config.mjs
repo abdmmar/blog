@@ -12,4 +12,8 @@ export default defineConfig({
   experimental: {
     assets: true,
   },
+  markdown: {
+    // Can be 'shiki' (default), 'prism' or false to disable highlighting
+    syntaxHighlight: "prism",
+  },
 });

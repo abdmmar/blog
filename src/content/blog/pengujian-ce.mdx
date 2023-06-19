@@ -37,22 +37,22 @@ itu, mari kita buat sebuah _custom elements_ sederhana terlebih dahulu, yeay!.
 Pertama, buat sebuah file baru di root direktori kalian dengan nama `print-text.js`. Lalu tambahkan
 kode berikut:
 
-```js:print-text.js
+```js
 class PrintText extends HTMLElement {
   constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.template = document.createElement('template')
-    this.template.innerHTML = PrintText.template()
-    this.shadowRoot.append(this.template.content.cloneNode(true))
+    super();
+    this.attachShadow({ mode: "open" });
+    this.template = document.createElement("template");
+    this.template.innerHTML = PrintText.template();
+    this.shadowRoot.append(this.template.content.cloneNode(true));
   }
 
   connectedCallback() {
-    this.message = this.getAttribute('message') || 'Hello World!';
-    this.shadowRoot.querySelector('h1').textContent = this.message;
+    this.message = this.getAttribute("message") || "Hello World!";
+    this.shadowRoot.querySelector("h1").textContent = this.message;
   }
 
-  static template(){
+  static template() {
     return `
       <style>
         :host {
@@ -62,11 +62,11 @@ class PrintText extends HTMLElement {
         }
       </style>
       <h1></h1>
-    `
+    `;
   }
 }
 
-customElements.define('print-text', PrintText);
+customElements.define("print-text", PrintText);
 ```
 
 <Callout>
@@ -79,18 +79,18 @@ customElements.define('print-text', PrintText);
 Kemudian. _import_ file `print-text.js` tersebut ke dalam file HTML dan gunakan komponen yang telah
 dibuat tadi dengan menggunakan tag `<print-text></print-text>` di dalam file HTML.
 
-```html:index.html {7,10}
+```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World</title>
-  <script type="module" src="print-text.js"></script>
-</head>
-<body>
-  <print-text message="Hello World!"></print-text>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello World</title>
+    <script type="module" src="print-text.js"></script>
+  </head>
+  <body>
+    <print-text message="Hello World!"></print-text>
+  </body>
 </html>
 ```
 
@@ -107,16 +107,16 @@ npm install --save-dev ava happy-dom
 Setelah itu, buat sebuah folder `__tests__` di _root_ direktori kamu, buat sebuah file JavaScript
 baru, dan _import_ AVA serta Happy DOM yang telah kita install.
 
-```js:print-text.js
-import test from 'ava';
-import { Window } from 'happy-dom';
+```js
+import test from "ava";
+import { Window } from "happy-dom";
 ```
 
 Tambahkan konfigurasi berikut
 
-```js:print-text.js {4-10}
-import test from 'ava';
-import { Window } from 'happy-dom';
+```js
+import test from "ava";
+import { Window } from "happy-dom";
 
 test.before(() => {
   const window = new Window();
@@ -130,9 +130,9 @@ test.before(() => {
 Import secara dinamis komponen `print-text` yang telah kita buat tadi, setiap sebelum kita melakukan
 pengujian.
 
-```js:print-text.js {12-14}
-import test from 'ava';
-import { Window } from 'happy-dom';
+```js
+import test from "ava";
+import { Window } from "happy-dom";
 
 test.before(() => {
   const window = new Window();
@@ -143,7 +143,7 @@ test.before(() => {
 });
 
 test.beforeEach(() => {
-  import('../print-text.js');
+  import("../print-text.js");
 });
 ```
 
@@ -152,9 +152,9 @@ test.beforeEach(() => {
 Setelah semua konfigurasi di atas, kita bisa mulai pengujian. Disini kita ingin menguji bahwa
 komponen `print-text` berjalan dengan baik dan mencetak kalimat 'Hello World!' pada DOM.
 
-```js:print-text.js {17-28}
-import test from 'ava';
-import { Window } from 'happy-dom';
+```js
+import test from "ava";
+import { Window } from "happy-dom";
 
 test.before(() => {
   const window = new Window();
@@ -166,20 +166,20 @@ test.before(() => {
 });
 
 test.beforeEach(() => {
-  import('../print-text.js');
+  import("../print-text.js");
 });
 
-test('print-text', t => {
+test("print-text", (t) => {
   const document = globalThis.document;
-  const printText = document.createElement('print-text');
-  printText.setAttribute('message', 'Hello World!');
+  const printText = document.createElement("print-text");
+  printText.setAttribute("message", "Hello World!");
 
   document.body.appendChild(printText);
 
-  const helloWorld = document.querySelector('print-text');
+  const helloWorld = document.querySelector("print-text");
 
-  t.is(helloWorld.tagName, 'PRINT-TEXT');
-  t.is(helloWorld.getAttribute('message'), 'Hello World!');
+  t.is(helloWorld.tagName, "PRINT-TEXT");
+  t.is(helloWorld.getAttribute("message"), "Hello World!");
 });
 ```
 
