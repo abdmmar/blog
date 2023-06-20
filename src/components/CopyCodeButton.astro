@@ -1,0 +1,43 @@
+---
+---
+
+<script>
+  const codeBlocks = Array.from(document.querySelectorAll("pre"));
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M7.5 18.98q-.63 0-1.06-.44T6 17.48v-14q0-.63.44-1.07t1.06-.44h11q.63 0 1.06.44T20 3.47v14q0 .63-.44 1.07t-1.06.44Zm0-1.5h11v-14h-11v14Zm-3 4.5q-.63 0-1.06-.44T3 20.48V6.15q0-.33.21-.54.21-.21.54-.21.33 0 .54.21.21.21.21.54v14.32h11.1q.33 0 .54.22.21.21.21.53 0 .33-.21.54-.22.22-.54.22Zm3-18.5v14-14Z"></path></svg>`;
+
+  for (let codeBlock of codeBlocks) {
+    codeBlock.style.position = "relative";
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("copy-button-wrapper");
+    wrapper.setAttribute("aria-live", "polite");
+
+    const button = document.createElement("button");
+    button.classList.add("copy-button");
+    button.innerHTML = svg;
+
+    wrapper.appendChild(button);
+    codeBlock.appendChild(wrapper);
+
+    button.addEventListener("click", async () => {
+      await copyCode(codeBlock, button, svg);
+    });
+  }
+
+  async function copyCode(
+    block: HTMLPreElement,
+    button: HTMLButtonElement,
+    svg: string
+  ) {
+    const code = block.querySelector("code");
+    const text = code?.innerText || "";
+
+    await navigator.clipboard.writeText(text);
+
+    button.innerHTML = "Copied";
+
+    setTimeout(() => {
+      button.innerHTML = svg;
+    }, 700);
+  }
+</script>

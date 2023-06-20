@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import Balancer from "react-wrap-balancer";
 import BaseHead from "../components/BaseHead.astro";
+import CopyCodeButton from "../components/CopyCodeButton.astro";
 import Header from "../components/Header.astro";
 
 type Props = CollectionEntry<"blog">["data"];
@@ -70,5 +71,6 @@ const postDate = dateFormatter.format(publishedDate);
         </article>
       </main>
     </div>
+    <CopyCodeButton />
   </body>
 </html>
