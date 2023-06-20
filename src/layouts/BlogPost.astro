@@ -1,14 +1,19 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import Balancer from "react-wrap-balancer";
 import BaseHead from "../components/BaseHead.astro";
-import FormattedDate from "../components/FormattedDate.astro";
 import Header from "../components/Header.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, publishedAt, image, imageAlt, updatedAt } =
+const dateFormatter = new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "short",
+});
+const { title, description, publishedAt, image, imageAlt, updatedAt, tag } =
   Astro.props;
+const publishedDate = new Date(publishedAt);
+const postDate = dateFormatter.format(publishedDate);
 ---
 
 <html lang="en">
@@ -20,29 +25,48 @@ const { title, description, publishedAt, image, imageAlt, updatedAt } =
   <body>
     <div class="p-10 w-full text-gray-900">
       <Header />
-      <main>
+      <main class="mt-28">
         <article>
-          {
-            image && (
-              <Image
-                width={720}
-                height={360}
-                src={image}
-                alt={imageAlt || ""}
-              />
-            )
-          }
-          <h1 class="title">{title}</h1>
-          <FormattedDate date={publishedAt} />
-          {
-            updatedAt && (
-              <div class="last-updated-on">
-                Last updated on <FormattedDate date={updatedAt} />
+          <section class="grid grid-cols-8 gap-10">
+            <div class="col-span-4 flex flex-col justify-between">
+              <div class="flex justify-between">
+                <div class="flex font-ibmMono">
+                  <span class="mr-9 text-green-600">{tag.toUpperCase()}</span>
+                  <time
+                    datetime={publishedDate.toISOString()}
+                    class="text-gray-600">{postDate}</time
+                  >
+                </div>
+                <button class="text-gray-600">
+                  {"share".toUpperCase()}
+                </button>
               </div>
-            )
-          }
-          <hr />
-          <slot />
+
+              <div class="mt-20">
+                <h1 class="text-gray-900 text-5xl leading-[52px] mb-6">
+                  <Balancer client:load>
+                    {title}
+                  </Balancer>
+                </h1>
+                <p class="text-gray-600 text-2xl">{description}</p>
+              </div>
+            </div>
+
+            {
+              image && (
+                <Image
+                  class="col-span-4 rounded-md"
+                  width={720}
+                  height={360}
+                  src={image}
+                  alt={imageAlt || ""}
+                />
+              )
+            }
+          </section>
+          <section class="mt-10 max-w-[60ch]">
+            <slot />
+          </section>
         </article>
       </main>
     </div>
