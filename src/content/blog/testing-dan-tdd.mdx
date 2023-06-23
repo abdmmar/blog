@@ -1,5 +1,4 @@
 ---
-layout: "../../layouts/BlogPost.astro"
 title: "Testing dan Test-Driven Development"
 subtitle: '"Kenapa kode harus dites? memang perlu? memang ngga makan banyak waktu?"'
 description:
@@ -197,7 +196,7 @@ testing-dan-tdd/
 
 Lalu buat sebuah folder dan tambahkan beberapa file baru seperti dibawah:
 
-```jsx {3-8}
+```jsx
 testing-and-tdd/
   src/
     components/
@@ -219,9 +218,9 @@ Mari kita mulai menulis sebuah _test case_ dengan menjalankan kerangka kerja red
 Pertama kita import terlebih dahulu function `render` dan objeck `screen` dari React Testing Library
 dan import komponen Card yang akan kita test.
 
-```jsx:Card.test.js
-import {render, screen} from '@testing-library/react'
-import Card from './Card'
+```jsx
+import { render, screen } from "@testing-library/react";
+import Card from "./Card";
 ```
 
 **Penjelasan**
@@ -237,7 +236,7 @@ import Card from './Card'
 Setelah itu, kita buat objek `data` yang berisikan detail informasi sebuah post yang akan digunakan
 untuk mengetes komponen card ini
 
-```jsx:Card.test.js
+```jsx
 ...
 const data = {
   title: 'Testing dan Test-Driven Development',
@@ -254,7 +253,7 @@ const data = {
 
 Lalu tambahkan kode berikut:
 
-```jsx:Card.test.js
+```jsx
 ...
 describe('Card', () => {
   test('render Card with title, description, and published date', () => {
@@ -273,7 +272,7 @@ describe('Card', () => {
 Kemudian kita panggil method `render()` untuk mencetak komponen card ke dalam dokumen dan tambahkan
 value dari objek `data` yang telah dibuat tadi kedalam atribut yang dibutuhkan oleh komponen card.
 
-```jsx:Card.test.js {4-7}
+```jsx
 describe('Card', () => {
   test('render Card with title, description, and published date', () => {
     // Arrange
@@ -288,7 +287,7 @@ describe('Card', () => {
 
 Lalu kita panggil query `getByText()` untuk menemukan elemen title, description, dan date
 
-```jsx:Card.test.js {10-12}
+```jsx
 describe('Card', () => {
   test('render Card with title, description, and published date', () => {
     // Arrange
@@ -309,7 +308,7 @@ describe('Card', () => {
 Setelah itu kita tes apakah elemen _title_, _description_, dan _date_ ada di dalam dokumen dan
 mempunyai value yang sama dengan value yang diberikan tadi.
 
-```jsx:Card.test.js {14-19}
+```jsx
 describe('Card', () => {
   test('render Card with title, description, and published date', () => {
     // Arrange
@@ -335,46 +334,46 @@ describe('Card', () => {
 
 Sampai sejauh ini, maka kode kita akan terlihat seperti ini:
 
-```jsx:Card.test.js
-import {render, screen} from '@testing-library/react'
-import Card from './Card'
+```jsx
+import { render, screen } from "@testing-library/react";
+import Card from "./Card";
 
 const data = {
-  title: 'Testing dan Test-Driven Development',
+  title: "Testing dan Test-Driven Development",
   description:
-    'Rangkuman singkat pembelajaran testing dan test-driven development di JavaScript',
-  publishedAt: '2021-09-11',
-  author: 'Abdullah Ammar',
-  tag: 'Testing',
-  tags: ['Learning', 'JavaScript', 'React'],
-  image: 'https://abdmmar.com../../assets/belajar_testing/meta.webp',
-  imageAlt: 'Illustration of red, green, refactor, approaches',
-}
+    "Rangkuman singkat pembelajaran testing dan test-driven development di JavaScript",
+  publishedAt: "2021-09-11",
+  author: "Abdullah Ammar",
+  tag: "Testing",
+  tags: ["Learning", "JavaScript", "React"],
+  image: "https://abdmmar.com../../assets/belajar_testing/meta.webp",
+  imageAlt: "Illustration of red, green, refactor, approaches",
+};
 
-describe('Card', () => {
-  test('render Card with title, description, and published date', () => {
+describe("Card", () => {
+  test("render Card with title, description, and published date", () => {
     // Arrange
     render(
       <Card
         title={data.title}
         description={data.description}
         date={data.publishedAt}
-      />,
-    )
+      />
+    );
 
     // Assert
-    const title = screen.getByText(data.title)
-    const description = screen.getByText(data.description)
-    const date = screen.getByText(data.publishedAt)
+    const title = screen.getByText(data.title);
+    const description = screen.getByText(data.description);
+    const date = screen.getByText(data.publishedAt);
 
-    expect(title).toBeInTheDocument()
-    expect(description).toBeInTheDocument()
-    expect(date).toBeInTheDocument()
-    expect(title.textContent).toEqual(data.title)
-    expect(description.textContent).toEqual(data.description)
-    expect(date.textContent).toEqual(data.publishedAt)
-  })
-})
+    expect(title).toBeInTheDocument();
+    expect(description).toBeInTheDocument();
+    expect(date).toBeInTheDocument();
+    expect(title.textContent).toEqual(data.title);
+    expect(description.textContent).toEqual(data.description);
+    expect(date.textContent).toEqual(data.publishedAt);
+  });
+});
 ```
 
 Lalu kita coba jalankan tesnya menggunakan perintah:
@@ -388,9 +387,9 @@ yarn start //atau npm start
 Maka akan muncul pesan kesalahan karena kita belum membuat komponen `Card`, oleh karena itu mari
 kita membuat komponen Card menggunakan function component
 
-```jsx:Card.js
+```jsx
 export default function Card(props) {
-  return <div>Hi!</div>
+  return <div>Hi!</div>;
 }
 ```
 
@@ -405,15 +404,15 @@ karena itu mari ke tahap selanjutnya untuk memenuhi ekspektasi tes ini.
 
 Tambahkan beberapa tag dan props title, description, dan date
 
-```jsx:Card.js {4-6}
-export default function Card({title, description, date}) {
+```jsx
+export default function Card({ title, description, date }) {
   return (
     <div>
       <small>{date}</small>
       <strong>{title}</strong>
       <p>{description}</p>
     </div>
-  )
+  );
 }
 ```
 

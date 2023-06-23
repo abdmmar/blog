@@ -2,6 +2,7 @@
 import type { MarkdownHeading } from "astro";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import { HiArrowRight, HiOutlineMoon } from "react-icons/hi2";
 import Balancer from "react-wrap-balancer";
 import BaseHead from "../components/BaseHead.astro";
 import CopyCodeButton from "../components/CopyCodeButton.astro";
@@ -41,10 +42,10 @@ const postDate = dateFormatter.format(publishedDate);
         </div>
       </sidebar>
 
-      <main class="col-start-3 col-end-8">
+      <main class="col-start-3 col-end-7">
         <article>
           <section class="grid grid-cols-4 gap-10">
-            <div class="col-span-3 flex flex-col justify-between">
+            <div class="col-span-4 flex flex-col justify-between">
               <div class="flex justify-between min-h-[28px] items-center">
                 <div class="flex font-ibmMono">
                   <span class="mr-9 text-green-600">{tag.toUpperCase()}</span>
@@ -58,18 +59,20 @@ const postDate = dateFormatter.format(publishedDate);
                 </button>
               </div>
 
-              <div class="mt-20">
-                <h1 class="text-gray-900 text-5xl leading-[52px] mb-12">
-                  <Balancer client:load>
-                    {title}
-                  </Balancer>
-                </h1>
+              <div class="mt-10">
+                <div class="min-h-[12rem] flex items-end mb-14">
+                  <h1 class="text-gray-900 text-5xl leading-[52px]">
+                    <Balancer client:load>
+                      {title}
+                    </Balancer>
+                  </h1>
+                </div>
 
                 {
                   image && (
                     <Image
                       class="rounded-md mb-12"
-                      width={image.width}
+                      width={image.width || 720}
                       height={360}
                       src={image}
                       alt={imageAlt || ""}
@@ -85,6 +88,22 @@ const postDate = dateFormatter.format(publishedDate);
           </section>
         </article>
       </main>
+
+      <sidebar class="col-start-7 col-end-9">
+        <div class="sticky top-10 h-[calc(100vh-80px)]">
+          <div class="flex flex-col h-full justify-between">
+            <div class="p-1 flex justify-end">
+              <HiOutlineMoon className="h-5" />
+            </div>
+            <div
+              class="py-2 px-3 flex items-center bg-slate-100 justify-between"
+            >
+              <span>Next Article</span>
+              <HiArrowRight className="h-5" />
+            </div>
+          </div>
+        </div>
+      </sidebar>
     </div>
     <CopyCodeButton />
   </body>

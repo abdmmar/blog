@@ -15,7 +15,7 @@ export default function buildTOC(headings: MarkdownHeading[]) {
     if (heading.depth === 2) {
       toc.push(heading);
     } else {
-      parentHeadings.get(heading.depth - 1).subheadings.push(heading);
+      parentHeadings.get(heading.depth - 1).children.push(heading);
     }
   });
 
