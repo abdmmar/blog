@@ -5,7 +5,6 @@ import type { CollectionEntry } from "astro:content";
 import Balancer from "react-wrap-balancer";
 import BaseHead from "../components/BaseHead.astro";
 import CopyCodeButton from "../components/CopyCodeButton.astro";
-import Header from "../components/Header.astro";
 import { TOC } from "../components/TOC";
 
 type Props = {
@@ -30,13 +29,23 @@ const postDate = dateFormatter.format(publishedDate);
   </head>
 
   <body>
-    <div class="p-10 w-full text-gray-900">
-      <Header />
-      <main class="mt-28">
+    <div class="p-10 w-full grid grid-cols-8 text-gray-900 gap-10">
+      <sidebar class="col-span-2">
+        <div class="sticky top-10 h-[calc(100vh-80px)]">
+          <div class="flex flex-col h-full justify-between">
+            <h2 class="text-gray-900 text-xl flex gap-2 items-center">
+              <span class="text-blue-600 animate-spin">✤</span> Abdullah Ammar
+            </h2>
+            {headings ? <TOC headings={headings} /> : null}
+          </div>
+        </div>
+      </sidebar>
+
+      <main class="col-start-3 col-end-8">
         <article>
-          <section class="grid grid-cols-8 gap-10">
-            <div class="col-span-4 flex flex-col justify-between">
-              <div class="flex justify-between">
+          <section class="grid grid-cols-4 gap-10">
+            <div class="col-span-3 flex flex-col justify-between">
+              <div class="flex justify-between min-h-[28px] items-center">
                 <div class="flex font-ibmMono">
                   <span class="mr-9 text-green-600">{tag.toUpperCase()}</span>
                   <time
@@ -50,38 +59,29 @@ const postDate = dateFormatter.format(publishedDate);
               </div>
 
               <div class="mt-20">
-                <h1 class="text-gray-900 text-5xl leading-[52px] mb-6">
+                <h1 class="text-gray-900 text-5xl leading-[52px] mb-12">
                   <Balancer client:load>
                     {title}
                   </Balancer>
                 </h1>
-                <p class="text-gray-600 text-2xl">{description}</p>
+
+                {
+                  image && (
+                    <Image
+                      class="rounded-md mb-12"
+                      width={image.width}
+                      height={360}
+                      src={image}
+                      alt={imageAlt || ""}
+                    />
+                  )
+                }
+                <p class="text-gray-600 text-2xl mb-6">{description}</p>
+                <article class="col-span-4">
+                  <slot />
+                </article>
               </div>
             </div>
-
-            {
-              image && (
-                <Image
-                  class="col-span-4 rounded-md"
-                  width={720}
-                  height={360}
-                  src={image}
-                  alt={imageAlt || ""}
-                />
-              )
-            }
-          </section>
-          <section class="mt-10 grid grid-cols-8 gap-10">
-            <article class="col-span-4">
-              <slot />
-            </article>
-            <sidebar class="col-span-4">
-              <div class="sticky top-10 h-[calc(100vh-80px)]">
-                <div class="flex flex-col h-full justify-between">
-                  {headings ? <TOC headings={headings} /> : null}
-                </div>
-              </div>
-            </sidebar>
           </section>
         </article>
       </main>
