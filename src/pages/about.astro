@@ -3,15 +3,17 @@ import Layout from "../layouts/BlogPost.astro";
 ---
 
 <Layout
-  title="About Me"
-  description="Lorem ipsum dolor sit amet"
-  publishedAt={new Date("August 08 2021")}
-  updatedAt={new Date("August 08 2022")}
-  imageAlt="Placeholder"
-  status="Finished"
-  tag="About"
-  keywords={["test"]}
-  author="Abdullah Ammar"
+  frontmatter={{
+    title: "Pengujian Web Component",
+    description:
+      "Tutorial singkat pengujian web component menggunakan AVA dan Happy DOM",
+    tag: "Blog",
+    keywords: ["Testing", "Custom Elements", "Web Components"],
+    status: "In Progress",
+    publishedAt: new Date("2021-12-23"),
+    imageAlt: "Ilustrasi Testing",
+    author: "Abdullah Ammar",
+  }}
 >
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
