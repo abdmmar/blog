@@ -1,20 +1,26 @@
 import mdx from "@astrojs/mdx";
+import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
-import react from "@astrojs/react";
 
 import image from "@astrojs/image";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://example.com",
-  integrations: [mdx(), sitemap(), tailwind(), react(), image()],
+  integrations: [
+    mdx(),
+    sitemap(),
+    tailwind(),
+    react(),
+    image({ serviceEntryPoint: "@astrojs/image/sharp" }),
+  ],
   experimental: {
-    assets: true
+    assets: true,
   },
   markdown: {
     // Can be 'shiki' (default), 'prism' or false to disable highlighting
-    syntaxHighlight: "prism"
-  }
+    syntaxHighlight: "prism",
+  },
 });
