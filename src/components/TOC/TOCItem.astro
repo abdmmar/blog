@@ -8,13 +8,16 @@ type Props = {
 const { heading } = Astro.props;
 ---
 
-<li class="mb-1 text-gray-600">
-  <a href={"#" + heading.slug}>
+<li class="mb-1">
+  <a
+    href={"#" + heading.slug}
+    class="text-gray-500 text-sm hover:text-gray-900"
+  >
     {heading.text}
   </a>
   {
     heading.children.length > 0 && (
-      <ul class="ml-4">
+      <ul class="ml-2">
         {heading.children.map((subheading) => (
           <Astro.self heading={subheading} />
         ))}

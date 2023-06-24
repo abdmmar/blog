@@ -2,21 +2,25 @@
 import type { MarkdownHeading } from "astro";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import { HiArrowRight, HiOutlineMoon } from "react-icons/hi2";
+import { HiArrowLeft, HiArrowRight, HiOutlineMoon } from "react-icons/hi2";
 import Balancer from "react-wrap-balancer";
 import BaseHead from "../components/BaseHead.astro";
 import CopyCodeButton from "../components/CopyCodeButton.astro";
 import { TOC } from "../components/TOC";
 
+type BlogPost = CollectionEntry<"blog">;
+
 type Props = {
-  frontmatter: CollectionEntry<"blog">["data"];
+  frontmatter: BlogPost["data"];
   headings?: MarkdownHeading[];
+  nextPost?: BlogPost;
+  previousPost?: BlogPost;
 };
 
 const dateFormatter = new Intl.DateTimeFormat("id-ID", {
   dateStyle: "short",
 });
-const { frontmatter, headings } = Astro.props;
+const { frontmatter, headings, nextPost, previousPost } = Astro.props;
 const { title, description, publishedAt, image, imageAlt, updatedAt, tag } =
   frontmatter;
 const publishedDate = new Date(publishedAt);
@@ -95,11 +99,29 @@ const postDate = dateFormatter.format(publishedDate);
             <div class="p-1 flex justify-end">
               <HiOutlineMoon className="h-5" />
             </div>
-            <div
-              class="py-2 px-3 flex items-center bg-slate-100 justify-between"
-            >
-              <span>Next Article</span>
-              <HiArrowRight className="h-5" />
+            <div class="flex flex-col divide-y divide-gray-400">
+              {
+                previousPost ? (
+                  <a
+                    href={`/blog/${previousPost.slug}`}
+                    class="py-2 px-3 flex items-center text-gray-600 justify-between text-sm"
+                  >
+                    <HiArrowLeft className="h-5 w-5 min-w-[20px] mr-4" />
+                    <span>{previousPost.data.title}</span>
+                  </a>
+                ) : null
+              }
+              {
+                nextPost ? (
+                  <a
+                    href={`/blog/${nextPost.slug}`}
+                    class="py-2 px-3 flex items-center text-gray-600 justify-between text-sm"
+                  >
+                    <span>{nextPost.data.title}</span>
+                    <HiArrowRight className="h-5 w-5 min-w-[20px] ml-4" />
+                  </a>
+                ) : null
+              }
             </div>
           </div>
         </div>
