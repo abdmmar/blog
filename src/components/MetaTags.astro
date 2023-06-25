@@ -1,6 +1,7 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/ibm-plex-sans/400.css";
@@ -13,16 +14,11 @@ export interface Props {
   image?: string;
 }
 
-const defaultMeta = {
-  title: "Abdullah Ammar",
-  description: "A software engineer who enjoy building things",
-};
-
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const {
-  title = defaultMeta.title,
-  description = defaultMeta.description,
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
   image = "/placeholder.png",
 } = Astro.props;
 ---

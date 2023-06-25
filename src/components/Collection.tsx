@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { CollectionEntry, getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import { $filterTag, FilterTag } from "../stores/collection";
 import { cn } from "../utils";
 import { CollectionCard } from "./CollectionCard";
@@ -9,12 +9,14 @@ type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
 type Collection = (BlogProps | ProjectProps)[];
 
-const blog = await getCollection("blog");
-const project = await getCollection("project");
-
 const filters: FilterTag[] = ["all", "blog", "project"];
 
-export function Collection() {
+type CollectionProps = {
+  blog: BlogProps[];
+  project: ProjectProps[];
+};
+
+export function Collection({ blog, project }: CollectionProps) {
   const filterTag = useStore($filterTag);
 
   const items: Collection = ([] as unknown as Collection)

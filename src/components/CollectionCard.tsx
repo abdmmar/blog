@@ -1,7 +1,7 @@
+import { cn } from "@/utils";
 import type { CollectionEntry } from "astro:content";
 import { motion } from "framer-motion";
-import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2";
-import { cn } from "../utils";
+import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2/index";
 
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;

@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import copy from "copy-to-clipboard";
 import { useState } from "react";
-import { HiXMark } from "react-icons/hi2";
+import { HiXMark } from "react-icons/hi2/index";
 
 const links = ["Twitter", "LinkedIn", "Facebook", "Copy Link"] as const;
 type Links = (typeof links)[number];

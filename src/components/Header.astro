@@ -1,5 +1,5 @@
 ---
-import { HiOutlineMoon } from "react-icons/hi2";
+import ThemeSwitcher from "./ThemeSwitcher";
 ---
 
 <header class="grid grid-cols-8 gap-10">
@@ -8,7 +8,7 @@ import { HiOutlineMoon } from "react-icons/hi2";
       <span class="text-blue-600 text-3xl animate-spin">✤</span> Abdullah Ammar
     </h2>
     <div class="col-start-4 flex justify-end items-center [&>svg]:stroke-2">
-      <HiOutlineMoon />
+      <ThemeSwitcher client:idle />
     </div>
   </div>
   <ul class="col-span-4 flex flex-row items-center gap-10">

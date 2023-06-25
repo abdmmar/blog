@@ -1,11 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
 import Coffee from "../components/Coffee.astro";
 import { Collection } from "../components/Collection";
 import Computer from "../components/Computer.astro";
 import Sunflower from "../components/Sunflower.astro";
 import Sup from "../components/Sup.astro";
 import ThemeSwitcher from "../components/ThemeSwitcher";
+
+const blog = await getCollection("blog");
+const project = await getCollection("project");
 ---
 
 <BaseLayout>
@@ -79,6 +83,6 @@ import ThemeSwitcher from "../components/ThemeSwitcher";
     </div>
   </header>
   <main class="flex w-full flex-col mt-10 gap-10">
-    <Collection client:load />
+    <Collection client:load blog={blog} project={project} />
   </main>
 </BaseLayout>

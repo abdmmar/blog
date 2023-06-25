@@ -1,5 +1,5 @@
 import * as React from "react";
-import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi2";
+import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi2/index";
 
 const ThemeSwitcher = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);

@@ -1,4 +1,4 @@
-import { HiOutlineInformationCircle } from "react-icons/hi2";
+import { HiOutlineInformationCircle } from "react-icons/hi2/index";
 
 type CalloutProps = { children: React.ReactNode; title?: React.ReactNode };
 export default function Callout({ children, title }: CalloutProps) {

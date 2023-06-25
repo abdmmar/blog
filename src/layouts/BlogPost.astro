@@ -1,9 +1,9 @@
 ---
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { ArrowLeft, ArrowRight } from "@/components/icons";
 import type { MarkdownHeading } from "astro";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import { HiArrowLeft, HiArrowRight } from "react-icons/hi2";
 import Balancer from "react-wrap-balancer";
 import CopyCodeButton from "../components/CopyCodeButton.astro";
 import ShareButton from "../components/ShareButton";
@@ -63,7 +63,7 @@ const postDate = dateFormatter.format(publishedDate);
             <div class="mt-10">
               <div class="min-h-[12rem] flex items-end mb-14">
                 <h1 class="text-5xl leading-[52px] font-medium">
-                  <Balancer client:load>
+                  <Balancer client:only>
                     {title}
                   </Balancer>
                 </h1>
@@ -105,7 +105,7 @@ const postDate = dateFormatter.format(publishedDate);
                   href={`/blog/${previousPost.slug}`}
                   class="py-3 px-4 flex items-center text-gray-600 dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
                 >
-                  <HiArrowLeft className="h-5 w-5 min-w-[20px] mr-5 text-gray-300" />
+                  <ArrowLeft className="h-5 w-5 min-w-[20px] mr-5 text-gray-300" />
                   <span>{previousPost.data.title}</span>
                 </a>
               ) : null
@@ -117,7 +117,7 @@ const postDate = dateFormatter.format(publishedDate);
                   class="py-3 px-4 flex items-center text-gray-600 dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
                 >
                   <span>{nextPost.data.title}</span>
-                  <HiArrowRight className="h-5 w-5 min-w-[20px] ml-5 text-gray-300" />
+                  <ArrowRight className="h-5 w-5 min-w-[20px] ml-5 text-gray-300" />
                 </a>
               ) : null
             }
