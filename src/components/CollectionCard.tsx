@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import { motion } from "framer-motion";
 import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2";
 import { cn } from "../utils";
 
@@ -12,11 +13,24 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
       : `/${post.data.tag.toLowerCase()}/${post.slug}`;
 
   return (
-    <a
+    <motion.a
+      whileHover={{
+        scale: 1.1,
+        transition: { duration: "150ms" },
+      }}
       key={post.id}
       href={link}
       target={post.data.tag.toLowerCase() === "project" ? "_blank" : ""}
-      className="col-span-2 rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all p-4 flex flex-col gap-4 w-full"
+      className={cn(
+        "col-span-2 rounded-md border transition-all p-4 flex flex-col gap-4 w-full",
+        "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
+        {
+          "hover:border-green-600 dark:hover:border-green-600":
+            post.data.tag.toLowerCase() === "blog",
+          "hover:border-blue-600  dark:hover:border-blue-600":
+            post.data.tag.toLowerCase() === "project",
+        }
+      )}
     >
       <div className="flex justify-between items-center w-full">
         <div className="font-ibmMono">
@@ -52,6 +66,6 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
         <h3 className="text-xl">{post.data.title}</h3>
         <p className="text-gray-500">{post.data.description}</p>
       </div>
-    </a>
+    </motion.a>
   );
 }
