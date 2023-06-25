@@ -51,7 +51,7 @@ const postDate = dateFormatter.format(publishedDate);
           <div class="col-span-4 flex flex-col justify-between">
             <div class="flex justify-between min-h-[28px] items-center">
               <div class="flex font-ibmMono">
-                <span class="mr-9 text-green-600">{tag.toUpperCase()}</span>
+                <span class="mr-9 text-green-600 uppercase">{tag}</span>
                 <time
                   datetime={publishedDate.toISOString()}
                   class="text-gray-600 dark:text-gray-400">{postDate}</time

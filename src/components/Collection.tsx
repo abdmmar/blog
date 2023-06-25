@@ -42,7 +42,7 @@ export function Collection() {
               <button
                 className={cn(
                   "rounded-sm font-ibmMono py-2 px-4 hover:bg-gray-100 transition-all border border-white",
-                  "dark:bg-gray-950 hover:dark:bg-gray-900 dark:border-gray-950",
+                  "dark:bg-gray-950 hover:dark:bg-gray-900 dark:border-gray-950 uppercase",
                   {
                     ["border-gray-300 dark:border-gray-800"]:
                       filter === filterTag,
@@ -50,7 +50,7 @@ export function Collection() {
                 )}
                 onClick={() => $filterTag.set(filter)}
               >
-                {filter.toUpperCase()}
+                {filter}
               </button>
             </li>
           ))}

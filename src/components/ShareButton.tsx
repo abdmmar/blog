@@ -69,14 +69,14 @@ export default function ShareButton({
       {isShareSupported ? (
         <button
           onClick={handleShare}
-          className="text-gray-600 dark:text-gray-400"
+          className="text-gray-600 dark:text-gray-400 uppercase"
         >
-          {"share".toUpperCase()}
+          Share
         </button>
       ) : (
         <Dialog.Trigger asChild>
-          <button className="text-gray-600 dark:text-gray-400">
-            {"share".toUpperCase()}
+          <button className="text-gray-600 dark:text-gray-400 uppercase">
+            Share
           </button>
         </Dialog.Trigger>
       )}

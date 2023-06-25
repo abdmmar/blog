@@ -21,12 +21,12 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
       <div className="flex justify-between items-center w-full">
         <div className="font-ibmMono">
           <small
-            className={cn({
+            className={cn("uppercase", {
               "text-green-600": post.data.tag.toLowerCase() === "blog",
               "text-blue-600": post.data.tag.toLowerCase() === "project",
             })}
           >
-            {post.data.tag.toUpperCase()}
+            {post.data.tag}
           </small>
           <small className="text-gray-400 dark:text-gray-600"> • </small>
           <small className="text-gray-600 dark:text-gray-400">
