@@ -1,0 +1,38 @@
+---
+import "@/styles/base.css";
+
+import type { Props as MetaTagsProps } from "@/components/MetaTags.astro";
+import MetaTags from "@/components/MetaTags.astro";
+
+type Props = {
+  meta?: MetaTagsProps;
+};
+
+const { meta } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <MetaTags {...meta} />
+    <slot name="head" />
+    <script>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (
+        localStorage.getItem("color-theme") === "dark" ||
+        (!("color-theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+
+  <body
+    class="p-10 w-full text-gray-900 bg-white dark:bg-gray-950 dark:text-gray-50 antialiased"
+  >
+    <slot />
+  </body>
+</html>

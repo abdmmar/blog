@@ -1,13 +1,14 @@
 ---
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 import type { MarkdownHeading } from "astro";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import { HiArrowLeft, HiArrowRight, HiOutlineMoon } from "react-icons/hi2";
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi2";
 import Balancer from "react-wrap-balancer";
-import BaseHead from "../components/BaseHead.astro";
 import CopyCodeButton from "../components/CopyCodeButton.astro";
 import ShareButton from "../components/ShareButton";
 import { TOC } from "../components/TOC";
+import BaseLayout from "./BaseLayout.astro";
 
 type BlogPost = CollectionEntry<"blog">;
 
@@ -28,106 +29,102 @@ const publishedDate = new Date(publishedAt);
 const postDate = dateFormatter.format(publishedDate);
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-    <link href="/prims-nord.css" rel="stylesheet" />
-  </head>
-
-  <body>
-    <div class="p-10 w-full grid grid-cols-8 text-gray-900 gap-10">
-      <sidebar class="col-span-2">
-        <div class="sticky top-10 h-[calc(100vh-80px)]">
-          <div class="flex flex-col h-full justify-between">
-            <a href="/">
-              <h2 class="text-gray-900 text-xl flex gap-2 items-center">
-                <span class="text-blue-600 animate-spin">✤</span> Abdullah Ammar
-              </h2>
-            </a>
-            {headings ? <TOC headings={headings} /> : null}
-          </div>
+<BaseLayout>
+  <link href="/prims-nord.css" rel="stylesheet" slot="head" />
+  <div class="grid grid-cols-8 gap-10">
+    <sidebar class="col-span-2">
+      <div class="sticky top-10 h-[calc(100vh-80px)]">
+        <div class="flex flex-col h-full justify-between">
+          <a href="/">
+            <h2 class="text-xl flex gap-2 items-center">
+              <span class="text-blue-600 animate-spin">✤</span> Abdullah Ammar
+            </h2>
+          </a>
+          {headings ? <TOC headings={headings} /> : null}
         </div>
-      </sidebar>
+      </div>
+    </sidebar>
 
-      <main class="col-start-3 col-end-7">
-        <article>
-          <section class="grid grid-cols-4 gap-10">
-            <div class="col-span-4 flex flex-col justify-between">
-              <div class="flex justify-between min-h-[28px] items-center">
-                <div class="flex font-ibmMono">
-                  <span class="mr-9 text-green-600">{tag.toUpperCase()}</span>
-                  <time
-                    datetime={publishedDate.toISOString()}
-                    class="text-gray-600">{postDate}</time
-                  >
-                </div>
-                <ShareButton client:idle />
+    <main class="col-start-3 col-end-7">
+      <article>
+        <section class="grid grid-cols-4 gap-10">
+          <div class="col-span-4 flex flex-col justify-between">
+            <div class="flex justify-between min-h-[28px] items-center">
+              <div class="flex font-ibmMono">
+                <span class="mr-9 text-green-600">{tag.toUpperCase()}</span>
+                <time
+                  datetime={publishedDate.toISOString()}
+                  class="text-gray-600 dark:text-gray-400">{postDate}</time
+                >
+              </div>
+              <ShareButton client:idle />
+            </div>
+
+            <div class="mt-10">
+              <div class="min-h-[12rem] flex items-end mb-14">
+                <h1 class="text-5xl leading-[52px] font-medium">
+                  <Balancer client:load>
+                    {title}
+                  </Balancer>
+                </h1>
               </div>
 
-              <div class="mt-10">
-                <div class="min-h-[12rem] flex items-end mb-14">
-                  <h1 class="text-gray-900 text-5xl leading-[52px] font-medium">
-                    <Balancer client:load>
-                      {title}
-                    </Balancer>
-                  </h1>
-                </div>
-
-                {
-                  image && (
-                    <Image
-                      class="rounded-md mb-12"
-                      width={image.width || 720}
-                      height={360}
-                      src={image}
-                      alt={imageAlt || ""}
-                    />
-                  )
-                }
-                <p class="text-gray-600 text-2xl mb-6">{description}</p>
-                <article id="article" class="col-span-4">
-                  <slot />
-                </article>
-              </div>
-            </div>
-          </section>
-        </article>
-      </main>
-
-      <sidebar class="col-start-7 col-end-9">
-        <div class="sticky top-10 h-[calc(100vh-80px)]">
-          <div class="flex flex-col h-full justify-between">
-            <div class="p-1 flex justify-end">
-              <HiOutlineMoon className="h-5" />
-            </div>
-            <div class="flex flex-col gap-5">
               {
-                previousPost ? (
-                  <a
-                    href={`/blog/${previousPost.slug}`}
-                    class="py-3 px-4 flex items-center text-gray-600 justify-between text-sm border border-gray-200 rounded-sm hover:bg-gray-50 bg-white transition-all"
-                  >
-                    <HiArrowLeft className="h-5 w-5 min-w-[20px] mr-5 text-gray-300" />
-                    <span>{previousPost.data.title}</span>
-                  </a>
-                ) : null
+                image && (
+                  <Image
+                    class="rounded-md mb-12"
+                    width={image.width || 720}
+                    height={360}
+                    src={image}
+                    alt={imageAlt || ""}
+                  />
+                )
               }
-              {
-                nextPost ? (
-                  <a
-                    href={`/blog/${nextPost.slug}`}
-                    class="py-3 px-4 flex items-center text-gray-600 justify-between text-sm border border-gray-200 rounded-sm hover:bg-gray-50 bg-white transition-all"
-                  >
-                    <span>{nextPost.data.title}</span>
-                    <HiArrowRight className="h-5 w-5 min-w-[20px] ml-5 text-gray-300" />
-                  </a>
-                ) : null
-              }
+              <p class="text-gray-600 dark:text-gray-400 text-2xl mb-6">
+                {description}
+              </p>
+              <article id="article" class="col-span-4">
+                <slot />
+              </article>
             </div>
           </div>
+        </section>
+      </article>
+    </main>
+
+    <sidebar class="col-start-7 col-end-9">
+      <div class="sticky top-10 h-[calc(100vh-80px)]">
+        <div class="flex flex-col h-full justify-between">
+          <div class="p-1 flex justify-end">
+            <ThemeSwitcher client:idle />
+          </div>
+          <div class="flex flex-col gap-5">
+            {
+              previousPost ? (
+                <a
+                  href={`/blog/${previousPost.slug}`}
+                  class="py-3 px-4 flex items-center text-gray-600 dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
+                >
+                  <HiArrowLeft className="h-5 w-5 min-w-[20px] mr-5 text-gray-300" />
+                  <span>{previousPost.data.title}</span>
+                </a>
+              ) : null
+            }
+            {
+              nextPost ? (
+                <a
+                  href={`/blog/${nextPost.slug}`}
+                  class="py-3 px-4 flex items-center text-gray-600 dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
+                >
+                  <span>{nextPost.data.title}</span>
+                  <HiArrowRight className="h-5 w-5 min-w-[20px] ml-5 text-gray-300" />
+                </a>
+              ) : null
+            }
+          </div>
         </div>
-      </sidebar>
-    </div>
-    <CopyCodeButton />
-  </body>
-</html>
+      </div>
+    </sidebar>
+  </div>
+  <CopyCodeButton />
+</BaseLayout>

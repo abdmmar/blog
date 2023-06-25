@@ -8,14 +8,23 @@ import "@fontsource/ibm-plex-sans/500.css";
 import "../styles/global.css";
 
 export interface Props {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   image?: string;
 }
 
+const defaultMeta = {
+  title: "Abdullah Ammar",
+  description: "A software engineer who enjoy building things",
+};
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = "/placeholder-social.jpg" } = Astro.props;
+const {
+  title = defaultMeta.title,
+  description = defaultMeta.description,
+  image = "../assets/placeholder.png",
+} = Astro.props;
 ---
 
 <!-- Global Metadata -->

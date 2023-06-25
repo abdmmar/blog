@@ -67,22 +67,27 @@ export default function ShareButton({
   return (
     <Dialog.Root>
       {isShareSupported ? (
-        <button onClick={handleShare} className="text-gray-600">
+        <button
+          onClick={handleShare}
+          className="text-gray-600 dark:text-gray-400"
+        >
           {"share".toUpperCase()}
         </button>
       ) : (
         <Dialog.Trigger asChild>
-          <button className="text-gray-600">{"share".toUpperCase()}</button>
+          <button className="text-gray-600 dark:text-gray-400">
+            {"share".toUpperCase()}
+          </button>
         </Dialog.Trigger>
       )}
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-gray-400 bg-opacity-50 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <Dialog.Overlay className="bg-gray-400 dark:bg-gray-600 dark:bg-opacity-50 bg-opacity-50 data-[state=open]:animate-overlayShow fixed inset-0" />
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white dark:bg-gray-900 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <div className="flex justify-between items-center mb-4 ">
             <Dialog.Title asChild>
               <h4 className="text-lg font-medium">Share this posts</h4>
             </Dialog.Title>
-            <Dialog.Close className="p-1 border border-gray-200 rounded-sm hover:bg-gray-100 bg-white transition-all">
+            <Dialog.Close className="p-1 border border-gray-200 dark:border-gray-700 rounded-sm hover:dark:bg-gray-800 hover:bg-gray-100 dark:bg-gray-900 bg-white transition-all">
               <HiXMark />
             </Dialog.Close>
           </div>
@@ -90,7 +95,7 @@ export default function ShareButton({
             {links.map((link) => (
               <li key={link}>
                 <button
-                  className="px-1 py-2 w-full text-gray-600 text-base border border-gray-200 rounded-sm hover:bg-gray-100 bg-white transition-all"
+                  className="px-1 py-2 w-full text-gray-600 dark:text-gray-200 text-base border border-gray-200 rounded-sm dark:border-gray-700 hover:dark:bg-gray-800 hover:bg-gray-100 dark:bg-gray-900 bg-white transition-all"
                   onClick={() => handleLink(link)}
                 >
                   {link === "Copy Link" && isCopied ? "Copied" : link}

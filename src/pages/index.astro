@@ -1,91 +1,84 @@
 ---
-import { HiOutlineMoon } from "react-icons/hi2";
-import BaseHead from "../components/BaseHead.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import Coffee from "../components/Coffee.astro";
 import { Collection } from "../components/Collection";
 import Computer from "../components/Computer.astro";
 import Sunflower from "../components/Sunflower.astro";
 import Sup from "../components/Sup.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import ThemeSwitcher from "../components/ThemeSwitcher";
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <div class="p-10 w-full text-gray-900">
-      <header class="grid grid-cols-8 gap-10 items-start">
-        <div class="col-span-4 flex gap-24 w-full flex-col">
-          <div class="grid grid-cols-4">
-            <h1
-              class="col-span-2 text-2xl text-gray-900 flex gap-2 items-center"
-            >
-              <span class="text-blue-600 text-3xl animate-spin select-none"
-                >✤</span
-              > Abdullah Ammar
-            </h1>
-            <div
-              class="col-start-4 flex justify-end items-center [&>svg]:stroke-2"
-            >
-              <HiOutlineMoon size="1.2em" />
-            </div>
-          </div>
-          <div class="flex justify-end">
-            <div class="flex gap-4 items-end">
-              <Coffee />
-              <Computer />
-              <Sunflower />
-            </div>
-          </div>
+<BaseLayout>
+  <header class="grid grid-cols-8 gap-10 items-start">
+    <div class="col-span-4 flex gap-24 w-full flex-col">
+      <div class="grid grid-cols-4">
+        <h1
+          class="col-span-2 text-2xl text-gray-900 dark:text-gray-50 flex gap-2 items-center"
+        >
+          <span class="text-blue-600 text-3xl animate-spin select-none">✤</span>
+          Abdullah Ammar
+        </h1>
+        <div class="col-start-4 flex justify-end items-center">
+          <ThemeSwitcher client:idle />
         </div>
-        <div class="col-span-4 flex flex-col w-full justify-between h-full">
-          <div class="grid grid-cols-4 gap-10">
-            <p class="col-span-4 text-2xl leading-[30.29px]">
-              a software engineer who enjoys sleeping, reading, designing
-              layouts, and occasionally building stuff. Currently learning about <Sup
-              >
-                (1)
-              </Sup>grid systems,
-              <Sup>(2)</Sup>crafting zines, <Sup>(3)</Sup>arranging letters, and <Sup
-              >
-                (4)
-              </Sup>trying photography.
-            </p>
-          </div>
-          <div class="grid grid-cols-4 gap-10">
-            <ul class="col-span-2 flex justify-between items-center text-xl">
-              <li class="text-gray-500 hover:text-gray-900">
-                <a
-                  href="https://github.com/abdmmar"
-                  target="_blank"
-                  rel="noreferrer">GitHub</a
-                >
-              </li>
-              <li class="text-gray-300">/</li>
-              <li class="text-gray-500 hover:text-gray-900">
-                <a
-                  href="https://twitter.com/abdmmar"
-                  target="_blank"
-                  rel="noreferrer">Twitter</a
-                >
-              </li>
-              <li class="text-gray-300">/</li>
-              <li class="text-gray-500 hover:text-gray-900">
-                <a
-                  href="mailto:abd.ammar.mar@gmail.com"
-                  target="_blank"
-                  rel="noreferrer">Email</a
-                >
-              </li>
-            </ul>
-          </div>
+      </div>
+      <div class="flex justify-end">
+        <div class="flex gap-4 items-end">
+          <Coffee />
+          <Computer />
+          <Sunflower />
         </div>
-      </header>
-      <main class="flex w-full flex-col mt-10 gap-10">
-        <Collection client:load />
-      </main>
+      </div>
     </div>
-  </body>
-</html>
+    <div class="col-span-4 flex flex-col w-full justify-between h-full">
+      <div class="grid grid-cols-4 gap-10">
+        <p class="col-span-4 text-2xl leading-[30.29px]">
+          a software engineer who enjoys sleeping, reading, designing layouts,
+          and occasionally building stuff. Currently learning about <Sup>
+            (1)
+          </Sup>grid systems,
+          <Sup>(2)</Sup>crafting zines, <Sup>(3)</Sup>arranging letters, and <Sup
+          >
+            (4)
+          </Sup>trying photography.
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-10">
+        <ul class="col-span-2 flex justify-between items-center text-xl">
+          <li
+            class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
+          >
+            <a
+              href="https://github.com/abdmmar"
+              target="_blank"
+              rel="noreferrer">GitHub</a
+            >
+          </li>
+          <li class="text-gray-300 dark:text-gray-800">/</li>
+          <li
+            class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
+          >
+            <a
+              href="https://twitter.com/abdmmar"
+              target="_blank"
+              rel="noreferrer">Twitter</a
+            >
+          </li>
+          <li class="text-gray-300 dark:text-gray-800">/</li>
+          <li
+            class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
+          >
+            <a
+              href="mailto:abd.ammar.mar@gmail.com"
+              target="_blank"
+              rel="noreferrer">Email</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <main class="flex w-full flex-col mt-10 gap-10">
+    <Collection client:load />
+  </main>
+</BaseLayout>

@@ -1,6 +1,6 @@
 import type { CollectionEntry } from "astro:content";
-import clsx from "clsx";
 import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2";
+import { cn } from "../utils";
 
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
@@ -16,20 +16,20 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
       key={post.id}
       href={link}
       target={post.data.tag.toLowerCase() === "project" ? "_blank" : ""}
-      className="col-span-2 rounded-md border border-gray-200 p-4 flex flex-col gap-4 w-full"
+      className="col-span-2 rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all p-4 flex flex-col gap-4 w-full"
     >
       <div className="flex justify-between items-center w-full">
         <div className="font-ibmMono">
           <small
-            className={clsx({
+            className={cn({
               "text-green-600": post.data.tag.toLowerCase() === "blog",
               "text-blue-600": post.data.tag.toLowerCase() === "project",
             })}
           >
             {post.data.tag.toUpperCase()}
           </small>
-          <small className="text-gray-400"> • </small>
-          <small className="text-gray-600">
+          <small className="text-gray-400 dark:text-gray-600"> • </small>
+          <small className="text-gray-600 dark:text-gray-400">
             {new Intl.DateTimeFormat("id-ID", {
               dateStyle: "short",
             }).format(post.data.publishedAt)}
