@@ -38,9 +38,11 @@ const postDate = dateFormatter.format(publishedDate);
       <sidebar class="col-span-2">
         <div class="sticky top-10 h-[calc(100vh-80px)]">
           <div class="flex flex-col h-full justify-between">
-            <h2 class="text-gray-900 text-xl flex gap-2 items-center">
-              <span class="text-blue-600 animate-spin">✤</span> Abdullah Ammar
-            </h2>
+            <a href="/">
+              <h2 class="text-gray-900 text-xl flex gap-2 items-center">
+                <span class="text-blue-600 animate-spin">✤</span> Abdullah Ammar
+              </h2>
+            </a>
             {headings ? <TOC headings={headings} /> : null}
           </div>
         </div>
@@ -65,7 +67,7 @@ const postDate = dateFormatter.format(publishedDate);
 
               <div class="mt-10">
                 <div class="min-h-[12rem] flex items-end mb-14">
-                  <h1 class="text-gray-900 text-5xl leading-[52px]">
+                  <h1 class="text-gray-900 text-5xl leading-[52px] font-medium">
                     <Balancer client:load>
                       {title}
                     </Balancer>
@@ -84,7 +86,7 @@ const postDate = dateFormatter.format(publishedDate);
                   )
                 }
                 <p class="text-gray-600 text-2xl mb-6">{description}</p>
-                <article class="col-span-4">
+                <article id="article" class="col-span-4">
                   <slot />
                 </article>
               </div>

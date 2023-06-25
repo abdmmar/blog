@@ -10,9 +10,13 @@ import image from "@astrojs/image";
 export default defineConfig({
   site: "https://example.com",
   integrations: [
+    tailwind({
+      config: {
+        applyBaseStyles: false,
+      },
+    }),
     mdx(),
     sitemap(),
-    tailwind(),
     react(),
     image({ serviceEntryPoint: "@astrojs/image/sharp" }),
   ],

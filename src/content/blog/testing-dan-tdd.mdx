@@ -19,6 +19,8 @@ imageAlt: "Ilustrasi botol kaca lab sebagai logo"
 author: Abdullah Ammar
 ---
 
+import Callout from "../../components/Callout";
+
 Pertanyaan tersebut adalah pertanyaan yang muncul dibenak saya ketika pertama kali mendengar kata
 _testing_ atau pengujian. Kita tau bahwa manusia adalah tempatnya salah dan lupa, beberapa dari
 kesalahan itu mungkin tidak penting, tetapi ada juga yang memiliki dampak yang tidak kecil, tentunya
@@ -35,31 +37,12 @@ perangkat lunak atau aplikasi melakukan apa yang seharusnya dilakukan.
 [Menurut Kent C. Dodds](https://kentcdodds.com/blog//static-vs-unit-vs-integration-vs-e2e-tests),
 ada 4 jenis tes dalam pengujian perangkat lunak:
 
-- **Static**
-
-  Untuk menangkap typo (kesalahan ketik) dan _type errors_ saat menulis kode.
-
-  _tools_ yang bisa digunakan: ESLint
-
-- **Unit Test**
-
-  Untuk memastikan unit individu terkecil dalam kode seperti function, method, ataupun class bisa
-  berjalan semestinya
-
-  _tools_ yang bisa digunakan: Mocha + Chai, Enzyme, Jest, dan React Testing Library
-
-- **Integration Test**
-
-  Untuk memastikan setiap unit berjalan secara harmonis
-
-  _tools_ yang bisa digunakan: Jest dan React Testing Library
-
-- **End-to-End Test**
-
-  Untuk memastikan aplikasi berjalan dengan benar, biasanya dilakukan oleh sebuah robot yang
-  bertindak layaknya pengguna
-
-  _tools_ yang bisa digunakan: Cypress dan Selenium
+- **Static**: untuk menangkap typo (kesalahan ketik) dan _type errors_ saat menulis kode. _tools_ yang bisa digunakan: ESLint
+- **Unit Test**: untuk memastikan unit individu terkecil dalam kode seperti function, method, ataupun class bisa
+  berjalan semestinya. _tools_ yang bisa digunakan: Mocha + Chai, Enzyme, Jest, dan React Testing Library
+- **Integration Test**: untuk memastikan setiap unit berjalan secara harmonis. _tools_ yang bisa digunakan: Jest dan React Testing Library
+- **End-to-End Test**: untuk memastikan aplikasi berjalan dengan benar, biasanya dilakukan oleh sebuah robot yang
+  bertindak layaknya pengguna. _tools_ yang bisa digunakan: Cypress dan Selenium
 
 ## Kenapa Testing?
 
@@ -71,15 +54,14 @@ diperlukannya sebuah pengujian otomatis.
 
 Dari sedikit artikel yang saya baca, ada 2 keuntungan utama kenapa pengujian dilakukan, yaitu:
 
-1. Mengidentifikasi dan mengurangi/mencegah cacat/bugs pada aplikasi
+#### Mengidentifikasi dan mengurangi/mencegah cacat/bugs pada aplikasi
 
-   ![A guy from history.com with text: "I read my code and it seemed just fine, Developers"](../../assets/blog/testing-dan-tdd/its-fine.webp)
+![A guy from history.com with text: "I read my code and it seemed just fine, Developers"](../../assets/blog/testing-dan-tdd/its-fine.webp)
+Apa jadinya jika sistem error karena sebuah kesalahan kecil seperti salah ketik?
 
-   Apa jadinya jika sistem error karena sebuah kesalahan kecil seperti salah ketik?
+#### Memastikan bahwa aplikasi berjalan semestinya
 
-2. Memastikan bahwa aplikasi berjalan semestinya
-
-   ![A girl smiling while a house burning in the background with text: pushes code to prod without testing leaves for vacation](../../assets/blog/testing-dan-tdd/pushes-code-to-prod-without-testing-leaves-for-vacation.webp)
+![A girl smiling while a house burning in the background with text: pushes code to prod without testing leaves for vacation](../../assets/blog/testing-dan-tdd/pushes-code-to-prod-without-testing-leaves-for-vacation.webp)
 
 Tentu semua hal ada konsekuensinya, dalam _testing_, hal yang harus dikorbankan adalah waktu, karena
 kita perlu menulis tes, namun banyak yang beranggapan bahwa waktu dan effort yang diperlukan untuk
@@ -93,19 +75,11 @@ kita harus menuliskan sebuah test—biasanya disebut _test case_ atau _test suit
 kemudian merancang dan menuliskan implementasi kode untuk memenuhi ekspektasi tes tersebut, proses
 ini biasanya dikenal dengan nama _red_, _green_, _refactor_ yang membagi fokus menjadi 3 fase:
 
-- **Red**
-
-  Menuliskan sebuah _test case_ dan berfokus mengenai fitur _apa_ yang ingin dibuat—biasanya dari
+- **Red**: menuliskan sebuah _test case_ dan berfokus mengenai fitur _apa_ yang ingin dibuat—biasanya dari
   _requirement_ yang ada
-
-- **Green**
-
-  Menuliskan implementasi kode minimal dan berfokus _bagaimana_ agar implementasi kode tersebut
+- **Green**: menuliskan implementasi kode minimal dan berfokus _bagaimana_ agar implementasi kode tersebut
   memenuhi ekspektasi _test_ yang ada
-
-- **Refactor**
-
-  Berfokus _bagaimana_ untuk meningkatkan kualitas implementasi kode yang ada, seperti meningkatkan
+- **Refactor**: berfokus _bagaimana_ untuk meningkatkan kualitas implementasi kode yang ada, seperti meningkatkan
   performa aplikasi dan meningkatkan keterbacaan kode yang telah dibuat—implementasi _clean code._
 
 ## Kenapa Test-Driven Development?
@@ -237,24 +211,22 @@ Setelah itu, kita buat objek `data` yang berisikan detail informasi sebuah post 
 untuk mengetes komponen card ini
 
 ```jsx
-...
 const data = {
-  title: 'Testing dan Test-Driven Development',
-  description: 'Rangkuman singkat pembelajaran testing dan test-driven development di JavaScript',
-  publishedAt: '2021-09-11',
-  author: 'Abdullah Ammar',
-  tag: 'Testing',
-  tags: ['Learning', 'JavaScript', 'React'],
-  image: 'https://abdmmar.com../../assets/belajar_testing/meta.webp',
-  imageAlt: 'Illustration of red, green, refactor, approaches'
-}
-...
+  title: "Testing dan Test-Driven Development",
+  description:
+    "Rangkuman singkat pembelajaran testing dan test-driven development di JavaScript",
+  publishedAt: "2021-09-11",
+  author: "Abdullah Ammar",
+  tag: "Testing",
+  tags: ["Learning", "JavaScript", "React"],
+  image: "https://abdmmar.com../../assets/belajar_testing/meta.webp",
+  imageAlt: "Illustration of red, green, refactor, approaches",
+};
 ```
 
 Lalu tambahkan kode berikut:
 
 ```jsx
-...
 describe('Card', () => {
   test('render Card with title, description, and published date', () => {
 
@@ -263,11 +235,12 @@ describe('Card', () => {
 
 ```
 
-**Penjelasan**
-
+<Callout title="Penjelasan">
 - method `desribe` digunakan untuk mengelompokkan beberapa tes yang berkaitan
 - method `test` digunakan untuk menjalankan sebuah test. Argumen pertama adalah nama tes dan argumen
   kedua adalah _function_ yang berisi ekspektasi untuk dites.
+
+</Callout>
 
 Kemudian kita panggil method `render()` untuk mencetak komponen card ke dalam dokumen dan tambahkan
 value dari objek `data` yang telah dibuat tadi kedalam atribut yang dibutuhkan oleh komponen card.
@@ -438,21 +411,12 @@ Jika teman-teman mempunyai kritik dan saran bisa kirimkan issue di
 ## Referensi
 
 1. [Introduction | Testing Library](https://testing-library.com/docs/)
-
 2. [Getting Started · Jest](https://jestjs.io/docs/getting-started)
-
 3. [What is software testing?](https://www.ibm.com/topics/software-testing)
-
 4. [Red, Green, Refactor | Codecademy](https://www.codecademy.com/articles/tdd-red-green-refactor)
-
 5. [TDD the Series : Part 1 - Apa itu Test Driven Development (TDD)](https://medium.com/koding-kala-weekend/tdd-the-series-part-1-apa-itu-test-driven-development-tdd-ff92c95c945f)
-
 6. [Static vs Unit vs Integration vs E2E Testing for Frontend Apps](https://kentcdodds.com/blog//static-vs-unit-vs-integration-vs-e2e-tests)
-
 7. [Why Test-Driven Development (TDD) | Marsner Technologies](https://marsner.com/blog/why-test-driven-development-tdd/)
-
 8. [Arrange-Act-Assert: A Pattern for Blog Good Tests](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/)
-
 9. [How to Write Tests with React Testing Library and TypeScript](https://javascript.plainenglish.io/how-to-write-the-basic-aaa-pattern-tests-with-react-testing-library-and-typescript-6836173d656b)
-
 10. [Kupas Tuntas Binary Search Tree dengan Test-Driven Development](https://www.youtube.com/watch?v=4tZDfvfXBb4)
