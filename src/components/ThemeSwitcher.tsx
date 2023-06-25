@@ -41,12 +41,14 @@ const ThemeSwitcher = () => {
         className={!isDarkTheme ? "hidden" : ""}
       >
         <HiOutlineMoon size="1.2rem" />
+        <span className="sr-only">Dark Mode</span>
       </span>
       <span
         id="theme-toggle-light-icon"
         className={isDarkTheme ? "hidden" : ""}
       >
         <HiOutlineSun size="1.2rem" />
+        <span className="sr-only">Light Mode</span>
       </span>
     </button>
   );

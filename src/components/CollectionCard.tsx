@@ -63,7 +63,7 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
         />
       ) : null}
       <div className="flex flex-col gap-2">
-        <h3 className="text-xl">{post.data.title}</h3>
+        <span className="text-xl">{post.data.title}</span>
         <p className="text-gray-500">{post.data.description}</p>
       </div>
     </motion.a>
