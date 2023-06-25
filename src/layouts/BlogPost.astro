@@ -6,6 +6,7 @@ import { HiArrowLeft, HiArrowRight, HiOutlineMoon } from "react-icons/hi2";
 import Balancer from "react-wrap-balancer";
 import BaseHead from "../components/BaseHead.astro";
 import CopyCodeButton from "../components/CopyCodeButton.astro";
+import ShareButton from "../components/ShareButton";
 import { TOC } from "../components/TOC";
 
 type BlogPost = CollectionEntry<"blog">;
@@ -60,9 +61,7 @@ const postDate = dateFormatter.format(publishedDate);
                     class="text-gray-600">{postDate}</time
                   >
                 </div>
-                <button class="text-gray-600">
-                  {"share".toUpperCase()}
-                </button>
+                <ShareButton client:idle />
               </div>
 
               <div class="mt-10">
