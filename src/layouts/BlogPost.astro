@@ -99,14 +99,14 @@ const postDate = dateFormatter.format(publishedDate);
             <div class="p-1 flex justify-end">
               <HiOutlineMoon className="h-5" />
             </div>
-            <div class="flex flex-col divide-y divide-gray-400">
+            <div class="flex flex-col gap-5">
               {
                 previousPost ? (
                   <a
                     href={`/blog/${previousPost.slug}`}
-                    class="py-2 px-3 flex items-center text-gray-600 justify-between text-sm"
+                    class="py-3 px-4 flex items-center text-gray-600 justify-between text-sm border border-gray-200 rounded-sm hover:bg-gray-50 bg-white transition-all"
                   >
-                    <HiArrowLeft className="h-5 w-5 min-w-[20px] mr-4" />
+                    <HiArrowLeft className="h-5 w-5 min-w-[20px] mr-5 text-gray-300" />
                     <span>{previousPost.data.title}</span>
                   </a>
                 ) : null
@@ -115,10 +115,10 @@ const postDate = dateFormatter.format(publishedDate);
                 nextPost ? (
                   <a
                     href={`/blog/${nextPost.slug}`}
-                    class="py-2 px-3 flex items-center text-gray-600 justify-between text-sm"
+                    class="py-3 px-4 flex items-center text-gray-600 justify-between text-sm border border-gray-200 rounded-sm hover:bg-gray-50 bg-white transition-all"
                   >
                     <span>{nextPost.data.title}</span>
-                    <HiArrowRight className="h-5 w-5 min-w-[20px] ml-4" />
+                    <HiArrowRight className="h-5 w-5 min-w-[20px] ml-5 text-gray-300" />
                   </a>
                 ) : null
               }

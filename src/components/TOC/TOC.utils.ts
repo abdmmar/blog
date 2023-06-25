@@ -14,7 +14,7 @@ export default function buildTOC(headings: MarkdownHeading[]) {
     // Change 2 to 1 if your markdown includes your <h1>
     if (heading.depth === 2) {
       toc.push(heading);
-    } else {
+    } else if (heading.depth <= 3) {
       parentHeadings.get(heading.depth - 1).children.push(heading);
     }
   });
