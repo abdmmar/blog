@@ -29,7 +29,7 @@ const publishedDate = new Date(publishedAt);
 const postDate = dateFormatter.format(publishedDate);
 ---
 
-<BaseLayout>
+<BaseLayout meta={{ image: image?.src }}>
   <link href="/prims-nord.css" rel="stylesheet" slot="head" />
   <div class="grid grid-cols-8 gap-10">
     <sidebar class="col-span-2">
