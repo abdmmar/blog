@@ -83,6 +83,10 @@
     transition: all 150ms;
   }
 
+  .dark #article a {
+    text-decoration-color: #334155;
+  }
+
   #article a:hover {
     text-decoration-color: #2563eb;
   }
@@ -95,5 +99,10 @@
     padding: 2px 4px;
     border-radius: 3px;
     background-color: #f3f4f6;
+  }
+
+  .dark #article p > code,
+  .dark #article li > code {
+    background-color: #111827;
   }
 }
