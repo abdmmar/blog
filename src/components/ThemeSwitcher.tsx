@@ -33,7 +33,7 @@ const ThemeSwitcher = () => {
   return (
     <button
       id="theme-toggle"
-      className="[&svg]:stroke-2"
+      className="[&svg]:stroke-2 border border-gray-300 p-1 rounded-sm bg-white hover:bg-gray-100 transition-all dark:bg-gray-950 dark:hover:bg-gray-900 dark:border-gray-800"
       onClick={handleToggleClick}
     >
       <span

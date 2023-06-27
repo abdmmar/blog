@@ -69,13 +69,13 @@ export default function ShareButton({
       {isShareSupported ? (
         <button
           onClick={handleShare}
-          className="text-gray-600 dark:text-gray-400 uppercase"
+          className="text-gray-600 dark:text-gray-400 uppercase border border-gray-300 py-1 px-2 rounded-sm bg-white hover:bg-gray-100 transition-all dark:bg-gray-950 dark:hover:bg-gray-900 dark:border-gray-800"
         >
           Share
         </button>
       ) : (
         <Dialog.Trigger asChild>
-          <button className="text-gray-600 dark:text-gray-400 uppercase">
+          <button className="text-gray-600 dark:text-gray-400 uppercase border border-gray-300 py-1 px-2 rounded-sm bg-white hover:bg-gray-100 transition-all dark:bg-gray-950 dark:hover:bg-gray-900 dark:border-gray-800">
             Share
           </button>
         </Dialog.Trigger>
