@@ -31,8 +31,8 @@ const postDate = dateFormatter.format(publishedDate);
 
 <BaseLayout meta={{ image: image?.src }}>
   <link href="/prims-nord.css" rel="stylesheet" slot="head" />
-  <div class="grid grid-cols-8 gap-10">
-    <sidebar class="col-span-2">
+  <div class="grid grid-cols-8 gap-10 sm:grid-cols-1">
+    <sidebar class="col-span-2 sm:hidden">
       <div class="sticky top-10 h-[calc(100vh-80px)]">
         <div class="flex flex-col h-full justify-between">
           <a href="/">
@@ -45,7 +45,22 @@ const postDate = dateFormatter.format(publishedDate);
       </div>
     </sidebar>
 
-    <main class="col-start-3 col-end-7">
+    <main class="col-start-3 col-end-7 sm:col-span-1">
+      <div class="grid-cols-4 sm:grid-cols-2 mb-36 hidden sm:grid">
+        <a href="/" class="col-span-2">
+          <h2
+            class="text-xl text-gray-900 dark:text-gray-50 flex gap-2 items-center"
+          >
+            <span class="text-blue-600 text-3xl animate-spin select-none"
+              >✤</span
+            >
+            Abdullah Ammar
+          </h2>
+        </a>
+        <div class="col-start-4 flex justify-end items-center">
+          <ThemeSwitcher client:idle />
+        </div>
+      </div>
       <article>
         <section class="grid grid-cols-4 gap-10">
           <div class="col-span-4 flex flex-col justify-between">
@@ -90,9 +105,33 @@ const postDate = dateFormatter.format(publishedDate);
           </div>
         </section>
       </article>
+      <div class="flex-col gap-5 mt-28 hidden sm:flex">
+        {
+          previousPost ? (
+            <a
+              href={`/blog/${previousPost.slug}`}
+              class="py-3 px-4 flex items-center text-gray-600 group dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
+            >
+              <ArrowLeft class="h-5 w-5 min-w-[20px] mr-5 group-hover:text-gray-600 transition-all text-gray-300 dark:text-gray-600 dark:group-hover:text-gray-300" />
+              <span>{previousPost.data.title}</span>
+            </a>
+          ) : null
+        }
+        {
+          nextPost ? (
+            <a
+              href={`/blog/${nextPost.slug}`}
+              class="py-3 px-4 flex items-center text-gray-600 group dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
+            >
+              <span>{nextPost.data.title}</span>
+              <ArrowRight class="h-5 w-5 min-w-[20px] ml-5 group-hover:text-gray-600 transition-all text-gray-300 dark:text-gray-600 dark:group-hover:text-gray-300" />
+            </a>
+          ) : null
+        }
+      </div>
     </main>
 
-    <sidebar class="col-start-7 col-end-9">
+    <sidebar class="col-start-7 col-end-9 sm:hidden">
       <div class="sticky top-10 h-[calc(100vh-80px)]">
         <div class="flex flex-col h-full justify-between">
           <div class="p-1 flex justify-end">
