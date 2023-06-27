@@ -57,7 +57,7 @@ export function Collection({ blog, project }: CollectionProps) {
             </li>
           ))}
         </ul>
-        <div className="col-span-4 flex justify-end">
+        <div className="col-span-4 flex justify-end sm:hidden">
           <div className="rounded-sm font-ibmMono tabular-nums py-2 px-4 border transition-all border-gray-300 dark:bg-gray-950 hover:dark:bg-gray-900 dark:border-gray-800">
             {String(itemsCount).padStart(3, "0")}
           </div>

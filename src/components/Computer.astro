@@ -1,8 +1,13 @@
 ---
+import { cn } from "@/utils";
+const { class: className } = Astro.props;
 ---
 
 <pre
-  class="font-ibmMono leading-[23.24px] font-medium text-xl">
+  class:list={cn(
+    "font-ibmMono leading-[23.24px] font-medium text-xl",
+    className
+  )}>
 	  _________________
 	 |  _____________  |_
 	 | |<span class="text-blue-600">|||||||||||||</span>| |||
