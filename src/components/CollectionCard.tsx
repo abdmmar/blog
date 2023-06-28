@@ -6,13 +6,7 @@ import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2/index";
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
 
-export function CollectionCard({
-  post,
-  i,
-}: {
-  post: BlogProps | ProjectProps;
-  i: number;
-}) {
+export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
   const link =
     post.data.tag.toLowerCase() === "project"
       ? (post as ProjectProps).data.link
@@ -20,13 +14,6 @@ export function CollectionCard({
 
   return (
     <motion.a
-      initial={{ translateY: -50, opacity: 0 }}
-      animate={{ translateY: 0, opacity: 1 }}
-      transition={{
-        delay: i * 0.15,
-        type: "spring",
-        bounce: 0.25,
-      }}
       whileHover={{
         scale: 1.1,
         transition: { duration: "150ms" },
