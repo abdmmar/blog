@@ -19,6 +19,7 @@ export default function ShareButton({
 }) {
   const [isCopied, setCopied] = useState(false);
   const isShareSupported = typeof window !== "undefined" && !!navigator?.share;
+  const url = BASE_URL + slug;
 
   const handleShare = async () => {
     if (typeof window !== "undefined" && navigator?.share) {
@@ -26,7 +27,7 @@ export default function ShareButton({
         await navigator?.share({
           title: title,
           text: description,
-          url: BASE_URL + slug,
+          url,
         });
         console.log("Thanks for sharing!");
         return;
@@ -38,8 +39,8 @@ export default function ShareButton({
     }
   };
 
-  const handleLink = (url: Links) => {
-    switch (url) {
+  const handleLink = (type: Links) => (url: string, description?: string) => {
+    switch (type) {
       case "Twitter":
         socialWindow(
           `https://twitter.com/intent/tweet?url=${url}&text=${description}`
@@ -96,7 +97,7 @@ export default function ShareButton({
               <li key={link}>
                 <button
                   className="px-1 py-2 w-full text-gray-600 dark:text-gray-200 text-base border border-gray-200 rounded-sm dark:border-gray-700 hover:dark:bg-gray-800 hover:bg-gray-100 dark:bg-gray-900 bg-white transition-all"
-                  onClick={() => handleLink(link)}
+                  onClick={() => handleLink(link)(url, description)}
                 >
                   {link === "Copy Link" && isCopied ? "Copied" : link}
                 </button>
