@@ -63,8 +63,8 @@ export function Collection({ blog, project }: CollectionProps) {
         </div>
       </div>
       <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
-        {items.map((post) => {
-          return <CollectionCard key={post.id} post={post} />;
+        {items.map((post, i) => {
+          return <CollectionCard key={i} post={post} i={i} />;
         })}
       </Masonry>
     </>
