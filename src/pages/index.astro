@@ -13,16 +13,18 @@ const project = await getCollection("project");
 ---
 
 <BaseLayout>
-  <header class="grid grid-cols-8 gap-10 items-start sm:grid-cols-4">
+  <header
+    class="grid grid-cols-8 gap-10 items-start sm:grid-cols-4 md:grid-cols-4"
+  >
     <div class="col-span-4 flex gap-24 w-full flex-col">
       <Header />
       <div class="flex justify-end">
         <div class="flex gap-4 items-end">
-          <div class="sm:hidden">
+          <div class="sm:hidden md:block lg:hidden">
             <Coffee />
           </div>
           <Computer class="text-base leading-[19px]" />
-          <div class="sm:hidden">
+          <div class="sm:hidden md:block lg:hidden">
             <Sunflower />
           </div>
         </div>
@@ -43,7 +45,7 @@ const project = await getCollection("project");
       </div>
       <div class="grid grid-cols-4 gap-10 mt-20">
         <ul
-          class="col-span-2 sm:col-span-4 flex justify-between items-center text-lg"
+          class="col-span-2 sm:col-span-4 lg:col-span-3 flex justify-between items-center text-lg"
         >
           <li
             class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
