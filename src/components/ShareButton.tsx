@@ -6,16 +6,16 @@ import { HiXMark } from "react-icons/hi2/index";
 const links = ["Twitter", "LinkedIn", "Facebook", "Copy Link"] as const;
 type Links = (typeof links)[number];
 
+const BASE_URL = "https://abdmmar.com";
+
 export default function ShareButton({
   title = "Abdullah Ammar",
   description = "A student and developer",
-  text = "Share this article",
-  url = "https://abdmmar.com",
+  slug = "/",
 }: {
   title?: string;
   description?: string;
-  text?: string;
-  url?: string;
+  slug?: string;
 }) {
   const [isCopied, setCopied] = useState(false);
   const isShareSupported = typeof window !== "undefined" && !!navigator?.share;
@@ -26,7 +26,7 @@ export default function ShareButton({
         await navigator?.share({
           title: title,
           text: description,
-          url: url,
+          url: BASE_URL + slug,
         });
         console.log("Thanks for sharing!");
         return;

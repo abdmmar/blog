@@ -46,8 +46,8 @@ const { Content, headings } = await post.render();
 ---
 
 <BlogPost
+  post={post}
   headings={headings}
-  frontmatter={post.data}
   nextPost={nextPost}
   previousPost={previousPost}
 >
