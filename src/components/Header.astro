@@ -1,19 +1,18 @@
 ---
+import { cn } from "@/utils";
 import ThemeSwitcher from "./ThemeSwitcher";
+
+const { class: className } = Astro.props;
 ---
 
-<header class="grid grid-cols-8 gap-10">
-  <div class="grid grid-cols-4 col-span-4">
-    <h2 class="col-span-3 text-2xl text-gray-900 flex gap-2 items-center">
-      <span class="text-blue-600 text-3xl animate-spin">✤</span> Abdullah Ammar
+<div class={cn("grid grid-cols-4 sm:grid-cols-2", className)}>
+  <a href="/" class="col-span-2">
+    <h2 class="text-xl text-gray-900 dark:text-gray-50 flex gap-2 items-center">
+      <span class="text-blue-600 text-3xl animate-spin select-none">✤</span>
+      Abdullah Ammar
     </h2>
-    <div class="col-start-4 flex justify-end items-center [&>svg]:stroke-2">
-      <ThemeSwitcher client:idle />
-    </div>
+  </a>
+  <div class="col-start-4 flex justify-end items-center">
+    <ThemeSwitcher client:idle />
   </div>
-  <ul class="col-span-4 flex flex-row items-center gap-10">
-    <li><a>GitHub</a></li>
-    <li><a>Twitter</a></li>
-    <li><a>Email</a></li>
-  </ul>
-</header>
+</div>

@@ -1,4 +1,5 @@
 ---
+import Header from "@/components/Header.astro";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { ArrowLeft, ArrowRight } from "@/components/icons";
 import type { MarkdownHeading } from "astro";
@@ -46,21 +47,7 @@ const postDate = dateFormatter.format(publishedDate);
     </sidebar>
 
     <main class="col-start-3 col-end-7 sm:col-span-1">
-      <div class="grid-cols-4 sm:grid-cols-2 mb-36 hidden sm:grid">
-        <a href="/" class="col-span-2">
-          <h2
-            class="text-xl text-gray-900 dark:text-gray-50 flex gap-2 items-center"
-          >
-            <span class="text-blue-600 text-3xl animate-spin select-none"
-              >✤</span
-            >
-            Abdullah Ammar
-          </h2>
-        </a>
-        <div class="col-start-4 flex justify-end items-center">
-          <ThemeSwitcher client:idle />
-        </div>
-      </div>
+      <Header class="mb-36 hidden sm:grid" />
       <article>
         <section class="grid grid-cols-4 gap-10">
           <div class="col-span-4 flex flex-col justify-between">
