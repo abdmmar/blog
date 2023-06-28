@@ -1,4 +1,8 @@
 ---
+import { cn } from "@/utils";
+const { class: className } = Astro.props;
 ---
 
-<sup class="text-gray-500"><em><small><slot /></small></em></sup>
+<sup aria-hidden="true" class={cn("text-gray-500", className)}
+  ><em><small><slot /></small></em></sup
+>

@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { $filterTag, FilterTag } from "../stores/collection";
 import { cn } from "../utils";
 import { CollectionCard } from "./CollectionCard";
+import Counter from "./Counter";
 import { Masonry } from "./Masonry";
 
 type BlogProps = CollectionEntry<"blog">;
@@ -37,8 +38,8 @@ export function Collection({ blog, project }: CollectionProps) {
 
   return (
     <>
-      <div className="grid grid-cols-8 gap-10">
-        <ul className="col-span-4 flex gap-10 items-center">
+      <div className="grid grid-cols-8 gap-10 sm:grid-cols-4">
+        <ul className="col-span-4 flex gap-10 items-center sm:justify-between">
           {filters.map((filter) => (
             <li key={filter}>
               <button
@@ -58,9 +59,7 @@ export function Collection({ blog, project }: CollectionProps) {
           ))}
         </ul>
         <div className="col-span-4 flex justify-end sm:hidden">
-          <div className="rounded-sm font-ibmMono tabular-nums py-2 px-4 border transition-all border-gray-300 dark:bg-gray-950 hover:dark:bg-gray-900 dark:border-gray-800">
-            {String(itemsCount).padStart(3, "0")}
-          </div>
+          <Counter value={itemsCount} />
         </div>
       </div>
       <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
