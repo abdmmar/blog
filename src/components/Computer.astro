@@ -4,6 +4,7 @@ const { class: className } = Astro.props;
 ---
 
 <pre
+  aria-hidden="true"
   class:list={cn(
     "font-ibmMono leading-[23.24px] font-medium text-xl",
     className
@@ -12,7 +13,7 @@ const { class: className } = Astro.props;
 	 |  _____________  |_
 	 | |<span class="text-blue-600">|||||||||||||</span>| |||
 	 | |<span class="text-blue-600">|||||||||||||</span>| |||\\\
-	 | |<span class="text-blue-600">|||</span><span class="text-green-600">&gt; start</span><span class="text-blue-600">|||</span>| |||||||
+	 | |<span class="text-blue-600">|||</span><span class="text-green-600"><span class="">&gt;</span> <span class="animate-blip">start</span></span><span class="text-blue-600">|||</span>| |||||||
 	 | |<span class="text-blue-600">|||||</span>exit<span class="text-blue-600">||||</span>| |||===|
 	 | |<span class="text-blue-600">|||||||||||||</span>| |||===|
 	 | |=============| |||///

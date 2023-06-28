@@ -36,6 +36,12 @@ module.exports = {
       animation: {
         overlayShow: "overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         contentShow: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+        blip: "blip 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+      },
+      keyframes: {
+        blip: {
+          "50%": { opacity: 0 },
+        },
       },
     },
   },
