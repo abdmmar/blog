@@ -37,7 +37,7 @@ function BlogCard({ post }: { post: BlogProps }) {
     >
       <div className="flex justify-between items-center w-full">
         <div className="font-ibmMono">
-          <small className="uppercase text-green-600">{post.data.tag}</small>
+          <small className="text-green-600">{post.data.tag}</small>
           <small className="text-gray-400 dark:text-gray-600"> • </small>
           <small className="text-gray-600 dark:text-gray-400">
             {new Intl.DateTimeFormat("id-ID", {
@@ -84,7 +84,7 @@ function ProjectCard({ post }: { post: ProjectProps }) {
     >
       <div className="flex justify-between items-center w-full p-4 ">
         <div className="font-ibmMono">
-          <small className="uppercase text-blue-600">{post.data.tag}</small>
+          <small className="text-blue-600">{post.data.tag}</small>
           <small className="text-gray-400 dark:text-gray-600"> • </small>
           <small className="text-gray-600 dark:text-gray-400">
             {post.data.title}
