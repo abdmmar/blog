@@ -28,7 +28,6 @@ function BlogCard({ post }: { post: BlogProps }) {
       }}
       key={post.id}
       href={link}
-      target="_blank"
       className={cn(
         "col-span-2 rounded-md border transition-all p-4 flex flex-col gap-4 w-full",
         "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
