@@ -19,6 +19,7 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
 
 function BlogCard({ post }: { post: BlogProps }) {
   const link = `/${post.data.tag.toLowerCase()}/${post.slug}`;
+  const isImageExist = !!post.data.image;
 
   return (
     <motion.a
@@ -54,7 +55,9 @@ function BlogCard({ post }: { post: BlogProps }) {
         />
       ) : null}
       <div className="flex flex-col gap-2">
-        <span className="text-xl">{post.data.title}</span>
+        <span className={cn("text-xl", { "mt-10": !isImageExist })}>
+          {post.data.title}
+        </span>
         <p className="text-gray-500">{post.data.description}</p>
       </div>
     </motion.a>
