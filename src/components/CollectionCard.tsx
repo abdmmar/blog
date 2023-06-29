@@ -7,10 +7,18 @@ type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
 
 export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
-  const link =
-    post.data.tag.toLowerCase() === "project"
-      ? (post as ProjectProps).data.link
-      : `/${post.data.tag.toLowerCase()}/${post.slug}`;
+  switch (post.data.tag) {
+    case "Project":
+      return <ProjectCard post={post as ProjectProps} />;
+    case "Blog":
+      return <BlogCard post={post as BlogProps} />;
+    default:
+      return null;
+  }
+}
+
+function BlogCard({ post }: { post: BlogProps }) {
+  const link = `/${post.data.tag.toLowerCase()}/${post.slug}`;
 
   return (
     <motion.a
@@ -20,28 +28,16 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
       }}
       key={post.id}
       href={link}
-      target={post.data.tag.toLowerCase() === "project" ? "_blank" : ""}
+      target="_blank"
       className={cn(
         "col-span-2 rounded-md border transition-all p-4 flex flex-col gap-4 w-full",
         "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
-        {
-          "hover:border-green-600 dark:hover:border-green-600":
-            post.data.tag.toLowerCase() === "blog",
-          "hover:border-blue-600  dark:hover:border-blue-600":
-            post.data.tag.toLowerCase() === "project",
-        }
+        "hover:border-green-600 dark:hover:border-green-600"
       )}
     >
       <div className="flex justify-between items-center w-full">
         <div className="font-ibmMono">
-          <small
-            className={cn("uppercase", {
-              "text-green-600": post.data.tag.toLowerCase() === "blog",
-              "text-blue-600": post.data.tag.toLowerCase() === "project",
-            })}
-          >
-            {post.data.tag}
-          </small>
+          <small className="uppercase text-green-600">{post.data.tag}</small>
           <small className="text-gray-400 dark:text-gray-600"> • </small>
           <small className="text-gray-600 dark:text-gray-400">
             {new Intl.DateTimeFormat("id-ID", {
@@ -49,11 +45,7 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
             }).format(post.data.publishedAt)}
           </small>
         </div>
-        {post.data.tag === "Blog" ? (
-          <HiArrowRight size="0.8rem" />
-        ) : (
-          <HiArrowUpRight size="0.8rem" />
-        )}
+        <HiArrowRight size="0.8rem" />
       </div>
       {post.data.image ? (
         <img
@@ -66,6 +58,45 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
         <span className="text-xl">{post.data.title}</span>
         <p className="text-gray-500">{post.data.description}</p>
       </div>
+    </motion.a>
+  );
+}
+
+function ProjectCard({ post }: { post: ProjectProps }) {
+  const link = post.data.link;
+
+  return (
+    <motion.a
+      whileHover={{
+        scale: 1.1,
+        transition: { duration: "150ms" },
+      }}
+      key={post.id}
+      href={link}
+      target="_blank"
+      className={cn(
+        "col-span-2 rounded-md border transition-all flex flex-col w-full",
+        "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
+        "hover:border-blue-600 dark:hover:border-blue-600"
+      )}
+    >
+      <div className="flex justify-between items-center w-full p-4 ">
+        <div className="font-ibmMono">
+          <small className="uppercase text-blue-600">{post.data.tag}</small>
+          <small className="text-gray-400 dark:text-gray-600"> • </small>
+          <small className="text-gray-600 dark:text-gray-400">
+            {post.data.title}
+          </small>
+        </div>
+        <HiArrowUpRight size="0.8rem" />
+      </div>
+      {post.data.image ? (
+        <img
+          className="rounded-sm"
+          alt={post.data.imageAlt}
+          src={post.data.image.src}
+        />
+      ) : null}
     </motion.a>
   );
 }

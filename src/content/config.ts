@@ -5,7 +5,7 @@ const blog = defineCollection({
     z.object({
       title: z.string(),
       description: z.string(),
-      tag: z.string(),
+      tag: z.enum(["Blog"]),
       status: z.string(),
       publishedAt: z
         .string()
@@ -27,7 +27,7 @@ const project = defineCollection({
     z.object({
       title: z.string(),
       description: z.string(),
-      tag: z.string(),
+      tag: z.enum(["Project"]),
       publishedAt: z
         .string()
         .or(z.date())
