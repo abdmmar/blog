@@ -2,16 +2,25 @@ import { cn } from "@/utils";
 import type { CollectionEntry } from "astro:content";
 import { motion } from "framer-motion";
 import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2/index";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
+type PhotoProps = CollectionEntry<"photo">;
 
-export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
+export function CollectionCard({
+  post,
+}: {
+  post: BlogProps | ProjectProps | PhotoProps;
+}) {
   switch (post.data.tag) {
     case "Project":
       return <ProjectCard post={post as ProjectProps} />;
     case "Blog":
       return <BlogCard post={post as BlogProps} />;
+    case "Photography":
+      return <PhotoCard photo={post as PhotoProps} />;
     default:
       return null;
   }
@@ -73,7 +82,6 @@ function ProjectCard({ post }: { post: ProjectProps }) {
         scale: 1.1,
         transition: { duration: "150ms" },
       }}
-      key={post.id}
       href={link}
       target="_blank"
       className={cn(
@@ -100,5 +108,29 @@ function ProjectCard({ post }: { post: ProjectProps }) {
         />
       ) : null}
     </motion.a>
+  );
+}
+
+function PhotoCard({ photo }: { photo: PhotoProps }) {
+  return (
+    <motion.div
+      whileHover={{
+        scale: 1.1,
+        transition: { duration: "150ms" },
+      }}
+      className={cn(
+        "col-span-2 rounded-md border transition-all flex flex-col w-full",
+        "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
+        "hover:border-yellow-500 dark:hover:border-yellow-500"
+      )}
+    >
+      <Zoom>
+        <img
+          className="rounded-sm h-fit"
+          alt={photo.data.title}
+          src={photo.data.image.src}
+        />
+      </Zoom>
+    </motion.div>
   );
 }

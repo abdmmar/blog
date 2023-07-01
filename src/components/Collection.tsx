@@ -8,26 +8,30 @@ import { Masonry } from "./Masonry";
 
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
-type Collection = (BlogProps | ProjectProps)[];
+type PhotoProps = CollectionEntry<"photo">;
+type Collection = (BlogProps | ProjectProps | PhotoProps)[];
 
-const filters: FilterTag[] = ["all", "blog", "project"];
+const filters: FilterTag[] = ["all", "blog", "project", "photography"];
 
 type CollectionProps = {
   blog: BlogProps[];
   project: ProjectProps[];
+  photography: PhotoProps[];
 };
 
-export function Collection({ blog, project }: CollectionProps) {
+export function Collection({ blog, project, photography }: CollectionProps) {
   const filterTag = useStore($filterTag);
 
   const items: Collection = ([] as unknown as Collection)
-    .concat(project, blog)
+    .concat(project, blog, photography)
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
     .filter((item) => {
       switch (filterTag) {
         case "project":
           return item.data.tag.toLowerCase() === filterTag;
         case "blog":
+          return item.data.tag.toLowerCase() === filterTag;
+        case "photography":
           return item.data.tag.toLowerCase() === filterTag;
         case "all":
         default:
@@ -39,7 +43,7 @@ export function Collection({ blog, project }: CollectionProps) {
   return (
     <>
       <div className="grid grid-cols-8 gap-10 sm:grid-cols-4">
-        <ul className="col-span-4 flex gap-10 items-center sm:justify-between">
+        <ul className="col-span-4 flex gap-10 items-center sm:justify-between sm:overflow-x-scroll md:overflow-x-scroll">
           {filters.map((filter) => (
             <li key={filter}>
               <button
