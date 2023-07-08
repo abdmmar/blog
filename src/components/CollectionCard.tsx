@@ -126,7 +126,7 @@ function PhotoCard({ photo }: { photo: PhotoProps }) {
     >
       <Zoom>
         <img
-          className="rounded-sm h-fit"
+          className="rounded-md h-fit"
           alt={photo.data.title}
           src={photo.data.image.src}
         />

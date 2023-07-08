@@ -57,6 +57,8 @@ export function Collection({ blog, project, photography }: CollectionProps) {
                       filter === "blog",
                     ["hover:border-blue-600 dark:hover:border-blue-600"]:
                       filter === "project",
+                    ["hover:border-yellow-500 dark:hover:border-yellow-500"]:
+                      filter === "photography",
                   }
                 )}
                 onClick={() => $filterTag.set(filter)}
