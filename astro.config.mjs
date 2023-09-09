@@ -4,8 +4,6 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
-import image from "@astrojs/image";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://abdmmar.com",
@@ -18,11 +16,7 @@ export default defineConfig({
     mdx(),
     sitemap(),
     react(),
-    image({ serviceEntryPoint: "@astrojs/image/sharp" }),
   ],
-  experimental: {
-    assets: true,
-  },
   markdown: {
     // Can be 'shiki' (default), 'prism' or false to disable highlighting
     syntaxHighlight: "prism",

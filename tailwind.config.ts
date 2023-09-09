@@ -1,7 +1,7 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: "class",
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
@@ -25,12 +25,15 @@ module.exports = {
       },
       keyframes: {
         overlayShow: {
-          from: { opacity: 0 },
-          to: { opacity: 1 },
+          from: { opacity: '0' },
+          to: { opacity: '1' },
         },
         contentShow: {
-          from: { opacity: 0, transform: "translate(-50%, -48%) scale(0.96)" },
-          to: { opacity: 1, transform: "translate(-50%, -50%) scale(1)" },
+          from: { opacity: '0', transform: "translate(-50%, -48%) scale(0.96)" },
+          to: { opacity: '1', transform: "translate(-50%, -50%) scale(1)" },
+        },
+        blip: {
+          "50%": { opacity: '0' },
         },
       },
       animation: {
@@ -38,12 +41,7 @@ module.exports = {
         contentShow: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         blip: "blip 1s cubic-bezier(0, 0, 0.2, 1) infinite",
       },
-      keyframes: {
-        blip: {
-          "50%": { opacity: 0 },
-        },
-      },
     },
   },
   plugins: [],
-};
+} satisfies Config
