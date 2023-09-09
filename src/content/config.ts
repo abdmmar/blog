@@ -40,7 +40,7 @@ const project = defineCollection({
       imageAlt: z.string().optional(),
       keywords: z.array(z.string()).optional(),
       author: z.string().optional(),
-      repository: z.string(),
+      repository: z.string().optional(),
       link: z.string(),
     }),
 });
