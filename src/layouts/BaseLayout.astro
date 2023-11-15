@@ -18,7 +18,7 @@ const { meta } = Astro.props;
     <MetaTags {...meta} />
     <slot name="head" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <script>
+    <script is:inline>
       const setDarkMode = () => {
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
         if (
