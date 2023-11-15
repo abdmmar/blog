@@ -39,9 +39,9 @@ function BlogCard({ post }: { post: BlogProps }) {
       key={post.id}
       href={link}
       className={cn(
-        "col-span-2 rounded-md border transition-all p-4 flex flex-col gap-4 w-full",
+        "col-span-2 rounded-md border transition-all p-4 flex flex-col gap-4 w-full h-fit",
         "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
-        "hover:border-green-600 dark:hover:border-green-600"
+        "hover:border-green-600 dark:hover:border-green-600",
       )}
     >
       <div className="flex justify-between items-center w-full">
@@ -61,6 +61,8 @@ function BlogCard({ post }: { post: BlogProps }) {
           className="rounded-sm"
           alt={post.data.imageAlt}
           src={post.data.image.src}
+          width={post.data.image.width}
+          height={post.data.image.height}
         />
       ) : null}
       <div className="flex flex-col gap-2">
@@ -85,7 +87,7 @@ function ProjectCard({ post }: { post: ProjectProps }) {
       href={link}
       target="_blank"
       className={cn(
-        "col-span-2 rounded-md border transition-all flex flex-col w-full",
+        "col-span-2 rounded-md border transition-all flex flex-col w-full h-fit",
         "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
         "hover:border-blue-600 dark:hover:border-blue-600"
       )}
@@ -103,8 +105,10 @@ function ProjectCard({ post }: { post: ProjectProps }) {
       {post.data.image ? (
         <img
           className="rounded-sm"
-          alt={post.data.imageAlt}
           src={post.data.image.src}
+          width={post.data.image.width}
+          height={post.data.image.height}
+          alt={post.data.imageAlt}
         />
       ) : null}
     </motion.a>
@@ -119,7 +123,7 @@ function PhotoCard({ photo }: { photo: PhotoProps }) {
         transition: { duration: "150ms" },
       }}
       className={cn(
-        "col-span-2 rounded-md border transition-all flex flex-col w-full",
+        "col-span-2 rounded-md border transition-all flex flex-col w-full h-fit",
         "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
         "hover:border-yellow-500 dark:hover:border-yellow-500"
       )}
@@ -129,6 +133,8 @@ function PhotoCard({ photo }: { photo: PhotoProps }) {
           className="rounded-md h-fit"
           alt={photo.data.title}
           src={photo.data.image.src}
+          width={photo.data.image.width}
+          height={photo.data.image.height}
         />
       </Zoom>
     </motion.div>

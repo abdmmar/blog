@@ -1,3 +1,4 @@
+import { Masonry } from "@/components/Masonry";
 import { useStore } from "@nanostores/react";
 import type { CollectionEntry } from "astro:content";
 import type { FilterTag } from "../stores/collection";
@@ -5,7 +6,6 @@ import { $filterTag } from "../stores/collection";
 import { cn } from "../utils";
 import { CollectionCard } from "./CollectionCard";
 import Counter from "./Counter";
-import { Masonry } from "./Masonry";
 
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
