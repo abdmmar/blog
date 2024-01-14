@@ -10,10 +10,10 @@ git clone https://github.com/abdmmar/blog.git
 cd blog
 
 # install dependencies
-yarn install
+pnpm install
 
 # build project
-yarn dev
+pnpm dev
 ```
 
 ## ✽ References
