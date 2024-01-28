@@ -69,7 +69,7 @@ function BlogCard({ post }: { post: BlogProps }) {
         <span className={cn("text-xl", { "mt-10": !isImageExist })}>
           {post.data.title}
         </span>
-        <p className="text-gray-500">{post.data.description}</p>
+        <p className="text-gray-500 leading-snug">{post.data.description}</p>
       </div>
     </motion.a>
   );

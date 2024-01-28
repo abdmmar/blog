@@ -9,6 +9,7 @@
   #article > p {
     margin-bottom: 1rem;
     line-height: calc(1.125rem * 1.5);
+    font-size: 1.125rem;
   }
 
   #article h1,
@@ -63,6 +64,7 @@
   #article ul li,
   #article ol li {
     margin-bottom: 0.5rem;
+    font-size: 1.125rem;
   }
 
   #article ol {

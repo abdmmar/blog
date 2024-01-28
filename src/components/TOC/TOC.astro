@@ -11,8 +11,37 @@ const { headings } = Astro.props;
 const toc = buildTOC(headings);
 ---
 
-<nav class="toc">
-  <ul>
-    {toc.map((heading) => <TOCItem heading={heading} />)}
-  </ul>
-</nav>
+<style>
+  @layer markers;
+
+  details {
+    border-radius: 0.5rem;
+    transition: 50ms;
+  }
+
+  summary::before,
+  summary::after {
+    transition: 200ms;
+  }
+
+  summary {
+    position: relative;
+  }
+
+  summary::marker {
+    content: none;
+  }
+
+  summary::before,
+  summary::after {
+    content: "";
+  }
+</style>
+<details>
+  <summary>Table of Contents</summary>
+  <nav class="toc">
+    <ul>
+      {toc.map((heading) => <TOCItem heading={heading} />)}
+    </ul>
+  </nav>
+</details>

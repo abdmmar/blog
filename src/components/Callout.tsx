@@ -7,7 +7,7 @@ export default function Callout({ children }: CalloutProps) {
       <div className="p-1 flex items-center">
         <HiOutlineInformationCircle className="text-blue-600 w-6 h-6" />
       </div>
-      <div className="mt-1">{children}</div>
+      <div className="mt-1 text-lg">{children}</div>
     </div>
   );
 }
