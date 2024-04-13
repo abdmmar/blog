@@ -33,23 +33,10 @@ const ThemeSwitcher = () => {
   return (
     <button
       id="theme-toggle"
-      className="[&svg]:stroke-2 border border-gray-300 p-1 rounded-sm bg-white hover:bg-gray-100 transition-all dark:bg-gray-950 dark:hover:bg-gray-900 dark:border-gray-800"
+      className="[&svg]:stroke-2 p-1 rounded-sm text-gray-500 hover:text-gray-900 transition-all dark:hover:text-gray-50"
       onClick={handleToggleClick}
     >
-      <span
-        id="theme-toggle-dark-icon"
-        className={!isDarkTheme ? "hidden" : ""}
-      >
-        <HiOutlineMoon size="1.2rem" />
-        <span className="sr-only">Dark Mode</span>
-      </span>
-      <span
-        id="theme-toggle-light-icon"
-        className={isDarkTheme ? "hidden" : ""}
-      >
-        <HiOutlineSun size="1.2rem" />
-        <span className="sr-only">Light Mode</span>
-      </span>
+      {isDarkTheme ? "Dark" : "Light"}
     </button>
   );
 };

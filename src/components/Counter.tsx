@@ -9,7 +9,7 @@ export default function Counter({ value }: { value: number }) {
   return (
     <div
       style={{ fontSize }}
-      className="flex space-x-3 overflow-hidden bg-white rounded-sm py-1 px-4 border transition-all border-gray-300 dark:bg-gray-950 hover:dark:bg-gray-900 dark:border-gray-800 hover:bg-gray-100"
+      className="flex space-x-3 overflow-hidden py-1 px-4 transition-all"
     >
       <Digit place={100} value={value} />
       <Digit place={10} value={value} />
@@ -52,7 +52,7 @@ function Number({ mv, number }: { mv: MotionValue; number: number }) {
   return (
     <motion.span
       style={{ y }}
-      className="absolute inset-0 flex items-center justify-center text-gray-900 dark:text-gray-100 font-ibmMono leading-none"
+      className="absolute inset-0 flex items-center text-sm justify-center text-gray-900 dark:text-gray-100 font-ibmMono leading-none"
     >
       {number}
     </motion.span>

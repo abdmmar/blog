@@ -2,11 +2,15 @@
 import Header from "@/components/Header.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
-import Coffee from "../components/Coffee.astro";
 import { Collection } from "../components/Collection";
 import Computer from "../components/Computer.astro";
 import Sunflower from "../components/Sunflower.astro";
 import Sup from "../components/Sup.astro";
+import Coffee from "../components/Coffee.astro";
+import Cat from "../components/Cat.astro";
+import Book from "../components/Book.astro";
+import Cactus from "../components/Cactus.astro";
+import Painting from "../components/Painting.astro";
 
 const blog = await getCollection("blog");
 const project = await getCollection("project");
@@ -17,65 +21,36 @@ const photography = await getCollection("photo");
   <header
     class="grid grid-cols-8 gap-10 items-start sm:grid-cols-4 md:grid-cols-4"
   >
-    <div class="col-span-4 flex gap-24 w-full flex-col">
+    <div class="col-span-8 flex gap-10 w-full flex-col">
       <Header />
-      <div class="flex justify-end">
-        <div class="flex gap-4 items-end">
-          <div class="sm:hidden md:block lg:hidden">
-            <Coffee />
+      <div class="flex justify-center">
+        <div class="flex gap-8 items-end justify-between">
+          <div class="flex flex-col items-center gap-8">
+            <div class="sm:hidden md:hidden lg:hidden">
+              <Painting />
+            </div>
+            <div class="flex items-end gap-8">
+              <div class="sm:hidden md:hidden lg:hidden xl:hidden">
+                <Cactus />
+              </div>
+              <div class="sm:hidden md:hidden lg:hidden">
+                <Cat />
+              </div>
+              <div class="sm:hidden md:block lg:block">
+                <Coffee />
+              </div>
+            </div>
           </div>
-          <Computer class="text-base leading-[19px]" />
-          <div class="sm:hidden md:block lg:hidden">
-            <Sunflower />
+          <Computer />
+          <div class="flex items-end gap-8">
+            <div class="sm:hidden md:hidden lg:hidden xl:hidden">
+              <Book />
+            </div>
+            <div class="sm:hidden md:hidden lg:block">
+              <Sunflower />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-span-4 flex flex-col w-full justify-between h-full">
-      <div class="grid grid-cols-4 gap-10">
-        <p class="col-span-4 text-2xl leading-[30.29px] m">
-          Pengembang perangkat lunak yang suka tidur, sedikit membaca, lain
-          waktu merancang, dan terkadang menyusun kode berbuntut. Saat ini
-          sedang mempelajari <Sup>(1)</Sup>sistem grid,
-          <Sup>(2)</Sup>merancang zine, <Sup>(3)</Sup>menyusun huruf, dan <Sup>
-            (4)
-          </Sup>melukis cahaya.
-        </p>
-      </div>
-      <div class="grid grid-cols-4 gap-10 mt-20">
-        <ul
-          class="col-span-2 sm:col-span-4 lg:col-span-3 flex justify-between items-center text-lg"
-        >
-          <li
-            class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
-          >
-            <a
-              href="https://github.com/abdmmar"
-              target="_blank"
-              rel="noreferrer">GitHub</a
-            >
-          </li>
-          <li class="text-gray-300 dark:text-gray-800">/</li>
-          <li
-            class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
-          >
-            <a
-              href="https://twitter.com/abdmmar"
-              target="_blank"
-              rel="noreferrer">Twitter</a
-            >
-          </li>
-          <li class="text-gray-300 dark:text-gray-800">/</li>
-          <li
-            class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
-          >
-            <a
-              href="mailto:abd.ammar.mar@gmail.com"
-              target="_blank"
-              rel="noreferrer">Email</a
-            >
-          </li>
-        </ul>
       </div>
     </div>
   </header>

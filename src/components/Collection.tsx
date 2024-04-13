@@ -1,9 +1,9 @@
-import { Masonry } from "@/components/Masonry";
+import type { PropsWithChildren } from "react";
 import { useStore } from "@nanostores/react";
 import type { CollectionEntry } from "astro:content";
+import { Masonry } from "@/components/Masonry";
 import type { FilterTag } from "../stores/collection";
-import { $filterTag } from "../stores/collection";
-import { cn } from "../utils";
+import { $filterTag, $descriptionLang } from "../stores/collection";
 import { CollectionCard } from "./CollectionCard";
 import Counter from "./Counter";
 
@@ -12,7 +12,7 @@ type ProjectProps = CollectionEntry<"project">;
 type PhotoProps = CollectionEntry<"photo">;
 type Collection = (BlogProps | ProjectProps | PhotoProps)[];
 
-const filters: Array<FilterTag> = ["all", "blog", "project", "photography"];
+const filters: Array<FilterTag> = ["All", "Blog", "Project", "Photography"];
 
 type CollectionProps = {
   blog: BlogProps[];
@@ -20,21 +20,32 @@ type CollectionProps = {
   photography: PhotoProps[];
 };
 
+function Sup({ children }: PropsWithChildren) {
+  return (
+    <sup aria-hidden="true" className="text-gray-500">
+      <em>
+        <small>{children}</small>
+      </em>
+    </sup>
+  );
+}
+
 export function Collection({ blog, project, photography }: CollectionProps) {
   const filterTag = useStore($filterTag);
+  const descLang = useStore($descriptionLang);
 
   const items: Collection = ([] as unknown as Collection)
     .concat(project, blog, photography)
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
     .filter((item) => {
       switch (filterTag) {
-        case "project":
-          return item.data.tag.toLowerCase() === filterTag;
-        case "blog":
-          return item.data.tag.toLowerCase() === filterTag;
-        case "photography":
-          return item.data.tag.toLowerCase() === filterTag;
-        case "all":
+        case "Project":
+          return item.data.tag === filterTag;
+        case "Blog":
+          return item.data.tag === filterTag;
+        case "Photography":
+          return item.data.tag === filterTag;
+        case "All":
         default:
           return true;
       }
@@ -43,34 +54,43 @@ export function Collection({ blog, project, photography }: CollectionProps) {
 
   return (
     <>
-      <div className="grid grid-cols-8 gap-10 sm:grid-cols-4">
-        <ul className="col-span-4 flex gap-10 items-center sm:justify-between sm:overflow-x-scroll md:overflow-x-scroll">
-          {filters.map((filter) => (
-            <li key={filter}>
-              <button
-                className={cn(
-                  "rounded-sm font-ibmMono py-2 px-4 hover:bg-gray-100 transition-all border border-white",
-                  "dark:bg-gray-950 hover:dark:bg-gray-900 dark:border-gray-950 uppercase",
-                  {
-                    ["border-gray-300 dark:border-gray-800"]:
-                      filter === filterTag,
-                    ["hover:border-green-600 dark:hover:border-green-600"]:
-                      filter === "blog",
-                    ["hover:border-blue-600 dark:hover:border-blue-600"]:
-                      filter === "project",
-                    ["hover:border-yellow-500 dark:hover:border-yellow-500"]:
-                      filter === "photography",
-                  }
-                )}
-                onClick={() => $filterTag.set(filter)}
+      <div className="grid grid-cols-8 gap-10 sm:flex sm:flex-col-reverse">
+        <div className="col-start-1 col-end-5 flex gap-10 items-start justify-between">
+          <select
+            className="bg-transparent py-1 pr-4 pl-2"
+            onChange={(e) => $filterTag.set(e.target.value as FilterTag)}
+          >
+            {filters.map((filter) => (
+              <option
+                className="dark:text-gray-900"
+                key={filter}
+                value={filter}
               >
                 {filter}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <div className="col-span-4 flex justify-end sm:hidden">
+              </option>
+            ))}
+          </select>
           <Counter value={itemsCount} />
+        </div>
+        <div className="col-start-5 col-end-9 flex justify-end">
+          <p className="text-xl">
+            {descLang === "en" ? (
+              <>
+                Sleep-loving software engineer with a knack for design and
+                occasionally diving deep into complex code. Currently exploring{" "}
+                <Sup>(1)</Sup>grid systems, <Sup>(2)</Sup>zine design,{" "}
+                <Sup>(3)</Sup>writing, and <Sup>(4)</Sup>photography.{" "}
+              </>
+            ) : (
+              <>
+                Pengembang perangkat lunak yang suka tidur, sedikit membaca,
+                lain waktu merancang, dan terkadang menyusun kode berbuntut.
+                Saat ini sedang mempelajari <Sup>(1)</Sup>sistem grid,
+                <Sup>(2)</Sup>merancang zine, <Sup>(3)</Sup>menyusun huruf, dan{" "}
+                <Sup>(4)</Sup>melukis cahaya.
+              </>
+            )}
+          </p>
         </div>
       </div>
       <Masonry breakpoints={{ 1440: 4, 960: 2, 520: 1 }}>
