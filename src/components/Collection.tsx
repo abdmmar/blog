@@ -77,7 +77,7 @@ export function Collection({ blog, project, photography }: CollectionProps) {
             {descLang === "en" ? (
               <>
                 Sleep-loving software engineer with a knack for design and
-                occasionally diving deep into complex code. Currently exploring{" "}
+                occasionally building things. Currently exploring{" "}
                 <Sup>(1)</Sup>grid systems, <Sup>(2)</Sup>zine design,{" "}
                 <Sup>(3)</Sup>writing, and <Sup>(4)</Sup>photography.{" "}
               </>
