@@ -5,7 +5,6 @@ import { getCollection } from "astro:content";
 import { Collection } from "../components/Collection";
 import Computer from "../components/Computer.astro";
 import Sunflower from "../components/Sunflower.astro";
-import Sup from "../components/Sup.astro";
 import Coffee from "../components/Coffee.astro";
 import Cat from "../components/Cat.astro";
 import Book from "../components/Book.astro";
@@ -14,7 +13,6 @@ import Painting from "../components/Painting.astro";
 
 const blog = await getCollection("blog");
 const project = await getCollection("project");
-const photography = await getCollection("photo");
 ---
 
 <BaseLayout>
@@ -59,7 +57,6 @@ const photography = await getCollection("photo");
       client:load
       blog={blog}
       project={project}
-      photography={photography}
     />
   </main>
 </BaseLayout>

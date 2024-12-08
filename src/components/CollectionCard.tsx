@@ -7,20 +7,17 @@ import "react-medium-image-zoom/dist/styles.css";
 
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
-type PhotoProps = CollectionEntry<"photo">;
 
 export function CollectionCard({
   post,
 }: {
-  post: BlogProps | ProjectProps | PhotoProps;
+  post: BlogProps | ProjectProps;
 }) {
   switch (post.data.tag) {
     case "Project":
       return <ProjectCard post={post as ProjectProps} />;
     case "Blog":
       return <BlogCard post={post as BlogProps} />;
-    case "Photography":
-      return <PhotoCard photo={post as PhotoProps} />;
     default:
       return null;
   }
@@ -115,6 +112,7 @@ function ProjectCard({ post }: { post: ProjectProps }) {
   );
 }
 
+type PhotoProps = any
 function PhotoCard({ photo }: { photo: PhotoProps }) {
   return (
     <motion.div

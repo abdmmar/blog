@@ -9,15 +9,13 @@ import Counter from "./Counter";
 
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
-type PhotoProps = CollectionEntry<"photo">;
-type Collection = (BlogProps | ProjectProps | PhotoProps)[];
+type Collection = (BlogProps | ProjectProps)[];
 
-const filters: Array<FilterTag> = ["All", "Blog", "Project", "Photography"];
+const filters: Array<FilterTag> = ["All", "Blog", "Project"];
 
 type CollectionProps = {
   blog: BlogProps[];
   project: ProjectProps[];
-  photography: PhotoProps[];
 };
 
 function Sup({ children }: PropsWithChildren) {
@@ -30,20 +28,18 @@ function Sup({ children }: PropsWithChildren) {
   );
 }
 
-export function Collection({ blog, project, photography }: CollectionProps) {
+export function Collection({ blog, project }: CollectionProps) {
   const filterTag = useStore($filterTag);
   const descLang = useStore($descriptionLang);
 
   const items: Collection = ([] as unknown as Collection)
-    .concat(project, blog, photography)
+    .concat(project, blog)
     .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
     .filter((item) => {
       switch (filterTag) {
         case "Project":
           return item.data.tag === filterTag;
         case "Blog":
-          return item.data.tag === filterTag;
-        case "Photography":
           return item.data.tag === filterTag;
         case "All":
         default:
@@ -76,18 +72,18 @@ export function Collection({ blog, project, photography }: CollectionProps) {
           <p className="text-xl">
             {descLang === "en" ? (
               <>
-                Sleep-loving software engineer with a knack for design and
+                A software engineer with a knack for design and
                 occasionally building things. Currently exploring{" "}
-                <Sup>(1)</Sup>grid systems, <Sup>(2)</Sup>zine design,{" "}
-                <Sup>(3)</Sup>writing, and <Sup>(4)</Sup>photography.{" "}
+                <Sup>(1)</Sup>software infrastructure, <Sup>(2)</Sup>zine design,{" "}
+                <Sup>(3)</Sup>writing, and <Sup>(4)</Sup><a href="https://instagram.com/abdmmar" target="_blank" className="underline">photography</a>.{" "}
               </>
             ) : (
               <>
                 Pengembang perangkat lunak yang suka tidur, sedikit membaca,
                 lain waktu merancang, dan terkadang menyusun kode berbuntut.
-                Saat ini sedang mempelajari <Sup>(1)</Sup>sistem grid,
-                <Sup>(2)</Sup>merancang zine, <Sup>(3)</Sup>menyusun huruf, dan{" "}
-                <Sup>(4)</Sup>melukis cahaya.
+                Saat ini sedang mempelajari <Sup>(1)</Sup>infrastruktur perangkat lunak,
+                <Sup>(2)</Sup>merancang zine, <Sup>(3)</Sup>menulis, dan{" "}
+                <Sup>(4)</Sup><a href="https://instagram.com/abdmmar" target="_blank" className="underline">memotret</a>.
               </>
             )}
           </p>
