@@ -1,5 +1,4 @@
 import * as React from "react";
-import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi2/index";
 
 const ThemeSwitcher = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
@@ -33,10 +32,10 @@ const ThemeSwitcher = () => {
   return (
     <button
       id="theme-toggle"
-      className="[&svg]:stroke-2 p-1 rounded-sm text-gray-500 hover:text-gray-900 transition-all dark:hover:text-gray-50"
+      className="[&svg]:stroke-2 rounded-sm text-gray-500 hover:text-gray-900 transition-all dark:hover:text-gray-50"
       onClick={handleToggleClick}
     >
-      {isDarkTheme ? "Dark" : "Light"}
+      {isDarkTheme ? "dark" : "light"}
     </button>
   );
 };

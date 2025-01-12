@@ -22,9 +22,9 @@ const { class: className } = Astro.props;
         >
       </li>
       <li class="text-gray-300 dark:text-gray-800">•</li>
-      <ThemeSwitcher client:idle />
-      <li class="text-gray-300 dark:text-gray-800">•</li>
-      <LangSwitcher client:idle />
+      <span>
+        [<ThemeSwitcher client:idle />, <LangSwitcher client:idle />]
+      </span>
     </ul>
   </div>
 </div>
