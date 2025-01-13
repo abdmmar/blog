@@ -20,8 +20,8 @@ export default {
         // => @media (max-width: 639px) { ... }
       },
       fontFamily: {
-        ibmMono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
-        ibmSans: ['"IBM Plex Sans"', ...defaultTheme.fontFamily.sans],
+        mono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       keyframes: {
         overlayShow: {

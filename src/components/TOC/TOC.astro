@@ -37,13 +37,17 @@ const toc = buildTOC(headings);
     content: "";
   }
 </style>
-  {toc.length !== 0 ? (
+{
+  toc.length !== 0 ? (
     <details>
       <summary>Table of Contents</summary>
       <nav class="toc">
         <ul>
-          {toc.map((heading) => <TOCItem heading={heading} />)}
+          {toc.map((heading) => (
+            <TOCItem heading={heading} />
+          ))}
         </ul>
       </nav>
     </details>
-  ) : null}
+  ) : null
+}

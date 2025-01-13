@@ -26,9 +26,6 @@ importers:
       '@fontsource/ibm-plex-mono':
         specifier: 5.0.3
         version: 5.0.3
-      '@fontsource/ibm-plex-sans':
-        specifier: 5.0.3
-        version: 5.0.3
       '@nanostores/react':
         specifier: 0.7.1
         version: 0.7.1(nanostores@0.9.2)(react@18.0.0)
@@ -541,9 +538,6 @@ packages:
 
   '@fontsource/ibm-plex-mono@5.0.3':
     resolution: {integrity: sha512-ifYK2yFaYmPcPi+zFOm4mAIP21K2LJ1wvjOW0Xfpx+Cxcz56m3Opow29mdj3HPGpfSZX7RdTVgno220MiUKCnw==}
-
-  '@fontsource/ibm-plex-sans@5.0.3':
-    resolution: {integrity: sha512-KcU73ZHJ1Hl2TyrTHdy4f4ajO+oPHXI3oXzmRpefifb/s/72LCtw/dVtxoQ3p8a2tRM3/I0xH15NLcgn0+R89w==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -3300,8 +3294,6 @@ snapshots:
     optional: true
 
   '@fontsource/ibm-plex-mono@5.0.3': {}
-
-  '@fontsource/ibm-plex-sans@5.0.3': {}
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:

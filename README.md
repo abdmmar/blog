@@ -1,6 +1,6 @@
 # ✤ abdmmar.com
 
-Personal site. Built using [Astro](https://astro.build/) and [IBM Plex](https://www.ibm.com/plex/) typeface 
+Personal site. Built using [Astro](https://astro.build/) and [Inter](https://rsms.me/inter/) typeface 
 
 ## ✦ Development
 

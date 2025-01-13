@@ -42,7 +42,7 @@ function BlogCard({ post }: { post: BlogProps }) {
       )}
     >
       <div className="flex justify-between items-center w-full">
-        <div className="font-ibmMono">
+        <div className="font-mono">
           <small className="text-green-600">{post.data.tag}</small>
           <small className="text-gray-400 dark:text-gray-600"> • </small>
           <small className="text-gray-600 dark:text-gray-400">
@@ -90,7 +90,7 @@ function ProjectCard({ post }: { post: ProjectProps }) {
       )}
     >
       <div className="flex justify-between items-center w-full p-4 ">
-        <div className="font-ibmMono">
+        <div className="font-mono">
           <small className="text-blue-600">{post.data.tag}</small>
           <small className="text-gray-400 dark:text-gray-600"> • </small>
           <small className="text-gray-600 dark:text-gray-400">
