@@ -2,14 +2,15 @@
 import { cn } from "@/utils";
 import ThemeSwitcher from "./ThemeSwitcher";
 import LangSwitcher from "./LangSwitcher";
-
+import { motion } from "framer-motion";
 const { class: className } = Astro.props;
 ---
 
 <div class={cn("grid grid-cols-4 sm:grid-cols-2 items-center", className)}>
   <a href="/" class="col-span-2">
-    <h2 class="text-md text-gray-900 dark:text-gray-50 flex gap-2 items-center">
-      ammar
+    <h2  class="text-lg text-gray-900 dark:text-gray-50 flex gap-2 items-center">
+    <motion.span client:load initial={{ y: 10, opacity: 0}} animate={{y: 0, opacity: 1}}>✤</motion.span>
+      ✦✧✱✻
     </h2>
   </a>
   <div class="col-start-4 flex justify-end items-center gap-4">
