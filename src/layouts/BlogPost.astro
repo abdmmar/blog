@@ -39,7 +39,7 @@ const postDate = dateFormatter.format(publishedDate);
         <div class="flex flex-col h-full justify-between">
           <a href="/">
             <h2 class="text-xl flex gap-2 items-center">
-              <span class="text-blue-600 animate-spin">✤</span> Abdullah Ammar
+              AA
             </h2>
           </a>
           {headings ? <TOC headings={headings} /> : null}
@@ -53,11 +53,12 @@ const postDate = dateFormatter.format(publishedDate);
         <section class="grid grid-cols-4 gap-10">
           <div class="col-span-4 flex flex-col justify-between">
             <div class="flex justify-between min-h-[28px] items-center">
-              <div class="flex font-mono">
-                <span class="mr-9 text-green-600 uppercase">{tag}</span>
+              <div class="flex gap-4">
+                <span class="text-green-600">{tag}</span>
+                <span class="text-gray-300 dark:text-gray-800">•</span>
                 <time
                   datetime={publishedDate.toISOString()}
-                  class="text-gray-600 dark:text-gray-400">{postDate}</time
+                  class="text-gray-600 dark:text-gray-400 tabular-nums">{postDate}</time
                 >
               </div>
               <ShareButton
@@ -128,7 +129,7 @@ const postDate = dateFormatter.format(publishedDate);
       <div class="sticky top-10 h-[calc(100vh-80px)]">
         <div class="flex flex-col h-full justify-between">
           <div class="p-1 flex justify-end">
-            <ThemeSwitcher client:idle />
+            <ThemeSwitcher />
           </div>
           <div class="flex flex-col gap-5">
             {

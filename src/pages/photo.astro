@@ -8,12 +8,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 
 <BaseLayout>
 	<Header />
-	<div class="mt-10">
-		<h1 class="text-9xl font-semibold -ml-[6px] col-span-full mb-16 sm:text-4xl sm:-ml-[2px]">
+	<div class="mt-32">
+		<h1 class="text-9xl font-bold -ml-[6px] col-span-full mb-16 sm:text-4xl sm:-ml-[2px] letter tracking-[-0.03em]">
 			Photography
 		</h1>
 		<div class="w-full grid grid-cols-4 gap-4">
-			<div class="col-span-2 columns-2 sm:columns-1 sm:col-span-4 gap-16 mb-32 text-lg sm:text-base">
+			<div class="col-span-2 columns-2 sm:columns-1 sm:col-span-4 gap-16 mb-32 sm:text-base">
 				<p class="mb-4">
 					I never truly developed an interest in photography until I reached
 					high school. Back then, I would occasionally borrow a friend's camera,
@@ -39,7 +39,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 					fulfilling experience.
 				</p>
 			</div>
-			<Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[300px] sm:w-[250px]" src={meImage}alt="self-portrait" />
+			<Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[300px] sm:w-[250px] justify-self-end" src={meImage}alt="self-portrait" />
 		</div>
 	</div>
 	<div class="grid grid-cols-4 gap-16 sm:grid-cols-2 sm:gap-4">
