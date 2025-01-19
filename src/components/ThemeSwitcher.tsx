@@ -35,7 +35,7 @@ const ThemeSwitcher = () => {
       className="[&svg]:stroke-2 rounded-sm text-gray-500 hover:text-gray-900 transition-all dark:hover:text-gray-50"
       onClick={handleToggleClick}
     >
-      {isDarkTheme ? "dark" : "light"}
+      {isDarkTheme ? "Dark" : "Light"}
     </button>
   );
 };
