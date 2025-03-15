@@ -45,4 +45,20 @@ const project = defineCollection({
     }),
 });
 
-export const collections = { blog, project };
+const photo = defineCollection({
+  schema: ({ image }) =>
+    z.object({
+      id: z.string(),
+      filepath: image(),
+      title: z.string(),
+      alt: z.string().optional(),
+      date: z.string().transform((str) => (new Date(str))),
+      author: z.string(),
+      iso: z.string().optional(),
+      shutterspeed: z.string().optional(),
+      aperture: z.string().optional(),
+      lens: z.string().optional(),
+    }),
+});
+
+export const collections = { blog, project, photo };

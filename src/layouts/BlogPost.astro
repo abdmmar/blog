@@ -5,8 +5,6 @@ import { ArrowLeft, ArrowRight } from "@/components/icons";
 import type { MarkdownHeading } from "astro";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import Balancer from "react-wrap-balancer";
-import CopyCodeButton from "../components/CopyCodeButton.astro";
 import ShareButton from "../components/ShareButton";
 import { TOC } from "../components/TOC";
 import BaseLayout from "./BaseLayout.astro";
@@ -72,9 +70,7 @@ const postDate = dateFormatter.format(publishedDate);
             <div class="mt-10">
               <div class="min-h-[12rem] flex items-end mb-14">
                 <h1 class="text-5xl leading-[52px] font-medium">
-                  <Balancer client:only>
-                    {title}
-                  </Balancer>
+                  {title}
                 </h1>
               </div>
 
