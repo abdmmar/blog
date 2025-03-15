@@ -79,7 +79,7 @@ importers:
         specifier: 1.0.0
         version: 1.0.0
       exif-reader:
-        specifier: ^2.0.2
+        specifier: 2.0.2
         version: 2.0.2
       sharp:
         specifier: 0.32.5
