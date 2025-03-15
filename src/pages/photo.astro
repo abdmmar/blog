@@ -50,7 +50,7 @@ const sortedPhotos = photos.sort(
 			<Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[300px] sm:w-[250px] justify-self-end sm:justify-self-start" src={meImage}alt="self-portrait" />
 		</div>
 	</div>
-	<div class="grid grid-cols-4 gap-16 sm:grid-cols-2 sm:gap-4">
+	<div class="grid grid-cols-4 gap-16 sm:grid-cols-1 sm:gap-4">
 		{sortedPhotos.map((photo) => (
 			<Picture src={photo.data.filepath} alt={photo.data.alt || photo.data.title} loading="lazy" />
 		))}
