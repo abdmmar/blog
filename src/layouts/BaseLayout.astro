@@ -5,6 +5,7 @@ import { ViewTransitions } from "astro:transitions";
 
 import type { Props as MetaTagsProps } from "@/components/MetaTags.astro";
 import MetaTags from "@/components/MetaTags.astro";
+import { SITE_TITLE } from "@/consts";
 
 type Props = {
   meta?: MetaTagsProps;
@@ -13,12 +14,18 @@ type Props = {
 const { meta } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <MetaTags {...meta} />
     <slot name="head" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE_TITLE}
+      href={new URL("rss.xml", Astro.site)}
+    />
     <script is:inline>
       const setDarkMode = () => {
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC

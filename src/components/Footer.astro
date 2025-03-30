@@ -1,13 +1,27 @@
 ---
-const today = new Date();
+import LangSwitcher from "./LangSwitcher";
+import ThemeSwitcher from "./ThemeSwitcher";
 ---
 
-<footer>
-	&copy; {today.getFullYear()} YOUR NAME HERE. All rights reserved.
+<footer class="mt-12">
+	<div class="col-start-4 flex items-center justify-between gap-4">
+		<span class="font-mono">
+			C|_|
+		</span>
+		<ul class="flex justify-between items-center text-md gap-4 sm:gap-1 md:gap-2">
+			<li
+				class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
+			>
+				<a href="https://github.com/abdmmar" target="_blank" rel="noreferrer"
+					>GitHub</a
+				>
+			</li>
+			<li class="text-gray-300 dark:text-gray-800">•</li>
+			<span>
+				<ThemeSwitcher client:idle />
+			</span>
+			<li class="text-gray-300 dark:text-gray-800">•</li>
+			<LangSwitcher client:idle />
+		</ul>
+	</div>
 </footer>
-<style>
-	footer {
-		padding: 25px;
-		text-align: center;
-	}
-</style>

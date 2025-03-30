@@ -1,15 +1,71 @@
 @tailwind base;
 
+:root {
+  --sansFont: "Inter";
+  --titleFont: "InterDisplay";
+  --monoFont: "IBM Plex Mono";
+
+  --fontSize: 16px;
+
+  --unit: calc(var(--fontSize) * 0.5);
+
+  /* line height is the basis for vertical spacing */
+  --line-height: calc(var(--fontSize) * 1.5);
+
+  /* horizontal and vertical spacing basis */
+  /*--baseline: calc(var(--line-height) / 2);*/
+  --baseline: var(--unit);
+
+  /* spacing around blocks */
+  --blockSpacingTop: 0px;
+  --blockSpacingBottom: var(--line-height);
+
+  /* horizontal rule */
+  --hr-weight: 2px;
+  /* 1 pixel */
+  --displayScale: 1;
+  --pixel: 1px;
+}
+
 @layer base {
+  address,
+  article,
+  aside,
+  blockquote,
+  dd,
+  dl,
+  dt,
+  fieldset,
+  figure,
+  form,
+  r-grid,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  nav,
+  ol,
+  p,
+  pre,
+  table,
+  tfoot,
+  ul,
+  video {
+    margin-top: var(--blockSpacingTop);
+    margin-bottom: var(--blockSpacingBottom);
+  }
+
   /* 
     Font scale configuration
     See: https://type-scale.com/
   */
 
   #article > p {
-    margin-bottom: 1rem;
-    line-height: calc(1.125rem * 1.5);
-    font-size: 1.125rem;
+    margin-bottom: var(--blockSpacingBottom);
+    line-height: var(--line-height);
+    font-size: 1rem;
   }
 
   #article h1,
@@ -17,7 +73,7 @@
   #article h3,
   #article h4,
   #article h5 {
-    font-family: "InterDisplay", "Inter", sans-serif;
+    font-family: var(--titleFont), var(--sansFont), sans-serif;
     font-weight: 400;
     margin: 0;
   }
@@ -25,13 +81,14 @@
   #article h2 {
     font-size: 1.7rem;
     font-weight: 500;
-    margin-top: 2rem;
+    margin-top: 3rem;
     margin-bottom: 1rem;
+    letter-spacing: 0.01em;
   }
 
   #article h3 {
     font-size: 1.4rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     margin-bottom: 0.8rem;
     font-weight: 500;
   }
@@ -64,8 +121,8 @@
 
   #article ul li,
   #article ol li {
-    margin-bottom: 0.5rem;
-    font-size: 1.125rem;
+    margin-bottom: calc(1rem * 0.5);
+    font-size: 1rem;
   }
 
   #article ol {
@@ -82,12 +139,15 @@
   #article a {
     text-decoration: underline;
     text-underline-offset: 2px;
-    text-decoration-color: #d1d5db;
+    text-decoration-color: rgba(255, 255, 255, 0.9);
     transition: all 150ms;
+    color: #2563eb;
   }
 
   .dark #article a {
+    color: #2563eb;
     text-decoration-color: #334155;
+    text-decoration-color: rgba(0, 0, 0, 0.9);
   }
 
   #article a:hover {
@@ -96,7 +156,7 @@
 
   #article p > code,
   #article li > code {
-    font-family: "IBM Plex Mono", monospace;
+    font-family: var(--monoFont), monospace;
     font-weight: 500;
     font-size: 14px;
     padding: 2px 4px;

@@ -5,8 +5,7 @@ import Header from "@/components/Header.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
-
-type Photos = CollectionEntry<"photo">;
+import Footer from "@/components/Footer.astro";
 
 const photos = await getCollection("photo");
 const sortedPhotos = photos.sort(
@@ -55,4 +54,5 @@ const sortedPhotos = photos.sort(
 			<Picture src={photo.data.filepath} alt={photo.data.alt || photo.data.title} loading="lazy" />
 		))}
 	</div>
+	<Footer />
 </BaseLayout>

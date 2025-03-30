@@ -1,30 +1,27 @@
 ---
 import { cn } from "@/utils";
-import ThemeSwitcher from "./ThemeSwitcher";
-import LangSwitcher from "./LangSwitcher";
 
 const { class: className } = Astro.props;
+const { pathname } = Astro.url;
 ---
 
 <div class={cn("grid grid-cols-4 sm:grid-cols-2 items-center", className)}>
   <a href="/" class="col-span-2">
     <h2 class="text-xl text-gray-900 dark:text-gray-50 flex gap-2 items-center">
-      AA
+      aa
     </h2>
   </a>
   <div class="col-start-4 flex justify-end items-center gap-4">
-    <ul class="flex justify-between items-center text-md gap-4 sm:gap-1 md:gap-2">
-      <li
-        class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 transition-all"
-      >
-        <a href="https://github.com/abdmmar" target="_blank" rel="noreferrer"
-          >GitHub</a
-        >
-      </li>
-      <li class="text-gray-300 dark:text-gray-800">•</li>
-      <span>
-        <ThemeSwitcher client:load />
-      </span>
+    <ul
+      class="flex justify-between items-center text-md gap-4 sm:gap-1 md:gap-2"
+    >
+      {
+        pathname !== "/photo" ? (
+          <li>
+            <a href="/photo">Photo</a>
+          </li>
+        ) : null
+      }
     </ul>
   </div>
 </div>

@@ -1,11 +1,5 @@
-import type { PropsWithChildren } from "react";
 import { useStore } from "@nanostores/react";
-import type { CollectionEntry } from "astro:content";
-import { Masonry } from "@/components/Masonry";
-import type { FilterTag } from "../stores/collection";
-import { $filterTag, $descriptionLang } from "../stores/collection";
-import { CollectionCard } from "./CollectionCard";
-import Counter from "./Counter";
+import { $descriptionLang } from "../stores/collection";
 
 function LangSwitcher() {
   const descLang = useStore($descriptionLang);

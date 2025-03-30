@@ -10,6 +10,9 @@ import Cat from "../components/Cat.astro";
 import Book from "../components/Book.astro";
 import Cactus from "../components/Cactus.astro";
 import Painting from "../components/Painting.astro";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import LangSwitcher from "@/components/LangSwitcher";
+import Footer from "@/components/Footer.astro";
 
 const blog = await getCollection("blog");
 const project = await getCollection("project");
@@ -59,4 +62,5 @@ const project = await getCollection("project");
       project={project}
     />
   </main>
+  <Footer />
 </BaseLayout>
