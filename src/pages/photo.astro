@@ -3,7 +3,6 @@ import { Image } from "astro:assets";
 import meImage from "@/assets/photo/me.jpg";
 import Header from "@/components/Header.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import Footer from "@/components/Footer.astro";
 
@@ -16,11 +15,11 @@ const sortedPhotos = photos.sort(
 <BaseLayout>
 	<Header />
 	<div class="mt-32">
-		<h1 class="text-9xl font-bold -ml-[6px] col-span-full mb-16 sm:text-4xl sm:-ml-[2px] letter tracking-[-0.03em]">
+		<h1 class="text-9xl font-bold -ml-[6px] col-span-full mb-16 sm:text-4xl md:text-6xl sm:-ml-[2px] letter tracking-[-0.03em]">
 			Photography
 		</h1>
-		<div class="w-full grid grid-cols-4 gap-4">
-			<div class="col-span-2 columns-2 sm:columns-1 sm:col-span-4 gap-16 mb-32 sm:text-base">
+		<div class="w-full grid grid-cols-4 gap-4 md:grid-cols-2">
+			<div class="col-span-2 columns-2 sm:columns-1 md:columns-1 lg:columns-1 sm:col-span-4 gap-16 mb-32 sm:text-base">
 				<p class="mb-4">
 					I never truly developed an interest in photography until I reached
 					high school. Back then, I would occasionally borrow a friend's camera,
@@ -46,10 +45,10 @@ const sortedPhotos = photos.sort(
 					fulfilling experience.
 				</p>
 			</div>
-			<Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[300px] sm:w-[250px] justify-self-end sm:justify-self-start" src={meImage}alt="self-portrait" />
+			<Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[300px] sm:w-[250px] md:w-[200px] justify-self-end sm:justify-self-start" src={meImage}alt="self-portrait" />
 		</div>
 	</div>
-	<div class="grid grid-cols-4 gap-16 sm:grid-cols-1 sm:gap-4">
+	<div class="grid grid-cols-4 gap-16 sm:grid-cols-1 md:grid-cols-3 sm:gap-4 md:gap-6 lg:gap-8">
 		{sortedPhotos.map((photo) => (
 			<Image src={photo.data.filepath} alt={photo.data.alt || photo.data.title} loading="lazy" />
 		))}
