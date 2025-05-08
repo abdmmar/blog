@@ -1,5 +1,5 @@
 ---
-import { Image, Picture } from "astro:assets";
+import { Image } from "astro:assets";
 import meImage from "@/assets/photo/me.jpg";
 import Header from "@/components/Header.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -51,7 +51,7 @@ const sortedPhotos = photos.sort(
 	</div>
 	<div class="grid grid-cols-4 gap-16 sm:grid-cols-1 sm:gap-4">
 		{sortedPhotos.map((photo) => (
-			<Picture src={photo.data.filepath} alt={photo.data.alt || photo.data.title} loading="lazy" />
+			<Image src={photo.data.filepath} alt={photo.data.alt || photo.data.title} loading="lazy" />
 		))}
 	</div>
 	<Footer />
