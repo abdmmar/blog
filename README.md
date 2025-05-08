@@ -16,6 +16,19 @@ pnpm install
 pnpm dev
 ```
 
+## Scripts
+
+Compress jpg file and resize it to 50% smaller
+
+```sh
+ ./scripts/convert-images-2.sh ./src/assets/photo/2024/
+```
+
+Generate images content
+```sh
+node --experimental-strip-types scripts/generate-images-content.ts
+```
+
 ## ✽ References
 
 - https://chia.design/
