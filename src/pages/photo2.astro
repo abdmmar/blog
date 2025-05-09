@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+import meImage from "@/assets/photo/me.jpg";
+import Header from "@/components/Header.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import Footer from "@/components/Footer.astro";
+
+const photos = await getCollection("photo");
+const sortedPhotos = photos.sort(
+	(a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<BaseLayout>
+  <div class="grid grid-cols-8 gap-8">
+		<div class="col-span-2">
+      <div class="mb-12">
+        <Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[100px]" src={meImage}alt="self-portrait" />
+      </div>
+      <ul>
+        <li>About</li>
+        <li>Contact</li>
+          <li>Projects</li>
+          <li>Blog</li>
+        </ul>
+    </div>
+    <div class="col-start-3 col-end-[-1]">
+      <div class="grid grid-cols-6 gap-8">
+        <h2 class="text-5xl">2024</h2>
+        {sortedPhotos.map((photo, i) => (
+          <div>
+            <Image src={photo.data.filepath} alt={photo.data.alt || photo.data.title} loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </div>
+	</div>
+</BaseLayout>
