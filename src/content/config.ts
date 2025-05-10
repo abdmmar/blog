@@ -52,7 +52,7 @@ const photo = defineCollection({
       filepath: image(),
       title: z.string(),
       alt: z.string().optional(),
-      date: z.string().transform((str) => (new Date(str))),
+      date: z.string().transform((str) => new Date(str)),
       author: z.string(),
       iso: z.string().optional(),
       shutterspeed: z.string().optional(),

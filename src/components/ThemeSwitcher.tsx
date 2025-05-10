@@ -6,7 +6,7 @@ const ThemeSwitcher = () => {
   React.useEffect(() => {
     const storedTheme = localStorage.getItem("color-theme");
     const prefersDarkScheme = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: dark)",
     ).matches;
 
     if (storedTheme === "dark" || (!storedTheme && prefersDarkScheme)) {

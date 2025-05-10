@@ -1,6 +1,5 @@
 ---
 import Header from "@/components/Header.astro";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { ArrowLeft, ArrowRight } from "@/components/icons";
 import type { MarkdownHeading } from "astro";
 import { Image } from "astro:assets";
@@ -25,7 +24,7 @@ const dateFormatter = new Intl.DateTimeFormat("id-ID", {
 const { post, headings, nextPost, previousPost } = Astro.props;
 
 const { title, description, publishedAt, image, imageAlt, updatedAt, tag } =
-post.data;
+  post.data;
 const publishedDate = new Date(publishedAt);
 const postDate = dateFormatter.format(publishedDate);
 ---
@@ -37,9 +36,7 @@ const postDate = dateFormatter.format(publishedDate);
       <div class="sticky top-10 h-[calc(100vh-80px)]">
         <div class="flex flex-col h-full justify-between">
           <a href="/">
-            <h2 class="text-xl flex gap-2 items-center">
-              aa
-            </h2>
+            <h2 class="text-xl flex gap-2 items-center">aa</h2>
           </a>
           {headings ? <TOC headings={headings} /> : null}
         </div>
@@ -57,7 +54,8 @@ const postDate = dateFormatter.format(publishedDate);
                 <span class="text-gray-300 dark:text-gray-800">•</span>
                 <time
                   datetime={publishedDate.toISOString()}
-                  class="text-gray-600 dark:text-gray-400 tabular-nums">{postDate}</time
+                  class="text-gray-600 dark:text-gray-400 tabular-nums"
+                  >{postDate}</time
                 >
               </div>
               <ShareButton
@@ -69,7 +67,7 @@ const postDate = dateFormatter.format(publishedDate);
             </div>
 
             <div class="mt-10">
-              <div class="min-h-[12rem] flex items-end mb-14">
+              <div class="min-h-48 flex items-end mb-14">
                 <h1 class="text-5xl leading-[52px] font-medium">
                   {title}
                 </h1>
@@ -125,8 +123,7 @@ const postDate = dateFormatter.format(publishedDate);
     <sidebar class="col-start-7 col-end-9 sm:hidden">
       <div class="sticky top-10 h-[calc(100vh-80px)]">
         <div class="flex flex-col h-full justify-between">
-          <div class="p-1 flex justify-end">
-          </div>
+          <div class="p-1 flex justify-end"></div>
           <div class="flex flex-col gap-5">
             {
               previousPost ? (

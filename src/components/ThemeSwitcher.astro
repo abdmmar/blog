@@ -1,6 +1,6 @@
 ---
 const { id } = Astro.props;
-console.log(id)
+console.log(id);
 ---
 
 <button
@@ -30,12 +30,13 @@ console.log(id)
 </style>
 
 <script>
-  document.querySelectorAll('[data-theme-button-id]')?.forEach(btn => btn?.addEventListener("click", () => {
+  document.querySelectorAll("[data-theme-button-id]")?.forEach((btn) =>
+    btn?.addEventListener("click", () => {
       const element = document.documentElement;
       element.classList.toggle("dark");
 
       const isDark = element.classList.contains("dark");
       localStorage.setItem("color-theme", isDark ? "dark" : "light");
-    }
-  ))
+    }),
+  );
 </script>

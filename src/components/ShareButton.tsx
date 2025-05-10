@@ -43,7 +43,7 @@ export default function ShareButton({
     switch (type) {
       case "Twitter":
         socialWindow(
-          `https://twitter.com/intent/tweet?url=${url}&text=${description}`
+          `https://twitter.com/intent/tweet?url=${url}&text=${description}`,
         );
         break;
       case "Facebook":
@@ -51,7 +51,7 @@ export default function ShareButton({
         break;
       case "LinkedIn":
         socialWindow(
-          `https://www.linkedin.com/shareArticle?mini=true&url=${url}`
+          `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
         );
         break;
       case "Copy Link":
@@ -83,7 +83,7 @@ export default function ShareButton({
       )}
       <Dialog.Portal>
         <Dialog.Overlay className="bg-gray-400 dark:bg-gray-600 dark:bg-opacity-50 bg-opacity-50 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white dark:bg-gray-900 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white dark:bg-gray-900 p-[25px] shadow-[hsl(206_22%_7%/35%)_0px_10px_38px_-10px,hsl(206_22%_7%/20%)_0px_10px_20px_-15px] focus:outline-none">
           <div className="flex justify-between items-center mb-4 ">
             <Dialog.Title asChild>
               <h4 className="text-lg font-medium">Share this posts</h4>

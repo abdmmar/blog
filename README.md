@@ -1,6 +1,6 @@
 # ✤ abdmmar.com
 
-Personal site. Built using [Astro](https://astro.build/) and [Inter](https://rsms.me/inter/) typeface 
+Personal site. Built using [Astro](https://astro.build/) and [Inter](https://rsms.me/inter/) typeface
 
 ## ✦ Development
 
@@ -25,6 +25,7 @@ Compress jpg file and resize it to 50% smaller
 ```
 
 Generate images content
+
 ```sh
 node --experimental-strip-types scripts/generate-images-content.ts
 ```

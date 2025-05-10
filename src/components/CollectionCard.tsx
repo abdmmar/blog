@@ -8,11 +8,7 @@ import "react-medium-image-zoom/dist/styles.css";
 type BlogProps = CollectionEntry<"blog">;
 type ProjectProps = CollectionEntry<"project">;
 
-export function CollectionCard({
-  post,
-}: {
-  post: BlogProps | ProjectProps;
-}) {
+export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
   switch (post.data.tag) {
     case "Project":
       return <ProjectCard post={post as ProjectProps} />;
@@ -86,7 +82,7 @@ function ProjectCard({ post }: { post: ProjectProps }) {
       className={cn(
         "col-span-2 rounded-md border transition-all flex flex-col w-full h-fit",
         "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
-        "hover:border-blue-600 dark:hover:border-blue-600"
+        "hover:border-blue-600 dark:hover:border-blue-600",
       )}
     >
       <div className="flex justify-between items-center w-full p-4 ">
@@ -112,7 +108,7 @@ function ProjectCard({ post }: { post: ProjectProps }) {
   );
 }
 
-type PhotoProps = any
+type PhotoProps = any;
 function PhotoCard({ photo }: { photo: PhotoProps }) {
   return (
     <motion.div
@@ -123,7 +119,7 @@ function PhotoCard({ photo }: { photo: PhotoProps }) {
       className={cn(
         "col-span-2 rounded-md border transition-all flex flex-col w-full h-fit",
         "dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 bg-white",
-        "hover:border-yellow-500 dark:hover:border-yellow-500"
+        "hover:border-yellow-500 dark:hover:border-yellow-500",
       )}
     >
       <Zoom>

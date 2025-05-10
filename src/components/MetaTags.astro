@@ -1,9 +1,7 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
+import "../styles/global.css";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 import "@fontsource/ibm-plex-mono/400.css";
-import "../styles/global.css";
 
 export interface Props {
   title?: string;
@@ -47,3 +45,25 @@ const {
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<link
+  rel="preload"
+  href="/fonts/Inter-Regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/Inter-DisplayBold.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/Inter-SemiBold.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>

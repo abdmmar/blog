@@ -72,18 +72,27 @@ export function Collection({ blog, project }: CollectionProps) {
           <p className="text-xl">
             {descLang === "en" ? (
               <>
-                A software engineer with a knack for design and
-                occasionally building things. Currently exploring{" "}
-                <Sup>(1)</Sup>software infrastructure, <Sup>(2)</Sup>zine design,{" "}
-                <Sup>(3)</Sup>writing, and <Sup>(4)</Sup><a href="/photo" className="underline">photography</a>.{" "}
+                A software engineer with a knack for design and occasionally
+                building things. Currently exploring <Sup>(1)</Sup>software
+                infrastructure, <Sup>(2)</Sup>zine design, <Sup>(3)</Sup>
+                writing, and <Sup>(4)</Sup>
+                <a href="/photo" className="underline">
+                  photography
+                </a>
+                .{" "}
               </>
             ) : (
               <>
                 Perekayasa perangkat lunak yang suka tidur, sedikit membaca,
                 lain waktu merancang, dan terkadang menyusun kode berbuntut.
-                Saat ini sedang mempelajari <Sup>(1)</Sup>infrastruktur perangkat lunak,
+                Saat ini sedang mempelajari <Sup>(1)</Sup>infrastruktur
+                perangkat lunak,
                 <Sup>(2)</Sup>merancang zine, <Sup>(3)</Sup>menulis, dan{" "}
-                <Sup>(4)</Sup><a href="/photo" className="underline">memotret</a>.
+                <Sup>(4)</Sup>
+                <a href="/photo" className="underline">
+                  memotret
+                </a>
+                .
               </>
             )}
           </p>

@@ -27,8 +27,8 @@ Over the past few months, I've been learning into integration testing for forms 
 For this tutorial, I'll show how to test a form that uses several types of components with client-side validation. I've used Vitest as a test runner, and mainly use native component and Radix UI for building this form, which affects what we need to mock and how to test the component.
 
 <Callout>
-Here the repository if you want to check the code by yourself:
-https://github.com/abdmmar/integration-test-react
+  Here the repository if you want to check the code by yourself:
+  https://github.com/abdmmar/integration-test-react
 </Callout>
 
 ## Testing Criteria
@@ -61,9 +61,9 @@ Many component in Radix UI use `useSize` hook that implement `ResizeObserver` un
 ```tsx
 // Mock the ResizeObserver
 const ResizeObserverMock = vi.fn(() => ({
-	observe: vi.fn(),
-	unobserve: vi.fn(),
-	disconnect: vi.fn(),
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
 }));
 
 // Stub the global ResizeObserver
@@ -86,57 +86,60 @@ This test case focuses on validating the behavior of the `CollectionForm`. It ai
 
 ```tsx
 const collection = {
-	title: "Kapal Karam Dilanda Badai",
-	description:
-		"Layaknya karya-karya bercorak Romantisisme, Raden Saleh mengungkapkan gejolak jiwanya yang terombang-ambing antara keinginan menghayati dunia imajinasi dan menyatakan dunia nyata. Perpaduan keduanya terwujud dalam ekspresi visual yang dramatis, emosional, sekaligus misterius. Meski demikian, para seniman romantisis sering juga berkarya berdasarkan pada kenyataan aktual. Dalam lukisan Kapal Dilanda Badai, dapat dilihat bagaimana Raden Saleh mengungkapkan perjuangan dramatis dua buah kapal dalam hempasan badai dahsyat di tengah lautan. Suasana mencekam diekspresikan lewat awan tebal yang gelap dan ombak-ombak tinggi yang menghancurkan salah satu kapal. Dari sudut atas, secercah sinar matahari tampak memantul ke gulungan ombak—menambah kesan dramatis.",
-	artist: "Raden Saleh",
-	creationDate: "1840-01-01",
-	classification: { value: "painting", label: "Painting" },
-	medium: { value: "oil-on-canvas", label: "Oil on Canvas" },
-	photo: new File(["Kapal Karam Dilanda Badai"], "kapalKaramDilandaBadai.png", {
-		type: "image/png",
-	}),
-	size: {
-		width: 98,
-		height: 74,
-	},
-	type: "physical",
-	isPrivate: false,
-	terms: true,
+  title: "Kapal Karam Dilanda Badai",
+  description:
+    "Layaknya karya-karya bercorak Romantisisme, Raden Saleh mengungkapkan gejolak jiwanya yang terombang-ambing antara keinginan menghayati dunia imajinasi dan menyatakan dunia nyata. Perpaduan keduanya terwujud dalam ekspresi visual yang dramatis, emosional, sekaligus misterius. Meski demikian, para seniman romantisis sering juga berkarya berdasarkan pada kenyataan aktual. Dalam lukisan Kapal Dilanda Badai, dapat dilihat bagaimana Raden Saleh mengungkapkan perjuangan dramatis dua buah kapal dalam hempasan badai dahsyat di tengah lautan. Suasana mencekam diekspresikan lewat awan tebal yang gelap dan ombak-ombak tinggi yang menghancurkan salah satu kapal. Dari sudut atas, secercah sinar matahari tampak memantul ke gulungan ombak—menambah kesan dramatis.",
+  artist: "Raden Saleh",
+  creationDate: "1840-01-01",
+  classification: { value: "painting", label: "Painting" },
+  medium: { value: "oil-on-canvas", label: "Oil on Canvas" },
+  photo: new File(["Kapal Karam Dilanda Badai"], "kapalKaramDilandaBadai.png", {
+    type: "image/png",
+  }),
+  size: {
+    width: 98,
+    height: 74,
+  },
+  type: "physical",
+  isPrivate: false,
+  terms: true,
 };
 
 describe("CollectionForm", () => {
-	it("should successfully submit on valid input", async () => {
-		const onSubmitMockFn = vi.fn();
-		const user = userEvent.setup();
-		render(<CollectionForm onSubmit={onSubmitMockFn} />);
-		const formElements = {
-			titleInput: screen.getByLabelText(/title/i),
-			descriptionInput: screen.getByLabelText(/description/i),
-			artistInput: screen.getByLabelText(/artist/i),
-			creationDateInput: screen.getByLabelText(/creation date/i),
-			classificationInput: screen.getByLabelText(/classification/i),
-			mediumInput: screen.getByLabelText(/medium/i),
-			sizeWidthInput: screen.getByLabelText(/size \(cm\)/i),
-			sizeHeightInput: screen.getByLabelText(/height/i),
-			sizeLengthInput: screen.getByLabelText(/length/i),
-			physicalTypeInput: screen.getByLabelText(/physical/i),
-			digitalTypeInput: screen.getByLabelText(/digital/i),
-			photoInput: screen.getByLabelText(/photo/i) as HTMLInputElement,
-			isPrivateInput: screen.getByLabelText(/private collection/i),
-			termsInput: screen.getByLabelText(/accept terms and conditions/i),
-			addCollectionButton: screen.getByRole("button", { name: /add collection/i }),
-		};
-  })
-})
+  it("should successfully submit on valid input", async () => {
+    const onSubmitMockFn = vi.fn();
+    const user = userEvent.setup();
+    render(<CollectionForm onSubmit={onSubmitMockFn} />);
+    const formElements = {
+      titleInput: screen.getByLabelText(/title/i),
+      descriptionInput: screen.getByLabelText(/description/i),
+      artistInput: screen.getByLabelText(/artist/i),
+      creationDateInput: screen.getByLabelText(/creation date/i),
+      classificationInput: screen.getByLabelText(/classification/i),
+      mediumInput: screen.getByLabelText(/medium/i),
+      sizeWidthInput: screen.getByLabelText(/size \(cm\)/i),
+      sizeHeightInput: screen.getByLabelText(/height/i),
+      sizeLengthInput: screen.getByLabelText(/length/i),
+      physicalTypeInput: screen.getByLabelText(/physical/i),
+      digitalTypeInput: screen.getByLabelText(/digital/i),
+      photoInput: screen.getByLabelText(/photo/i) as HTMLInputElement,
+      isPrivateInput: screen.getByLabelText(/private collection/i),
+      termsInput: screen.getByLabelText(/accept terms and conditions/i),
+      addCollectionButton: screen.getByRole("button", {
+        name: /add collection/i,
+      }),
+    };
+  });
+});
 ```
 
 Here what we do in Arrange phase:
+
 1. Create mock to represent sample data that would typically be entered into the form.
 2. Add **`onSubmitMockFn`** function as a mock function to simulate the form submission callback.
 3. Render the **`CollectionForm`** component into JSDOM.
 4. Get all component need to be tested by calling **`screen.getByLabelText`** and **`screen.getByRole`** to interact with input fields and buttons and make sure it's accessible.
-5. Setup **`userEvent`**  to simulate user interactions with the form.
+5. Setup **`userEvent`** to simulate user interactions with the form.
 
 ### Act
 
@@ -145,10 +148,16 @@ await user.type(formElements.titleInput, collection.title);
 await user.type(formElements.descriptionInput, collection.description);
 await user.type(formElements.artistInput, collection.artist);
 await user.type(formElements.creationDateInput, collection.creationDate);
-await user.selectOptions(formElements.classificationInput, collection.classification.label);
+await user.selectOptions(
+  formElements.classificationInput,
+  collection.classification.label,
+);
 await user.selectOptions(formElements.mediumInput, collection.medium.label);
 await user.type(formElements.sizeWidthInput, collection.size.width.toString());
-await user.type(formElements.sizeHeightInput, collection.size.height.toString());
+await user.type(
+  formElements.sizeHeightInput,
+  collection.size.height.toString(),
+);
 await user.click(formElements.physicalTypeInput);
 await user.upload(formElements.photoInput, collection.photo);
 await user.click(formElements.isPrivateInput);
@@ -157,6 +166,7 @@ await user.click(formElements.addCollectionButton);
 ```
 
 There several input interactions simulation here:
+
 - `type` to simulates user input
 - `selectOptions` to simulate selecting option from `select` component
 - `click` to simulate click on input radio, checkbox, and submit button
@@ -168,7 +178,9 @@ There several input interactions simulation here:
 expect(formElements.titleInput).toHaveValue(collection.title);
 expect(formElements.descriptionInput).toHaveValue(collection.description);
 expect(formElements.artistInput).toHaveValue(collection.artist);
-expect(formElements.classificationInput).toHaveValue(collection.classification.value);
+expect(formElements.classificationInput).toHaveValue(
+  collection.classification.value,
+);
 expect(formElements.mediumInput).toHaveValue(collection.medium.value);
 expect(formElements.sizeWidthInput).toHaveValue(collection.size.width);
 expect(formElements.sizeHeightInput).toHaveValue(collection.size.height);
@@ -204,90 +216,103 @@ import CollectionForm from "./form";
 import { cleanup, render, screen, userEvent, within } from "./utils/test-utils";
 
 const collection = {
-	title: "Kapal Karam Dilanda Badai",
-	description:
-		"Layaknya karya-karya bercorak Romantisisme, Raden Saleh mengungkapkan gejolak jiwanya yang terombang-ambing antara keinginan menghayati dunia imajinasi dan menyatakan dunia nyata. Perpaduan keduanya terwujud dalam ekspresi visual yang dramatis, emosional, sekaligus misterius. Meski demikian, para seniman romantisis sering juga berkarya berdasarkan pada kenyataan aktual. Dalam lukisan Kapal Dilanda Badai, dapat dilihat bagaimana Raden Saleh mengungkapkan perjuangan dramatis dua buah kapal dalam hempasan badai dahsyat di tengah lautan. Suasana mencekam diekspresikan lewat awan tebal yang gelap dan ombak-ombak tinggi yang menghancurkan salah satu kapal. Dari sudut atas, secercah sinar matahari tampak memantul ke gulungan ombak—menambah kesan dramatis.",
-	artist: "Raden Saleh",
-	creationDate: "1840-01-01",
-	classification: { value: "painting", label: "Painting" },
-	medium: { value: "oil-on-canvas", label: "Oil on Canvas" },
-	photo: new File(["Kapal Karam Dilanda Badai"], "kapalKaramDilandaBadai.png", {
-		type: "image/png",
-	}),
-	size: {
-		width: 98,
-		height: 74,
-	},
-	type: "physical",
-	isPrivate: false,
-	terms: true,
+  title: "Kapal Karam Dilanda Badai",
+  description:
+    "Layaknya karya-karya bercorak Romantisisme, Raden Saleh mengungkapkan gejolak jiwanya yang terombang-ambing antara keinginan menghayati dunia imajinasi dan menyatakan dunia nyata. Perpaduan keduanya terwujud dalam ekspresi visual yang dramatis, emosional, sekaligus misterius. Meski demikian, para seniman romantisis sering juga berkarya berdasarkan pada kenyataan aktual. Dalam lukisan Kapal Dilanda Badai, dapat dilihat bagaimana Raden Saleh mengungkapkan perjuangan dramatis dua buah kapal dalam hempasan badai dahsyat di tengah lautan. Suasana mencekam diekspresikan lewat awan tebal yang gelap dan ombak-ombak tinggi yang menghancurkan salah satu kapal. Dari sudut atas, secercah sinar matahari tampak memantul ke gulungan ombak—menambah kesan dramatis.",
+  artist: "Raden Saleh",
+  creationDate: "1840-01-01",
+  classification: { value: "painting", label: "Painting" },
+  medium: { value: "oil-on-canvas", label: "Oil on Canvas" },
+  photo: new File(["Kapal Karam Dilanda Badai"], "kapalKaramDilandaBadai.png", {
+    type: "image/png",
+  }),
+  size: {
+    width: 98,
+    height: 74,
+  },
+  type: "physical",
+  isPrivate: false,
+  terms: true,
 };
 
 describe("CollectionForm", () => {
-	it("should successfully submit on valid input", async () => {
-		const onSubmitMockFn = vi.fn();
-		const user = userEvent.setup();
-		render(<CollectionForm onSubmit={onSubmitMockFn} />);
-		const formElements = {
-			titleInput: screen.getByLabelText(/title/i),
-			descriptionInput: screen.getByLabelText(/description/i),
-			artistInput: screen.getByLabelText(/artist/i),
-			creationDateInput: screen.getByLabelText(/creation date/i),
-			classificationInput: screen.getByLabelText(/classification/i),
-			mediumInput: screen.getByLabelText(/medium/i),
-			sizeWidthInput: screen.getByLabelText(/size \(cm\)/i),
-			sizeHeightInput: screen.getByLabelText(/height/i),
-			sizeLengthInput: screen.getByLabelText(/length/i),
-			physicalTypeInput: screen.getByLabelText(/physical/i),
-			digitalTypeInput: screen.getByLabelText(/digital/i),
-			photoInput: screen.getByLabelText(/photo/i) as HTMLInputElement,
-			isPrivateInput: screen.getByLabelText(/private collection/i),
-			termsInput: screen.getByLabelText(/accept terms and conditions/i),
-			addCollectionButton: screen.getByRole("button", { name: /add collection/i }),
-		};
+  it("should successfully submit on valid input", async () => {
+    const onSubmitMockFn = vi.fn();
+    const user = userEvent.setup();
+    render(<CollectionForm onSubmit={onSubmitMockFn} />);
+    const formElements = {
+      titleInput: screen.getByLabelText(/title/i),
+      descriptionInput: screen.getByLabelText(/description/i),
+      artistInput: screen.getByLabelText(/artist/i),
+      creationDateInput: screen.getByLabelText(/creation date/i),
+      classificationInput: screen.getByLabelText(/classification/i),
+      mediumInput: screen.getByLabelText(/medium/i),
+      sizeWidthInput: screen.getByLabelText(/size \(cm\)/i),
+      sizeHeightInput: screen.getByLabelText(/height/i),
+      sizeLengthInput: screen.getByLabelText(/length/i),
+      physicalTypeInput: screen.getByLabelText(/physical/i),
+      digitalTypeInput: screen.getByLabelText(/digital/i),
+      photoInput: screen.getByLabelText(/photo/i) as HTMLInputElement,
+      isPrivateInput: screen.getByLabelText(/private collection/i),
+      termsInput: screen.getByLabelText(/accept terms and conditions/i),
+      addCollectionButton: screen.getByRole("button", {
+        name: /add collection/i,
+      }),
+    };
 
-		await user.type(formElements.titleInput, collection.title);
-		await user.type(formElements.descriptionInput, collection.description);
-		await user.type(formElements.artistInput, collection.artist);
-		await user.type(formElements.creationDateInput, collection.creationDate);
-		await user.selectOptions(formElements.classificationInput, collection.classification.label);
-		await user.selectOptions(formElements.mediumInput, collection.medium.label);
-		await user.type(formElements.sizeWidthInput, collection.size.width.toString());
-		await user.type(formElements.sizeHeightInput, collection.size.height.toString());
-		await user.click(formElements.physicalTypeInput);
-		await user.upload(formElements.photoInput, collection.photo);
-		await user.click(formElements.isPrivateInput);
-		await user.click(formElements.termsInput);
-		await user.click(formElements.addCollectionButton);
+    await user.type(formElements.titleInput, collection.title);
+    await user.type(formElements.descriptionInput, collection.description);
+    await user.type(formElements.artistInput, collection.artist);
+    await user.type(formElements.creationDateInput, collection.creationDate);
+    await user.selectOptions(
+      formElements.classificationInput,
+      collection.classification.label,
+    );
+    await user.selectOptions(formElements.mediumInput, collection.medium.label);
+    await user.type(
+      formElements.sizeWidthInput,
+      collection.size.width.toString(),
+    );
+    await user.type(
+      formElements.sizeHeightInput,
+      collection.size.height.toString(),
+    );
+    await user.click(formElements.physicalTypeInput);
+    await user.upload(formElements.photoInput, collection.photo);
+    await user.click(formElements.isPrivateInput);
+    await user.click(formElements.termsInput);
+    await user.click(formElements.addCollectionButton);
 
-		expect(formElements.titleInput).toHaveValue(collection.title);
-		expect(formElements.descriptionInput).toHaveValue(collection.description);
-		expect(formElements.artistInput).toHaveValue(collection.artist);
-		expect(formElements.classificationInput).toHaveValue(collection.classification.value);
-		expect(formElements.mediumInput).toHaveValue(collection.medium.value);
-		expect(formElements.sizeWidthInput).toHaveValue(collection.size.width);
-		expect(formElements.sizeHeightInput).toHaveValue(collection.size.height);
-		expect(formElements.digitalTypeInput).not.toBeChecked();
-		expect(formElements.physicalTypeInput).toBeChecked();
-		expect(formElements.photoInput.files?.[0]).toBe(collection.photo);
-		expect(formElements.photoInput.files).toHaveLength(1);
-		expect(formElements.isPrivateInput).toBeChecked();
-		expect(formElements.termsInput).toBeChecked();
+    expect(formElements.titleInput).toHaveValue(collection.title);
+    expect(formElements.descriptionInput).toHaveValue(collection.description);
+    expect(formElements.artistInput).toHaveValue(collection.artist);
+    expect(formElements.classificationInput).toHaveValue(
+      collection.classification.value,
+    );
+    expect(formElements.mediumInput).toHaveValue(collection.medium.value);
+    expect(formElements.sizeWidthInput).toHaveValue(collection.size.width);
+    expect(formElements.sizeHeightInput).toHaveValue(collection.size.height);
+    expect(formElements.digitalTypeInput).not.toBeChecked();
+    expect(formElements.physicalTypeInput).toBeChecked();
+    expect(formElements.photoInput.files?.[0]).toBe(collection.photo);
+    expect(formElements.photoInput.files).toHaveLength(1);
+    expect(formElements.isPrivateInput).toBeChecked();
+    expect(formElements.termsInput).toBeChecked();
 
-		expect(formElements.titleInput).toBeValid();
-		expect(formElements.descriptionInput).toBeValid();
-		expect(formElements.artistInput).toBeValid();
-		expect(formElements.creationDateInput).toBeValid();
-		expect(formElements.classificationInput).toBeValid();
-		expect(formElements.mediumInput).toBeValid();
-		expect(formElements.sizeWidthInput).toBeValid();
-		expect(formElements.sizeHeightInput).toBeValid();
-		expect(formElements.photoInput).toBeValid();
-		expect(formElements.isPrivateInput).toBeValid();
-		expect(formElements.termsInput).toBeValid();
+    expect(formElements.titleInput).toBeValid();
+    expect(formElements.descriptionInput).toBeValid();
+    expect(formElements.artistInput).toBeValid();
+    expect(formElements.creationDateInput).toBeValid();
+    expect(formElements.classificationInput).toBeValid();
+    expect(formElements.mediumInput).toBeValid();
+    expect(formElements.sizeWidthInput).toBeValid();
+    expect(formElements.sizeHeightInput).toBeValid();
+    expect(formElements.photoInput).toBeValid();
+    expect(formElements.isPrivateInput).toBeValid();
+    expect(formElements.termsInput).toBeValid();
 
-		expect(onSubmitMockFn).toBeCalledTimes(1);
-	});
+    expect(onSubmitMockFn).toBeCalledTimes(1);
+  });
 });
 ```
 

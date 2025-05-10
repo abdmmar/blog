@@ -1,0 +1,23 @@
+---
+import { Image } from "astro:assets";
+import meImage from "@/assets/photo/me.jpg";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <div class="grid grid-cols-8 gap-8">
+    <div class="col-span-2 fixed top-8">
+      <div class="mb-12">
+        <!-- <Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[100px]" src={meImage}alt="self-portrait" /> -->
+        <a href="/photo2"><strong class="text-xl">A. Ammar</strong> </a>
+      </div>
+      <ul>
+        <li>About</li>
+        <li><a href="/photo2/list">Photos</a></li>
+        <li>Projects</li>
+        <li>Blog</li>
+      </ul>
+    </div>
+    <slot />
+  </div>
+</BaseLayout>

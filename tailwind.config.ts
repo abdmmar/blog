@@ -1,5 +1,5 @@
-import type { Config } from 'tailwindcss'
-import defaultTheme from 'tailwindcss/defaultTheme'
+import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
   darkMode: "class",
@@ -21,19 +21,22 @@ export default {
       },
       fontFamily: {
         mono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
-        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        sans: ["Inter", ...defaultTheme.fontFamily.sans],
       },
       keyframes: {
         overlayShow: {
-          from: { opacity: '0' },
-          to: { opacity: '1' },
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
         contentShow: {
-          from: { opacity: '0', transform: "translate(-50%, -48%) scale(0.96)" },
-          to: { opacity: '1', transform: "translate(-50%, -50%) scale(1)" },
+          from: {
+            opacity: "0",
+            transform: "translate(-50%, -48%) scale(0.96)",
+          },
+          to: { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
         },
         blip: {
-          "50%": { opacity: '0' },
+          "50%": { opacity: "0" },
         },
       },
       animation: {
@@ -44,4 +47,4 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config
+} satisfies Config;
