@@ -1,0 +1,48 @@
+---
+import { getCollection } from "astro:content";
+import PhotoLayout from "@/layouts/PhotoLayout.astro";
+
+const photos = await getCollection("photo");
+const sortedPhotos = photos.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<style>
+  .photo {
+    width: 100%;
+    height: fit-content;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.3s ease-out forwards;
+    transition: all 175ms ease-out;
+  }
+
+  .photo:hover {
+    scale: 1.1;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+<PhotoLayout>
+  <div class="col-start-3 col-end-[-1]">
+    <div class="grid grid-cols-6 gap-8">
+      <h2 class="text-5xl">2024</h2>
+      {
+        sortedPhotos.map((photo, i) => (
+          <div class="photo" style={{ animationDelay: `${i * 100}ms` }}>
+            <img
+              src={photo.data.filepath.src}
+              alt={photo.data.alt || photo.data.title}
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</PhotoLayout>

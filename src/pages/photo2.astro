@@ -1,39 +1,314 @@
 ---
 import { Image } from "astro:assets";
 import meImage from "@/assets/photo/me.jpg";
-import Header from "@/components/Header.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
-import Footer from "@/components/Footer.astro";
+import PhotoLayout from "@/layouts/PhotoLayout.astro";
 
 const photos = await getCollection("photo");
 const sortedPhotos = photos.sort(
-	(a, b) => b.data.date.getTime() - a.data.date.getTime()
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
+// TypeScript types
+interface MediaItem {
+  src: string;
+  mediaType: string;
+  alt?: string;
+}
+
+interface BaseCollection {
+  id: string;
+  title: string;
+}
+
+interface MediaCollection extends BaseCollection {
+  type: "media";
+  items: MediaItem[]; // single-item array for image/video
+}
+
+interface ZineCollection extends BaseCollection {
+  type: "zine";
+  cover: string;
+  pdf: string;
+  pages: MediaItem[];
+}
+
+interface PhotoJournalCollection extends BaseCollection {
+  type: "photo-journal";
+  intro: string;
+  narrative: string;
+  items: MediaItem[];
+}
+
+interface PhotoAlbumCollection extends BaseCollection {
+  type: "album";
+  items: MediaItem[];
+}
+
+interface SlideshowCollection extends BaseCollection {
+  type: "slideshow";
+  items: MediaItem[];
+}
+
+interface ChronologicalItem {
+  date: string;
+  label: string;
+  media: MediaItem;
+}
+
+interface ChronologicalCollection extends BaseCollection {
+  type: "chronological";
+  items: ChronologicalItem[];
+}
+
+type Collection =
+  | MediaCollection
+  | ZineCollection
+  | PhotoJournalCollection
+  | PhotoAlbumCollection
+  | SlideshowCollection
+  | ChronologicalCollection;
+
+const collections: Collection[] = [
+  {
+    type: "media",
+    id: "featured",
+    title: "Featured Spotlight",
+    items: [
+      {
+        src: sortedPhotos[0].data.filepath.src,
+        alt: "Sunset over mountains",
+        mediaType: "image/jpeg",
+      },
+    ],
+  },
+  {
+    type: "media",
+    id: "highlight",
+    title: "Ode-to-code",
+    items: [
+      { src: "/src/assets/projects/ode-to-code.gif", mediaType: "image/gif" },
+    ],
+  },
+  {
+    type: "zine",
+    id: "my-zine",
+    title: "My Zine Preview",
+    cover: "/zine/cover.jpg",
+    pdf: "/zine/my-zine.pdf",
+    pages: [
+      {
+        src: "/images/landscape.jpg",
+        alt: "Sunset over mountains",
+        mediaType: "image/jpeg",
+      },
+    ],
+  },
+  {
+    type: "photo-journal",
+    id: "on-the-road",
+    title: "On the Road: A Photo Essay",
+    intro: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+    items: [
+      {
+        src: "/journal/road-trip-1.jpg",
+        alt: "Road trip",
+        mediaType: "image/jpeg",
+      },
+      { src: "/journal/clip.gif", mediaType: "image/gif" },
+    ],
+    narrative: "More narrative...",
+  },
+  {
+    type: "album",
+    id: "spring-blossoms",
+    title: "Album: Spring Blossoms",
+    items: [
+      { src: "/albums/spring1.jpg", alt: "Blossom 1", mediaType: "image/jpeg" },
+      { src: "/albums/spring2.jpg", alt: "Blossom 2", mediaType: "image/jpeg" },
+      { src: "/albums/teaser.mp4", mediaType: "video/mp4" },
+    ],
+  },
+  {
+    type: "slideshow",
+    id: "city-nights",
+    title: "Slideshow: City Nights",
+    items: [
+      { src: "/slides/night1.jpg", alt: "Night 1", mediaType: "image/jpeg" },
+      { src: "/slides/night2.jpg", alt: "Night 2", mediaType: "image/jpeg" },
+      { src: "/slides/teaser.gif", mediaType: "image/gif" },
+    ],
+  },
+  {
+    type: "chronological",
+    id: "timeline",
+    title: "Timeline",
+    items: [
+      {
+        date: "2025-01-01",
+        label: "New Year Hike",
+        media: {
+          src: "/timeline/01.jpg",
+          alt: "Hike",
+          mediaType: "image/jpeg",
+        },
+      },
+      {
+        date: "2025-03-15",
+        label: "Spring Festival",
+        media: { src: "/timeline/fest.mp4", mediaType: "video/mp4" },
+      },
+      {
+        date: "2025-05-10",
+        label: "Beach Day",
+        media: {
+          src: "/timeline/03.jpg",
+          alt: "Beach",
+          mediaType: "image/jpeg",
+        },
+      },
+    ],
+  },
+];
 ---
 
-<BaseLayout>
-  <div class="grid grid-cols-8 gap-8">
-		<div class="col-span-2">
-      <div class="mb-12">
-        <Image class="col-start-4 col-end-4 sm:col-span-full sm:row-start-1 w-[100px]" src={meImage}alt="self-portrait" />
+<style>
+  .photo {
+    width: 100%;
+    height: fit-content;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.3s ease-out forwards;
+    transition: all 175ms ease-out;
+  }
+
+  .photo:hover {
+    scale: 1.1;
+  }
+
+  .text-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.3s ease-out forwards;
+    transition: all 175ms ease-out;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+<PhotoLayout>
+  <div class="col-start-3 col-end-[-1]">
+    <div class="grid grid-cols-6 gap-8 w-full">
+      <div class="photo" style={{ animationDelay: "0ms" }}>
+        <img src="/src/assets/photo/brother.jpg" />
       </div>
-      <ul>
-        <li>About</li>
-        <li>Contact</li>
-          <li>Projects</li>
-          <li>Blog</li>
-        </ul>
-    </div>
-    <div class="col-start-3 col-end-[-1]">
-      <div class="grid grid-cols-6 gap-8">
-        <h2 class="text-5xl">2024</h2>
-        {sortedPhotos.map((photo, i) => (
-          <div>
-            <Image src={photo.data.filepath} alt={photo.data.alt || photo.data.title} loading="lazy" />
+      <div
+        class="photo flex flex-col gap-2"
+        style={{ animationDelay: "100ms" }}
+      >
+        <div class="grid grid-cols-2 gap-2">
+          <img
+            class="h-full w-full col-start-1 object-cover"
+            src="/src/assets/photo/brother.jpg"
+          />
+          <img
+            class="h-full w-full col-start-1 object-cover"
+            src="/src/assets/photo/forest.jpg"
+          />
+          <img
+            class="col-start-2 row-start-1 row-end-3"
+            src="/src/assets/photo/tree.jpg"
+          />
+        </div>
+        <div class="flex flex-row flex-wrap justify-between gap-1 items-center">
+          <strong
+            class="font-semibold text-in"
+            style={{ animationDelay: "150ms" }}>Jogja & Friends 2025</strong
+          >
+          <div
+            class="text-in top-1 right-1 text-xs text-slate-700"
+            title="20"
+            style={{ animationDelay: "175ms" }}
+          >
+            20 Photos
           </div>
-        ))}
+        </div>
+      </div>
+      <div class="photo" style={{ animationDelay: "150ms" }}>
+        <img src="/src/assets/projects/ode-to-code.gif" />
+      </div>
+      <figure class="photo" style={{ animationDelay: "200ms" }}>
+        <img src="/src/assets/photo/tree.jpg" alt="Tree" />
+        <figcaption>
+          <small class="text-xs italic text-slate-700">Untitled, 2023</small>
+        </figcaption>
+      </figure>
+      <div class="photo col-span-2" style={{ animationDelay: "250ms" }}>
+        <div class="grid grid-cols-2 gap-4 w-full min-w-0 bg-black">
+          <img
+            class="max-w-full min-w-0 min-h-0 object-cover"
+            src="/src/assets/photo/2024/DSCF0253_resized.jpg"
+          />
+          <div
+            class="flex flex-col justify-between flex-wrap gap-1 bg-black text-white py-3 pl-0 pr-2"
+          >
+            <div class="flex flex-col gap-2">
+              <strong
+                class="font-semibold text-in"
+                style={{ animationDelay: "150ms" }}
+                >Photojournal: Bandung-In Between</strong
+              >
+            </div>
+            <div
+              class="text-in top-1 right-1 text-xs"
+              title="20"
+              style={{ animationDelay: "175ms" }}
+            >
+              24 April 2025
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="photo col-span-1" style={{ animationDelay: "250ms" }}>
+        <div class="flex flex-col gap-2 w-full min-w-0">
+          <img
+            class="max-w-full min-w-0"
+            src="/src/assets/photo/2024/DSCF0192_resized.jpg"
+          />
+          <div
+            class="flex flex-row flex-wrap justify-between gap-1 items-center"
+          >
+            <strong
+              class="font-semibold text-in text-slate-900"
+              style={{ animationDelay: "150ms" }}>Photojournal: Bandung</strong
+            >
+            <div
+              class="text-in top-1 right-1 text-xs text-slate-700"
+              title="20"
+              style={{ animationDelay: "175ms" }}
+            >
+              24 April 2025
+            </div>
+          </div>
+          <p class="line-clamp-2 text-xs">
+            Sejauh yang saya ingat, pertama kali saya menggunakan kamera adalah
+            ketika di bangku sekolah dasar, meminjam kamera bapak saya untuk
+            memotret hal yang saya sukai, bermain komputer dan sepak bola. Saya
+            tidak intens menggunakannya dan hanya sesekali saja dan tak ada
+            ketertarikan yang kuat terhadap fotografi. Berselang lama, di
+            madrasah aliyah, saya seringkali meminjam kamera teman dan bersama
+            pergi ke museum, rumah rusak, belakang asrama, lapangan, dan tempat
+            kosong untuk memotret apapun yang ada, lumut, acara tahunan, hingga
+            bima sakti. Di hari-hari selanjutnya, fotografi saya anggap selingan
+            saja, hingga suatu hari, entah kenapa, saya tiba-tiba tertarik
+            mendalami medium ini.
+          </p>
+        </div>
       </div>
     </div>
-	</div>
-</BaseLayout>
+  </div>
+</PhotoLayout>

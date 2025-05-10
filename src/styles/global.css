@@ -109,3 +109,14 @@ h3 {
 .dark ::-webkit-scrollbar-thumb:hover {
   background-color: #4b5563 !important;
 }
+
+::-moz-selection {
+  /* Code for Firefox */
+  color: white;
+  background: black;
+}
+
+::selection {
+  color: white;
+  background: black;
+}
