@@ -106,7 +106,8 @@ async function getSession() {
  */
 function parsePorts(html) {
   const ports = [];
-  const re = /<option\s+value="(\d+)"[^>]*>\s*([^<]+?)\s*<\/option>/g;
+  // Handle both quoted (value="946") and unquoted (value=946) attributes
+  const re = /<option\s+value=["']?(\d+)["']?[^>]*>\s*([^<]+?)\s*<\/option>/g;
   let m;
 
   while ((m = re.exec(html)) !== null) {
@@ -179,7 +180,8 @@ async function getDestinations(session, portId, retries = 0) {
 
     const html = await res.text();
     const destinations = [];
-    const re = /<option\s+value="(\d+)"[^>]*>\s*([^<]+?)\s*<\/option>/g;
+    // /getdes returns unquoted values: value=946 (not value="946")
+    const re = /<option\s+value=["']?(\d+)["']?[^>]*>\s*([^<]+?)\s*<\/option>/g;
     let m;
     while ((m = re.exec(html)) !== null) {
       if (m[2].toLowerCase().includes("pilih")) continue;
