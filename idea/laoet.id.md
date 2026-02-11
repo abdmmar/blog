@@ -29,154 +29,336 @@ laoet.id solves this by aggregating route data from multiple sources into one se
 
 Long-distance passenger ships connecting major ports across Indonesia.
 
-#### Site Architecture
+#### Site Architecture (Confirmed)
 
-pelni.co.id is a **Laravel** application. The reservation page at `/reservasi-tiket` uses a form-based flow:
+pelni.co.id is a **Laravel** application. The reservation page at `/reservasi-tiket` uses a **server-rendered form** with **AJAX-powered dependent dropdowns**. No SPA framework — just jQuery + Select2.
 
-1. User selects **departure port** (Pelabuhan Asal) from a dropdown
-2. User selects **destination port** (Pelabuhan Tujuan) — likely filtered by available routes from selected origin
-3. User picks **departure month** (Bulan Keberangkatan)
-4. User picks **ship** (Kapal) — optional, or picks from available ships on that route
-5. Submit → returns matching schedule results
+**Form flow:**
 
-The site also has a **sandbox environment** at `sandbox.pelni.co.id` (currently shows "Layanan Dalam Perbaikan") which suggests they have a staging API.
+1. User selects **departure port** (`ticket_org`) — static `<select>` with ~340 `<option>` elements, pre-rendered in HTML
+2. On change → AJAX `POST /getdes` fetches valid **destination ports** for that origin
+3. User selects **destination port** (`ticket_des`)
+4. User picks **departure date** (`ticket_month`) — datepicker, format `DD/MM/YYYY`, max 2 months ahead
+5. On date/destination change → AJAX `POST /getclass` fetches available **cabin classes**
+6. Submit → `POST /reservasi-tiket` → server returns full page with **embedded JSON schedule data**
 
-#### Known PELNI Ships (26 vessels)
+The site also has a **sandbox environment** at `sandbox.pelni.co.id` (currently shows "Layanan Dalam Perbaikan").
 
-These are the active passenger ships that we need to track routes for:
+#### Discovered API Endpoints
 
-| Ship | Ship | Ship |
+All endpoints are `POST` requests to `https://www.pelni.co.id/...` and require a `_token` (CSRF) parameter.
+
+| Endpoint | Purpose | Parameters | Returns |
+|---|---|---|---|
+| `POST /getdes` | Get valid destinations for an origin | `ticket_org`, `_token` | HTML `<option>` elements |
+| `POST /getorg` | Get valid origins for a destination | `ticket_des`, `_token` | HTML `<option>` elements |
+| `POST /getclass` | Get available cabin classes for a route+date | `ticket_org`, `ticket_des`, `ticket_month`, `ticket_male`, `ticket_female`, `_token` | HTML `<option>` elements |
+| `POST /reservasi-tiket` | Search schedules | `ticket_org`, `ticket_des`, `ticket_month`, `ticket_class`, `ticket_male`, `ticket_female`, `ticket_baby`, `_token` | Full HTML page with embedded `jsonData` |
+| `POST /checkavb` | Check seat availability | `org`, `org_call`, `des`, `des_call`, `dep_date`, `ship_no`, `subclass`, `female_pax`, `male_pax`, `_token` | JSON `{ availability: number }` |
+| `POST /reservasi-tiket/pick-schedule` | Select a specific schedule for booking | All trip details (hidden form fields) | Redirect to booking page |
+
+**Key insight**: The schedule search results are **embedded as a JavaScript variable** `var jsonData = [...]` in the HTML response. This is the richest data source — it contains everything we need.
+
+#### Schedule Response Data Structure
+
+Each item in `jsonData` contains:
+
+```json
+{
+  "ship": "(NP-131-H8) KM.LABOBAR",
+  "ship_no": "NP-131-H8",
+  "ship_name": "KM.LABOBAR",
+  "fare_class": "KELAS EKONOMI / E",
+  "deptime_plain": "21:00",
+  "depdate_plain": "Friday, 13 February 2026",
+  "arrtime_plain": "22:00",
+  "arrdate_plain": "Tuesday, 17 February 2026",
+  "duration_plain": "04 hari 01 jam 00 menit",
+  "price": "Rp. 808.000",
+  "price_original": "Rp. 808.000",
+  "discount": null,
+  "discount_amount": "0,00",
+  "org_name": "TANJUNG PRIOK",
+  "des_name": "AMBON",
+  "rpdetail": {
+    "route": "Rute",
+    "route_arr": ["431/1", "563/1", "893/1", "921/1", "946/1"],
+    "route_arr_arv_date": ["", "202602142200", "202602160400", "202602162200", "202602172200"],
+    "route_arr_dep_date": ["202602132100", "202602150200", "202602160800", "202602162359", ""],
+    "split_route": "<div>SURABAYA 22:00-02:00 15 Feb 2026</div>..."
+  },
+  "form": {
+    "org": "431",
+    "des": "946",
+    "dep_date": "20260213",
+    "code_class": "EKO",
+    "subclass": "E",
+    "pdprice_adult": "808.000",
+    "pdprice_infant": "81.700"
+  }
+}
+```
+
+**Critical fields for laoet.id:**
+- `rpdetail.route_arr` — Array of port IDs with call number (e.g. `"431/1"` = port 431, call 1). This is the **full route with all intermediate stops**.
+- `rpdetail.route_arr_arv_date` / `route_arr_dep_date` — Arrival/departure timestamps at each stop (`YYYYMMDDHHmm` format)
+- `ship_no` — Internal ship identifier (e.g. `NP-131-H8`)
+- `form.pdprice_adult` / `form.pdprice_infant` — Per-person prices
+
+#### Port Database (340+ Ports)
+
+Ports are **statically rendered** in the `<select>` dropdown (not loaded via AJAX). Format:
+
+```
+<option value="431">JAKARTA UTARA, DKI JAKARTA | TPR - TANJUNG PRIOK</option>
+<option value="946">AMBON, MALUKU | AMQ - AMBON</option>
+<option value="563">SURABAYA, JAWA TIMUR | SUB - TANJUNG PERAK</option>
+```
+
+**Parsed structure**: `value=PORT_ID` → `KABUPATEN, PROVINSI | IATA_CODE - PORT_NAME`
+
+Total: ~340 ports (not 90-100 as initially estimated). This includes major ports and small remote islands.
+
+Sample port codes (major hubs):
+| Port ID | Code | Name | Region |
+|---|---|---|---|
+| 431 | TPR | Tanjung Priok | DKI Jakarta |
+| 563 | SUB | Tanjung Perak | Jawa Timur |
+| 893 | MAK | Makassar | Sulawesi Selatan |
+| 946 | AMQ | Ambon | Maluku |
+| 835 | BIT | Bitung | Sulawesi Utara |
+| 971 | SOQ | Sorong | Papua Barat |
+| 972 | MKW | Manokwari | Papua Barat |
+| 974 | DJJ | Jayapura | Papua |
+| 681 | TQP | Kupang | NTT |
+| 144 | BLW | Belawan | Sumatera Utara |
+| 256 | BUR | Batam | Kepulauan Riau |
+| 662 | LBO | Labuan Bajo | NTT |
+
+**Destination filtering**: When user selects an origin, `POST /getdes` returns only the valid destinations for that port. This means **not all port pairs have routes** — we can use `/getdes` to discover the actual route graph.
+
+#### Port Coordinates (From Ship Schedule Visualizer)
+
+We have lat/lng coordinates for ~80 key ports from an existing PELNI schedule visualization:
+
+```json
+{
+  "Tg.Priok": [-6.1030, 106.8851],
+  "Surabaya": [-7.2093, 112.7331],
+  "Makassar": [-5.1310, 119.4121],
+  "Ambon": [-3.6961, 128.1812],
+  "Sorong": [-0.8809, 131.2589],
+  "Jayapura": [-2.5333, 140.7167],
+  "Kupang": [-10.1652, 123.6062],
+  "Labuan Bajo": [-8.4965, 119.8785],
+  "Bitung": [1.4428, 125.1873],
+  "Ternate": [0.7891, 127.3789],
+  "Batam": [1.1671, 103.9968],
+  "Belawan": [3.7841, 98.6888]
+}
+```
+
+Remaining ~260 ports can be geocoded from OpenStreetMap or Google Geocoding API.
+
+#### Known PELNI Ships
+
+**Regular passenger ships** (from website search results):
+
+| Ship ID | Ship Name |
+|---|---|
+| NP-131-H8 | KM. Labobar |
+| NP-132-B16 | KM. Gunung Dempo |
+| ... | (more discovered via scraping) |
+
+**Ships with confirmed route data** (from schedule visualizer):
+
+| Ship | Route Pattern | Cycle |
 |---|---|---|
-| KM. Bukit Siguntang | KM. Ciremai | KM. Dobonsolo |
-| KM. Egon | KM. Gunung Dempo | KM. Kelud |
-| KM. Kelimutu | KM. Lambelu | KM. Labobar |
-| KM. Lawit | KM. Leuser | KM. Nggapulu |
-| KM. Pangrango | KM. Sangiang | KM. Sinabung |
-| KM. Sirimau | KM. Tatamailau | KM. Tilongkabila |
-| KM. Tidar | KM. Umsini | KM. Wilis |
-| KM. Binaiya | KM. Dorolonda | KM. Awu |
-| KM. Sabuk Nusantara 93 | KM. Sabuk Nusantara 96 | |
+| KM. Awu | Kumai - Surabaya - Benoa - Bima - Waingapu - Ende - Kupang - Kalabahi (and back) | ~14 days |
+| KM. Dobonsolo | Tg.Priok - Surabaya - Makassar - Bau-Bau - Sorong - Manokwari - (Nabire - Biak - Jayapura) (and back) | 12-16 days (2 route variants) |
+| KM. Kelimutu | Tg.Priok - Tg.Pandan - Pontianak - Semarang - Kumai (and back, 2 route variants) | 11-17 days |
+| KM. Lambelu | Makassar - Pare-Pare - Balikpapan - Tarakan - Nunukan - Pantoloan (and back, + NTT loop) | ~14 days |
+| KM. Nggapulu | Tg.Priok - Surabaya - Makassar - Bau-Bau - Namlea - Ambon - Ternate - Jailolo - Bitung (and back) | ~14 days |
+| KM. Sinabung | Surabaya - Makassar - Bau-Bau - Banggai - Bitung - Ternate - Bacan - Sorong - Manokwari - Nabire - Biak - Jayapura (and back) | ~17 days |
+| KM. Tatamailau | Bitung - Tidore - Sorong - Fak-Fak - Kaimana - Tual - Timika - Agats - Merauke (and back) | ~16 days |
+| KM. Tidar | Kijang - Tg.Priok - Surabaya - Makassar - Bau-Bau - Maumere - Larantuka - Lewoleba - Kupang (and back) | ~14 days |
+| KM. Wilis | Batulicin - Makassar - Labuan Bajo - Bima - Waikelo - Waingapu - Ende - Kupang - Kalabahi (and back) | ~14 days |
+| KM. Kelud | Tg.Priok - Batam - Tg. Balai Karimun - Belawan (and back) | ~7 days |
+| KM. Sabuk Nusantara 95 | Tahuna - Kawaluso - Matutuang - Kawio - Marore (and back) | ~5 days |
+| KM. Sabuk Nusantara 97 | Kwandang - Paleleh - Leok - Toli Toli - Tarakan - Nunukan - P. Sebatik (and back) | ~11 days |
+| KM. Sabuk Nusantara 69 | Bitung - Makalehi - Para - Ngalipaeng - ... - Miangas - ... - Tahuna - Likupang - Bitung | ~9 days |
 
-Each ship follows a fixed cyclical route (e.g., KM. Kelud loops Jakarta → Batam → Tanjung Karimun → Medan and back). Routes repeat on ~2-week cycles.
+**Key insight**: Ships have voyage numbers (e.g. `13.2025`, `14.2025`) and some ships alternate between 2 route variants (Rute A / Rute B).
+
+#### Cabin Classes
+
+Available classes from the website:
+
+| Code | Name |
+|---|---|
+| EKO | Kelas Ekonomi |
+| ENS | Ekonomi Non Seat |
+| EWA | Ekonomi Khusus Wanita |
+| EK1-EK4 | Ekonomi Eks Kabin Kls 1-4 |
+| 2, 2A, 2B | Kelas 2 / 2A / 2B |
+| 1, 1A, 1B | Kelas 1 / 1A / 1B |
+| BSN | Kelas Bisnis |
+| EXC | Kelas Eksekutif |
+| VIP | Kelas VIP |
 
 #### Data Acquisition Strategy
 
-**Approach A: Reverse-engineer the website's XHR/API calls (PRIMARY)**
+**Approach A: Scrape via form submission (PRIMARY — confirmed working)**
 
-1. Open `pelni.co.id/reservasi-tiket` in browser DevTools → Network tab
-2. Select a departure port, destination, month → observe the XHR requests fired
-3. The Laravel backend likely serves JSON responses for:
-   - Port list endpoint (populates the departure/destination dropdowns)
-   - Schedule search endpoint (returns matching trips for a port pair + month)
-   - Ship list endpoint (populates ship dropdown)
-4. Key things to capture from the network tab:
-   - URL pattern (e.g., `/api/ports`, `/api/schedule`, `/reservation/schedule`)
-   - HTTP method (GET/POST)
-   - Request headers (especially `X-CSRF-TOKEN`, cookies, `X-Requested-With`)
-   - Request payload (port codes, date params)
-   - Response shape (JSON with schedule entries)
-5. Old URL pattern spotted from archives: `/reservation/schedule/?opsi=opsiDestinations&originPort=...&destinationPort=...&tgl_mulai=...&ship=...`
+The most reliable approach. Submit the search form and extract `jsonData` from the response.
 
-**Approach B: Reverse-engineer the PELNI Mobile App API**
+```
+Step 1: GET /reservasi-tiket
+        → Parse _token from: <input type="hidden" name="_token" value="...">
+        → Parse all port options from <select name="ticket_org">
+        → Store cookies (laravel_session, XSRF-TOKEN)
+
+Step 2: POST /getdes  (for each origin port)
+        → body: { ticket_org: PORT_ID, _token: TOKEN }
+        → Returns HTML <option> list of valid destinations
+        → This maps the entire route graph: which ports connect to which
+
+Step 3: POST /reservasi-tiket  (for each origin-destination pair)
+        → body: {
+            ticket_org: "431",
+            ticket_des: "946",
+            ticket_month: "11/02/2026",
+            ticket_class: "",       // empty = all classes
+            ticket_male: 1,
+            ticket_female: 0,
+            ticket_baby: 0,
+            _token: TOKEN
+          }
+        → Parse response HTML for: var jsonData = [...];
+        → Extract schedule, prices, transit stops, ship info
+
+Step 4: Store extracted data in database
+```
+
+**Approach B: Discover route graph via `/getdes` endpoint (RECOMMENDED FIRST STEP)**
+
+Instead of brute-forcing all ~340×340 port pairs, call `/getdes` for each of the 340 origin ports. This reveals the actual connectivity graph.
+
+```
+for each port_id in ALL_PORTS:
+    destinations = POST /getdes { ticket_org: port_id }
+    store_edges(port_id, destinations)
+    sleep(1000)
+
+// Result: adjacency list of all valid routes
+// Then only scrape schedules for known valid pairs
+```
+
+Estimated: ~340 requests to map the full graph. At 1 req/sec = ~6 minutes.
+
+**Approach C: Reverse-engineer the PELNI Mobile App API**
 
 1. PELNI has an official app: `id.co.pelni.superapp` ([Play Store](https://play.google.com/store/apps/details?id=id.co.pelni.superapp))
-2. Use **mitmproxy** or **Charles Proxy** to intercept the app's HTTP traffic
-3. The mobile app likely hits a cleaner REST API than the website (possibly at a subdomain like `api.pelni.co.id` or same origin)
-4. Steps:
-   - Install PELNI app on Android emulator
-   - Configure mitmproxy as system proxy + install CA cert
-   - Browse schedules in the app → capture all API calls
-   - Document endpoints, auth headers, request/response schemas
-5. Mobile APIs often return richer data (seat availability, real-time status) that the website doesn't expose
-
-**Approach C: Scrape the HTML pages (FALLBACK)**
-
-If the above APIs are protected or obfuscated:
-1. Use **Playwright** to automate the browser flow on `pelni.co.id/reservasi-tiket`
-2. For each ship × month combination, submit the form and parse the results table
-3. Iterate: 26 ships × 12 months = 312 scrape jobs per full refresh
-4. Parse the HTML response for schedule entries (departure time, arrival time, port names, prices)
-5. Use polite scraping: 2-3 second delays between requests, respect robots.txt
+2. Use **mitmproxy** to intercept the app's HTTP traffic
+3. May expose cleaner REST API endpoints returning pure JSON
 
 **Approach D: Third-party reseller APIs**
 
-- **Darmawisata Indonesia** offers a reseller API that includes PELNI tickets — could be a clean data source if partnership is established
-- **Fastpay** also resells PELNI tickets and publishes schedule data
-- Contact: `it.devel@pelni.co.id` to ask about official API access
+- **Darmawisata Indonesia** offers a reseller API that includes PELNI tickets
+- Contact: `it.devel@pelni.co.id` for official API access
 
 #### Scraper Implementation Plan
 
 ```
 pelni-scraper/
 ├── src/
-│   ├── ports.ts          # Fetch & cache all port codes + names
-│   ├── ships.ts          # Hardcoded ship list (26 vessels)
-│   ├── schedule.ts       # Fetch schedules per ship or port-pair
-│   ├── normalize.ts      # Normalize port names, deduplicate
+│   ├── session.ts        # GET /reservasi-tiket, extract CSRF token + cookies
+│   ├── ports.ts          # Parse all <option> from HTML, store port master list
+│   ├── graph.ts          # POST /getdes for each port → build route adjacency list
+│   ├── schedule.ts       # POST /reservasi-tiket for each valid pair → extract jsonData
+│   ├── parser.ts         # Parse jsonData JSON: routes, stops, prices, ships
+│   ├── normalize.ts      # Normalize port names (Tg.Priok = Tanjung Priok = TPR)
 │   └── store.ts          # Upsert to PostgreSQL
 ├── cron/
-│   ├── daily.ts          # Daily: scrape next 2 months of schedules
-│   └── semester.ts       # Semester: full rescrape all ships × all months
-└── config.ts             # Rate limits, CSRF handling, headers
+│   ├── weekly-graph.ts   # Weekly: refresh route graph via /getdes
+│   ├── daily-schedule.ts # Daily: scrape next 2 months of schedules for all valid pairs
+│   └── semester-full.ts  # Semester: full rescrape all routes × all months
+├── data/
+│   ├── ports.json        # Cached port master list (340+ ports)
+│   ├── coordinates.json  # Port lat/lng (80 known + geocoded rest)
+│   └── graph.json        # Route adjacency list from /getdes
+└── config.ts             # Rate limits, CSRF refresh logic, headers
+```
+
+**CSRF handling:**
+
+```ts
+// 1. GET /reservasi-tiket → extract _token from hidden input
+//    <input type="hidden" name="_token" value="M0kTraOuq7ZzH3L6iJ9AV5Fg1xhsPR36pS9HmXfj">
+// 2. Store laravel_session and XSRF-TOKEN cookies
+// 3. Include _token in all POST request bodies
+// 4. Refresh session on 419 (token expired) or every ~30 minutes
 ```
 
 **Key scraping logic:**
 
+```ts
+// Phase 1: Build route graph (run weekly)
+const session = await getSession() // GET /reservasi-tiket, extract token
+const ports = parsePortOptions(session.html) // ~340 ports
+
+for (const port of ports) {
+  const destinations = await postGetDes(session, port.id)
+  storeRouteEdges(port.id, destinations)
+  await sleep(1000)
+}
+
+// Phase 2: Scrape schedules for known routes (run daily)
+const edges = getRouteEdges() // from Phase 1
+for (const [origin, destination] of edges) {
+  const html = await postSearch(session, origin, destination, dateRange)
+  const jsonData = extractJsonData(html) // regex: var jsonData = (\[.*?\]);
+  for (const trip of jsonData) {
+    upsertSchedule({
+      ship_no: trip.ship_no,
+      ship_name: trip.ship_name,
+      origin_port: trip.form.org,
+      dest_port: trip.form.des,
+      departure: parseDateTime(trip.form.dep_date, trip.deptime_plain),
+      arrival: parseDateTime(trip.arrdate_plain, trip.arrtime_plain),
+      duration: trip.duration_plain,
+      stops: parseRouteStops(trip.rpdetail),
+      price_adult: parsePrice(trip.form.pdprice_adult),
+      price_infant: parsePrice(trip.form.pdprice_infant),
+      cabin_class: trip.form.code_class,
+      discount: trip.discount,
+    })
+  }
+  await sleep(2000) // polite delay
+}
 ```
-// Pseudocode for the core scraping loop
-for each ship in PELNI_SHIPS:
-  for each month in NEXT_6_MONTHS:
-    schedules = fetchSchedule(ship, month)
-    for each trip in schedules:
-      upsertRoute({
-        departure: trip.origin_port,
-        destination: trip.destination_port,
-        ship: ship.name,
-        departure_time: trip.depart_at,
-        arrival_time: trip.arrive_at,
-        prices: trip.fare_classes,
-      })
-    sleep(2000) // polite delay
-```
-
-**Handling Laravel CSRF:**
-
-```
-// Laravel requires CSRF token for form submissions
-// 1. GET /reservasi-tiket → extract meta[name="csrf-token"] from HTML
-// 2. Include in subsequent requests as X-CSRF-TOKEN header
-// 3. Also send the laravel_session cookie from the initial request
-// 4. Token expires — refresh every ~30 minutes or on 419 response
-```
-
-#### Port Code Discovery
-
-The dropdown on `/reservasi-tiket` contains all PELNI port codes. Strategy:
-1. Fetch the page HTML once
-2. Parse all `<option>` values from the departure port `<select>` element
-3. This gives us the complete (port_code, port_name) mapping
-4. Alternatively, if the dropdown is populated via AJAX, intercept that call to get the port list as JSON
-
-Expected: ~90-100 PELNI ports across Indonesia.
 
 #### Update Strategy
 
 | What | Frequency | Method |
 |---|---|---|
-| Port list | Monthly | Refetch dropdown / API |
-| Full schedule (all ships × 6 months) | Every 2 weeks | Iterate all ship-month combos |
-| Near-term schedule (next 2 months) | Daily | Targeted scrape |
-| Prices | Daily | Captured with schedule |
-| Holiday schedule changes | On-demand | Monitor @pelaboranid & PELNI social media |
+| Port list | Monthly | Re-parse `<select>` from `/reservasi-tiket` |
+| Route graph | Weekly | `POST /getdes` for all 340 ports (~6 min) |
+| Schedules (next 2 months) | Daily | `POST /reservasi-tiket` for all valid route pairs |
+| Prices | Daily | Included in schedule response |
+| Full schedule (6 months) | Every 2 weeks | All pairs × extended date range |
+| Holiday changes | On-demand | Monitor @pelni162 social media |
 
 #### Known Challenges
 
-- **CSRF + session handling**: Laravel will reject requests without valid CSRF token and session cookie. Must maintain a session.
-- **Rate limiting**: pelni.co.id returns 403 on aggressive scraping. Use delays + rotate user-agent.
-- **Cloudflare/WAF**: The site may use WAF protection. Playwright with stealth plugin can bypass basic checks.
-- **Holiday chaos**: Lebaran, Natal/Tahun Baru schedules change late. PELNI announces via social media before updating the website.
-- **Sandbox environment**: `sandbox.pelni.co.id` exists but is currently down — worth monitoring as it might expose a more accessible API.
-- **No public API exists**: Confirmed via research — there is no documented public PELNI API. All data must be scraped or reverse-engineered.
+- **CSRF + session handling**: All POST endpoints require `_token`. Must maintain session cookies and refresh on 419 response.
+- **Rate limiting**: pelni.co.id returns 403 on aggressive requests. Use 1-2 second delays between requests.
+- **HTML response parsing**: Schedule data is embedded as `var jsonData = [...]` in server-rendered HTML — need regex or DOM parsing to extract.
+- **Destination filtering**: Not all port pairs have routes. Must use `/getdes` to discover valid pairs first, otherwise wasting requests.
+- **Route variants**: Some ships alternate between 2 routes (Rute A / Rute B). The schedule data includes this but need to track which variant is active.
+- **Date limitation**: The datepicker only allows searching 2 months ahead (`maxDate:"+2m"`). For longer-term schedules, need the separate ship schedule data.
+- **Holiday chaos**: Lebaran/Natal schedules change late. PELNI announces via social media before updating the website.
+- **Sandbox environment**: `sandbox.pelni.co.id` exists but is currently down — worth monitoring.
 
 #### Reference Architecture
 
@@ -185,6 +367,15 @@ The [comuline/api](https://github.com/comuline/api) project (KRL commuter line s
 - Two-phase sync: stations first, then schedules (same pattern we need: ports first, then routes)
 - PostgreSQL + Redis cache + Hono API on Cloudflare Workers
 - This is the closest open-source reference for Indonesian transport data scraping
+
+#### Supplementary Data: Ship Schedule Visualizer
+
+A separate data source exists with **pre-compiled ship schedules** including:
+- Full voyage-by-voyage schedules with ETA/ETD at every port
+- Port coordinates (lat/lng) for ~80 ports
+- Ship metadata and route patterns
+
+This data can **seed the database** before the scraper runs, giving us historical route patterns and port coordinates. It covers 13+ ships with multiple voyages each.
 
 ---
 
