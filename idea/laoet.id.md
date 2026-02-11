@@ -29,25 +29,162 @@ laoet.id solves this by aggregating route data from multiple sources into one se
 
 Long-distance passenger ships connecting major ports across Indonesia.
 
-**How to get the data:**
+#### Site Architecture
 
-- **Website scraping**: PELNI's booking site (pelni.co.id) has a schedule search. Build a scraper that queries all known port pairs periodically.
-  - Target endpoints: the schedule search API behind their frontend (inspect network tab for XHR calls)
-  - Fields to extract: route, departure/arrival port, departure/arrival time, ship name, fare classes & prices
-- **PDF schedule**: PELNI publishes seasonal route maps and schedules as PDF. Parse these as a fallback/validation source.
-- **Manual verification**: Cross-check with PELNI branch offices or call centers for routes that don't show up online.
+pelni.co.id is a **Laravel** application. The reservation page at `/reservasi-tiket` uses a form-based flow:
 
-**Update strategy:**
+1. User selects **departure port** (Pelabuhan Asal) from a dropdown
+2. User selects **destination port** (Pelabuhan Tujuan) — likely filtered by available routes from selected origin
+3. User picks **departure month** (Bulan Keberangkatan)
+4. User picks **ship** (Kapal) — optional, or picks from available ships on that route
+5. Submit → returns matching schedule results
 
-- Full scrape: **weekly** (PELNI schedules are relatively stable per semester)
-- Delta check on pricing: **daily**
-- Major schedule revision: **every 6 months** (PELNI typically revises routes twice a year, align with their semester schedule)
+The site also has a **sandbox environment** at `sandbox.pelni.co.id` (currently shows "Layanan Dalam Perbaikan") which suggests they have a staging API.
 
-**Known challenges:**
+#### Known PELNI Ships (26 vessels)
 
-- PELNI site may rate-limit or block scrapers — use polite scraping (delays, rotating user-agent, respect robots.txt)
-- Schedule changes during Lebaran/holiday season are announced late — monitor their social media (Twitter/X, Instagram) for announcements
-- Some routes are seasonal or weather-dependent
+These are the active passenger ships that we need to track routes for:
+
+| Ship | Ship | Ship |
+|---|---|---|
+| KM. Bukit Siguntang | KM. Ciremai | KM. Dobonsolo |
+| KM. Egon | KM. Gunung Dempo | KM. Kelud |
+| KM. Kelimutu | KM. Lambelu | KM. Labobar |
+| KM. Lawit | KM. Leuser | KM. Nggapulu |
+| KM. Pangrango | KM. Sangiang | KM. Sinabung |
+| KM. Sirimau | KM. Tatamailau | KM. Tilongkabila |
+| KM. Tidar | KM. Umsini | KM. Wilis |
+| KM. Binaiya | KM. Dorolonda | KM. Awu |
+| KM. Sabuk Nusantara 93 | KM. Sabuk Nusantara 96 | |
+
+Each ship follows a fixed cyclical route (e.g., KM. Kelud loops Jakarta → Batam → Tanjung Karimun → Medan and back). Routes repeat on ~2-week cycles.
+
+#### Data Acquisition Strategy
+
+**Approach A: Reverse-engineer the website's XHR/API calls (PRIMARY)**
+
+1. Open `pelni.co.id/reservasi-tiket` in browser DevTools → Network tab
+2. Select a departure port, destination, month → observe the XHR requests fired
+3. The Laravel backend likely serves JSON responses for:
+   - Port list endpoint (populates the departure/destination dropdowns)
+   - Schedule search endpoint (returns matching trips for a port pair + month)
+   - Ship list endpoint (populates ship dropdown)
+4. Key things to capture from the network tab:
+   - URL pattern (e.g., `/api/ports`, `/api/schedule`, `/reservation/schedule`)
+   - HTTP method (GET/POST)
+   - Request headers (especially `X-CSRF-TOKEN`, cookies, `X-Requested-With`)
+   - Request payload (port codes, date params)
+   - Response shape (JSON with schedule entries)
+5. Old URL pattern spotted from archives: `/reservation/schedule/?opsi=opsiDestinations&originPort=...&destinationPort=...&tgl_mulai=...&ship=...`
+
+**Approach B: Reverse-engineer the PELNI Mobile App API**
+
+1. PELNI has an official app: `id.co.pelni.superapp` ([Play Store](https://play.google.com/store/apps/details?id=id.co.pelni.superapp))
+2. Use **mitmproxy** or **Charles Proxy** to intercept the app's HTTP traffic
+3. The mobile app likely hits a cleaner REST API than the website (possibly at a subdomain like `api.pelni.co.id` or same origin)
+4. Steps:
+   - Install PELNI app on Android emulator
+   - Configure mitmproxy as system proxy + install CA cert
+   - Browse schedules in the app → capture all API calls
+   - Document endpoints, auth headers, request/response schemas
+5. Mobile APIs often return richer data (seat availability, real-time status) that the website doesn't expose
+
+**Approach C: Scrape the HTML pages (FALLBACK)**
+
+If the above APIs are protected or obfuscated:
+1. Use **Playwright** to automate the browser flow on `pelni.co.id/reservasi-tiket`
+2. For each ship × month combination, submit the form and parse the results table
+3. Iterate: 26 ships × 12 months = 312 scrape jobs per full refresh
+4. Parse the HTML response for schedule entries (departure time, arrival time, port names, prices)
+5. Use polite scraping: 2-3 second delays between requests, respect robots.txt
+
+**Approach D: Third-party reseller APIs**
+
+- **Darmawisata Indonesia** offers a reseller API that includes PELNI tickets — could be a clean data source if partnership is established
+- **Fastpay** also resells PELNI tickets and publishes schedule data
+- Contact: `it.devel@pelni.co.id` to ask about official API access
+
+#### Scraper Implementation Plan
+
+```
+pelni-scraper/
+├── src/
+│   ├── ports.ts          # Fetch & cache all port codes + names
+│   ├── ships.ts          # Hardcoded ship list (26 vessels)
+│   ├── schedule.ts       # Fetch schedules per ship or port-pair
+│   ├── normalize.ts      # Normalize port names, deduplicate
+│   └── store.ts          # Upsert to PostgreSQL
+├── cron/
+│   ├── daily.ts          # Daily: scrape next 2 months of schedules
+│   └── semester.ts       # Semester: full rescrape all ships × all months
+└── config.ts             # Rate limits, CSRF handling, headers
+```
+
+**Key scraping logic:**
+
+```
+// Pseudocode for the core scraping loop
+for each ship in PELNI_SHIPS:
+  for each month in NEXT_6_MONTHS:
+    schedules = fetchSchedule(ship, month)
+    for each trip in schedules:
+      upsertRoute({
+        departure: trip.origin_port,
+        destination: trip.destination_port,
+        ship: ship.name,
+        departure_time: trip.depart_at,
+        arrival_time: trip.arrive_at,
+        prices: trip.fare_classes,
+      })
+    sleep(2000) // polite delay
+```
+
+**Handling Laravel CSRF:**
+
+```
+// Laravel requires CSRF token for form submissions
+// 1. GET /reservasi-tiket → extract meta[name="csrf-token"] from HTML
+// 2. Include in subsequent requests as X-CSRF-TOKEN header
+// 3. Also send the laravel_session cookie from the initial request
+// 4. Token expires — refresh every ~30 minutes or on 419 response
+```
+
+#### Port Code Discovery
+
+The dropdown on `/reservasi-tiket` contains all PELNI port codes. Strategy:
+1. Fetch the page HTML once
+2. Parse all `<option>` values from the departure port `<select>` element
+3. This gives us the complete (port_code, port_name) mapping
+4. Alternatively, if the dropdown is populated via AJAX, intercept that call to get the port list as JSON
+
+Expected: ~90-100 PELNI ports across Indonesia.
+
+#### Update Strategy
+
+| What | Frequency | Method |
+|---|---|---|
+| Port list | Monthly | Refetch dropdown / API |
+| Full schedule (all ships × 6 months) | Every 2 weeks | Iterate all ship-month combos |
+| Near-term schedule (next 2 months) | Daily | Targeted scrape |
+| Prices | Daily | Captured with schedule |
+| Holiday schedule changes | On-demand | Monitor @pelaboranid & PELNI social media |
+
+#### Known Challenges
+
+- **CSRF + session handling**: Laravel will reject requests without valid CSRF token and session cookie. Must maintain a session.
+- **Rate limiting**: pelni.co.id returns 403 on aggressive scraping. Use delays + rotate user-agent.
+- **Cloudflare/WAF**: The site may use WAF protection. Playwright with stealth plugin can bypass basic checks.
+- **Holiday chaos**: Lebaran, Natal/Tahun Baru schedules change late. PELNI announces via social media before updating the website.
+- **Sandbox environment**: `sandbox.pelni.co.id` exists but is currently down — worth monitoring as it might expose a more accessible API.
+- **No public API exists**: Confirmed via research — there is no documented public PELNI API. All data must be scraped or reverse-engineered.
+
+#### Reference Architecture
+
+The [comuline/api](https://github.com/comuline/api) project (KRL commuter line schedule API) uses a similar approach:
+- Daily cron job scrapes PT. KAI's website
+- Two-phase sync: stations first, then schedules (same pattern we need: ports first, then routes)
+- PostgreSQL + Redis cache + Hono API on Cloudflare Workers
+- This is the closest open-source reference for Indonesian transport data scraping
 
 ---
 
