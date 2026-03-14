@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import type { CollectionEntry } from "astro:content";
 import { motion } from "framer-motion";
-import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2/index";
+import { HiArrowRight, HiArrowUpRight } from "react-icons/hi2";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 
@@ -20,7 +20,7 @@ export function CollectionCard({ post }: { post: BlogProps | ProjectProps }) {
 }
 
 function BlogCard({ post }: { post: BlogProps }) {
-  const link = `/${post.data.tag.toLowerCase()}/${post.slug}`;
+  const link = `/${post.data.tag.toLowerCase()}/${post.id}`;
   const isImageExist = !!post.data.image;
 
   return (

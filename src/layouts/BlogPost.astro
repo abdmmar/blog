@@ -62,7 +62,7 @@ const postDate = dateFormatter.format(publishedDate);
                 client:idle
                 title={title}
                 description={description}
-                slug={`/blog/${post.slug}`}
+                slug={`/blog/${post.id}`}
               />
             </div>
 
@@ -98,7 +98,7 @@ const postDate = dateFormatter.format(publishedDate);
         {
           previousPost ? (
             <a
-              href={`/blog/${previousPost.slug}`}
+              href={`/blog/${previousPost.id}`}
               class="py-3 px-4 flex items-center text-gray-600 group dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
             >
               <ArrowLeft class="h-5 w-5 min-w-[20px] mr-5 group-hover:text-gray-600 transition-all text-gray-300 dark:text-gray-600 dark:group-hover:text-gray-300" />
@@ -109,7 +109,7 @@ const postDate = dateFormatter.format(publishedDate);
         {
           nextPost ? (
             <a
-              href={`/blog/${nextPost.slug}`}
+              href={`/blog/${nextPost.id}`}
               class="py-3 px-4 flex items-center text-gray-600 group dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
             >
               <span>{nextPost.data.title}</span>
@@ -128,7 +128,7 @@ const postDate = dateFormatter.format(publishedDate);
             {
               previousPost ? (
                 <a
-                  href={`/blog/${previousPost.slug}`}
+                  href={`/blog/${previousPost.id}`}
                   class="py-3 px-4 flex items-center text-gray-600 group dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
                 >
                   <ArrowLeft class="h-5 w-5 min-w-[20px] mr-5 group-hover:text-gray-600 transition-all text-gray-300 dark:text-gray-600 dark:group-hover:text-gray-300" />
@@ -139,7 +139,7 @@ const postDate = dateFormatter.format(publishedDate);
             {
               nextPost ? (
                 <a
-                  href={`/blog/${nextPost.slug}`}
+                  href={`/blog/${nextPost.id}`}
                   class="py-3 px-4 flex items-center text-gray-600 group dark:text-gray-200 justify-between text-sm border border-gray-200 dark:border-gray-800 rounded-sm hover:bg-gray-50 bg-white dark:bg-gray-950 dark:hover:bg-gray-900 transition-all"
                 >
                   <span>{nextPost.data.title}</span>
