@@ -8,13 +8,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "convert-images": "tsx scripts/convert-images.ts",
+    "generate-content": "tsx scripts/generate-images-content.ts",
+    "upload-images": "tsx scripts/upload-to-cloudflare.ts",
     "lint": "oxlint",
     "fmt": "oxfmt --write .",
-    "fmt:check": "oxfmt --check .",
-    "generate-types": "wrangler types"
+    "fmt:check": "oxfmt --check ."
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.1.1",
     "@astrojs/mdx": "5.0.0",
     "@astrojs/react": "5.0.0",
     "@astrojs/rss": "4.0.17",
@@ -34,17 +35,19 @@
     "react-icons": "5.6.0",
     "react-medium-image-zoom": "5.4.1",
     "tailwind-merge": "3.5.0",
-    "tailwindcss": "3.4.19",
-    "wrangler": "^4.73.0"
+    "tailwindcss": "3.4.19"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1009.0",
     "astro-robots-txt": "1.0.0",
     "autoprefixer": "10.4.21",
+    "dotenv": "^17.3.1",
     "exif-reader": "2.0.3",
     "oxfmt": "0.40.0",
     "oxlint": "1.55.0",
     "postcss-import": "16.1.0",
-    "sharp": "0.34.5"
+    "sharp": "0.34.5",
+    "tsx": "^4.21.0"
   },
   "packageManager": "pnpm@9.15.3+sha512.1f79bc245a66eb0b07c5d4d83131240774642caaa86ef7d0434ab47c0d16f66b04e21e0c086eb61e62c77efc4d7f7ec071afad3796af64892fae66509173893a"
 }
