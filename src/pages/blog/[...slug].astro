@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
 import "../../styles/base.css";
 
@@ -35,14 +35,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const { nextPost, previousPost } = getNextAndPreviousPosts(sorted, post.id);
 
     return {
-      params: { slug: post.slug },
+      params: { slug: post.id },
       props: { post, nextPost, previousPost },
     };
   });
 };
 
 const { post, nextPost, previousPost } = Astro.props;
-const { Content, headings } = await post.render();
+const { Content, headings } = await render(post);
 ---
 
 <BlogPost
