@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   src: string;
@@ -7,14 +7,16 @@ type Props = {
   height?: string;
 };
 
+/**
+ * Semplice5-style stacked parallax: the image sticks to the viewport
+ * while subsequent content scrolls over it, creating a layered effect.
+ */
 export default function ParallaxImage({
   src,
   alt,
   overlayText,
   height = "100vh",
 }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState(0);
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
@@ -25,93 +27,68 @@ export default function ParallaxImage({
     setEnabled(!prefersReduced && !isMobile);
   }, []);
 
-  useEffect(() => {
-    if (!enabled) return;
-
-    let ticking = false;
-    const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        if (!containerRef.current) {
-          ticking = false;
-          return;
-        }
-        const rect = containerRef.current.getBoundingClientRect();
-        const windowH = window.innerHeight;
-        // Progress: 0 when bottom of viewport hits top of container,
-        //           1 when top of viewport passes bottom of container
-        const progress =
-          (windowH - rect.top) / (windowH + rect.height);
-        // Map to a parallax offset range
-        setOffset((progress - 0.5) * 100);
-        ticking = false;
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [enabled]);
-
   return (
     <div
-      ref={containerRef}
-      className="parallax-breakout"
-      style={{ height, position: "relative", overflow: "hidden" }}
+      className="parallax-breakout parallax-stack-wrapper"
+      style={{ height }}
     >
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          width: "100%",
-          height: "140%",
-          objectFit: "cover",
-          top: "-20%",
-          transform: enabled ? `translateY(${offset}px)` : "none",
-          willChange: enabled ? "transform" : "auto",
-          transition: "transform 0.05s linear",
-        }}
-      />
       <div
+        className="parallax-stack-sticky"
         style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.1) 100%)",
+          position: enabled ? "sticky" : "relative",
+          top: 0,
+          height,
+          overflow: "hidden",
         }}
-      />
-      {overlayText && (
+      >
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
         <div
           style={{
             position: "absolute",
             inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2.5rem",
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.1) 100%)",
           }}
-        >
-          <p
+        />
+        {overlayText && (
+          <div
             style={{
-              color: "white",
-              fontSize: "clamp(1.25rem, 3vw, 2rem)",
-              fontWeight: 500,
-              textAlign: "center",
-              lineHeight: 1.5,
-              maxWidth: "600px",
-              textShadow: "0 2px 20px rgba(0,0,0,0.3)",
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "2.5rem",
             }}
           >
-            {overlayText}
-          </p>
-        </div>
-      )}
+            <p
+              style={{
+                color: "white",
+                fontSize: "clamp(1.25rem, 3vw, 2rem)",
+                fontWeight: 500,
+                textAlign: "center",
+                lineHeight: 1.5,
+                maxWidth: "600px",
+                textShadow: "0 2px 20px rgba(0,0,0,0.3)",
+              }}
+            >
+              {overlayText}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
