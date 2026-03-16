@@ -3,16 +3,22 @@ import { Image } from "astro:assets";
 import meImage from "@/assets/photo/me.jpg";
 import Header from "@/components/Header.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
 import Footer from "@/components/Footer.astro";
+import GalleryCard from "@/components/photo/GalleryCard.astro";
+import { getCollection } from "astro:content";
 
 const photos = await getCollection("photo");
 const sortedPhotos = photos.sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
+
+const galleryEntries = await getCollection("photoGallery");
+const sortedGallery = galleryEntries.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
 ---
 
-<BaseLayout>
+<BaseLayout meta={{ title: "Photography — Abdullah Ammar", description: "A collection of photographs, albums, and photo journals by Abdullah Ammar." }}>
   <Header />
   <div class="mt-32">
     <h1
@@ -56,19 +62,36 @@ const sortedPhotos = photos.sort(
       />
     </div>
   </div>
-  <div
-    class="grid grid-cols-4 gap-16 sm:grid-cols-1 md:grid-cols-3 sm:gap-4 md:gap-6 lg:gap-8"
-  >
-    {
-      sortedPhotos.map((photo) => (
-        <img
-          src={photo.data.filepath}
-          alt={photo.data.alt || photo.data.title}
-          loading="lazy"
-          decoding="async"
-        />
-      ))
-    }
-  </div>
+
+  {
+    sortedGallery.length > 0 && (
+      <section class="mb-24">
+        <h2 class="text-2xl font-semibold mb-8">Collections</h2>
+        <div class="grid grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {sortedGallery.map((entry, index) => (
+            <GalleryCard entry={entry} index={index} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section>
+    <h2 class="text-2xl font-semibold mb-8">All Photos</h2>
+    <div
+      class="grid grid-cols-4 gap-16 sm:grid-cols-1 md:grid-cols-3 sm:gap-4 md:gap-6 lg:gap-8"
+    >
+      {
+        sortedPhotos.map((photo) => (
+          <img
+            src={photo.data.filepath}
+            alt={photo.data.alt || photo.data.title}
+            loading="lazy"
+            decoding="async"
+          />
+        ))
+      }
+    </div>
+  </section>
   <Footer />
 </BaseLayout>

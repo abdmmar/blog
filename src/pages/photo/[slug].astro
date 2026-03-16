@@ -1,0 +1,90 @@
+---
+import type { GetStaticPaths } from "astro";
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PhotoJournalLayout from "@/layouts/PhotoJournalLayout.astro";
+import Slideshow from "@/components/photo/Slideshow.tsx";
+
+type GalleryEntry = CollectionEntry<"photoGallery">;
+
+type Props = {
+  entry: GalleryEntry;
+  nextEntry?: GalleryEntry;
+  previousEntry?: GalleryEntry;
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const entries = await getCollection("photoGallery");
+  const sorted = entries.sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  );
+
+  return entries.map((entry) => {
+    const index = sorted.findIndex((e) => e.id === entry.id);
+    const nextEntry =
+      index !== -1 && index < sorted.length - 1 ? sorted[index + 1] : undefined;
+    const previousEntry = index > 0 ? sorted[index - 1] : undefined;
+
+    return {
+      params: { slug: entry.data.slug },
+      props: { entry, nextEntry, previousEntry },
+    };
+  });
+};
+
+const { entry, nextEntry, previousEntry } = Astro.props;
+const { data } = entry;
+
+const isJournal = data.type === "journal";
+const rendered = isJournal ? await render(entry) : null;
+const Content = rendered?.Content;
+const headings = rendered?.headings;
+---
+
+{
+  data.type === "single" && (
+    <BaseLayout
+      meta={{ title: data.title, description: data.title, image: data.coverImage }}
+    >
+      <Slideshow
+        client:load
+        images={[{ src: data.coverImage, alt: data.alt || data.title }]}
+        title={data.title}
+        exif={{
+          iso: data.iso,
+          shutterspeed: data.shutterspeed,
+          aperture: data.aperture,
+          lens: data.lens,
+          author: data.author,
+        }}
+      />
+    </BaseLayout>
+  )
+}
+
+{
+  data.type === "album" && (
+    <BaseLayout
+      meta={{
+        title: data.title,
+        description: data.description || data.title,
+        image: data.coverImage,
+      }}
+    >
+      <Slideshow client:load images={data.images} title={data.title} />
+    </BaseLayout>
+  )
+}
+
+{
+  data.type === "journal" && Content && (
+    <PhotoJournalLayout
+      entry={entry}
+      headings={headings}
+      nextEntry={nextEntry}
+      previousEntry={previousEntry}
+    >
+      <Content />
+    </PhotoJournalLayout>
+  )
+}

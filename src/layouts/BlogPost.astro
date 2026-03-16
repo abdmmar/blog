@@ -78,7 +78,7 @@ const postDate = dateFormatter.format(publishedDate);
                   <Image
                     class="rounded-md mb-12"
                     width={image.width || 720}
-                    height={360}
+                    height={image.height || Math.round((image.width || 720) * (9 / 16))}
                     src={image}
                     alt={imageAlt || ""}
                   />

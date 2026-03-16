@@ -1,0 +1,20 @@
+---
+type Props = {
+  author?: string;
+  source?: string;
+};
+
+const { author, source } = Astro.props;
+---
+
+<blockquote class="max-w-[70ch] my-14 py-8 border-t border-b border-gray-200 dark:border-gray-800">
+  <div class="text-2xl italic text-gray-700 dark:text-gray-300 leading-relaxed sm:text-xl">
+    <slot />
+  </div>
+  {(author || source) && (
+    <footer class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+      {author && <span>— {author}</span>}
+      {source && <cite class="ml-1 not-italic">({source})</cite>}
+    </footer>
+  )}
+</blockquote>

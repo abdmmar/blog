@@ -1,0 +1,67 @@
+---
+type Props = {
+  src: string;
+  type?: "video" | "youtube" | "vimeo";
+  caption?: string;
+};
+
+const { src, type = "video", caption } = Astro.props;
+
+function getYoutubeId(url: string) {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  );
+  return match?.[1];
+}
+
+function getVimeoId(url: string) {
+  const match = url.match(/vimeo\.com\/(\d+)/);
+  return match?.[1];
+}
+---
+
+<figure class="my-10">
+  {
+    type === "video" && (
+      <video
+        src={src}
+        controls
+        preload="metadata"
+        class="w-full rounded-sm"
+      >
+        <track kind="captions" />
+      </video>
+    )
+  }
+  {
+    type === "youtube" && (
+      <div class="relative w-full" style="padding-bottom: 56.25%;">
+        <iframe
+          src={`https://www.youtube.com/embed/${getYoutubeId(src)}`}
+          title={caption || "Video"}
+          class="absolute inset-0 w-full h-full rounded-sm"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+    )
+  }
+  {
+    type === "vimeo" && (
+      <div class="relative w-full" style="padding-bottom: 56.25%;">
+        <iframe
+          src={`https://player.vimeo.com/video/${getVimeoId(src)}`}
+          title={caption || "Video"}
+          class="absolute inset-0 w-full h-full rounded-sm"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+    )
+  }
+  {caption && (
+    <figcaption class="text-center text-sm text-gray-500 dark:text-gray-400 mt-3">
+      {caption}
+    </figcaption>
+  )}
+</figure>

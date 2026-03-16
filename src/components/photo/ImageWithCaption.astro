@@ -1,0 +1,42 @@
+---
+type Props = {
+  src: string;
+  alt: string;
+  caption?: string;
+  credit?: string;
+  layout?: "content" | "full";
+};
+
+const { src, alt, caption, credit, layout = "content" } = Astro.props;
+---
+
+<figure class:list={[layout === "full" ? "fullwidth-breakout" : "max-w-[70ch]"]}>
+  {layout === "full" ? (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      class="w-full max-h-screen object-cover"
+    />
+  ) : (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      class="max-w-full max-h-screen h-auto mx-auto block rounded-sm"
+    />
+  )}
+  {(caption || credit) && (
+    <figcaption class:list={[
+      layout === "full" ? "max-w-[70ch] mx-auto px-5" : "",
+      "mt-3 text-sm text-gray-500 dark:text-gray-400"
+    ]}>
+      {caption}
+      {credit && (
+        <span class="text-gray-400 dark:text-gray-500"> — {credit}</span>
+      )}
+    </figcaption>
+  )}
+</figure>

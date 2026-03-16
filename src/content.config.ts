@@ -64,4 +64,54 @@ const photo = defineCollection({
   }),
 });
 
-export const collections = { blog, project, photo };
+const singleSchema = z.object({
+  type: z.literal("single"),
+  title: z.string(),
+  slug: z.string(),
+  date: z.string().transform((str) => new Date(str)),
+  coverImage: z.string(),
+  alt: z.string().optional(),
+  author: z.string().optional(),
+  iso: z.string().optional(),
+  shutterspeed: z.string().optional(),
+  aperture: z.string().optional(),
+  lens: z.string().optional(),
+});
+
+const albumSchema = z.object({
+  type: z.literal("album"),
+  title: z.string(),
+  slug: z.string(),
+  date: z.string().transform((str) => new Date(str)),
+  coverImage: z.string(),
+  description: z.string().optional(),
+  images: z.array(
+    z.object({
+      src: z.string(),
+      alt: z.string().optional(),
+      caption: z.string().optional(),
+    }),
+  ),
+});
+
+const journalSchema = z.object({
+  type: z.literal("journal"),
+  title: z.string(),
+  slug: z.string(),
+  date: z.string().transform((str) => new Date(str)),
+  coverImage: z.string(),
+  description: z.string(),
+  author: z.string().optional(),
+  keywords: z.array(z.string()).optional(),
+});
+
+const photoGallery = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "src/content/photo-gallery" }),
+  schema: z.discriminatedUnion("type", [
+    singleSchema,
+    albumSchema,
+    journalSchema,
+  ]),
+});
+
+export const collections = { blog, project, photo, photoGallery };
