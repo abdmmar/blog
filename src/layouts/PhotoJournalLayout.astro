@@ -266,8 +266,7 @@ const jsonLd = JSON.stringify({
   }
 
   /* Full-width breakout for images/galleries */
-  .journal-content :global(.fullwidth-breakout),
-  .journal-content :global(.parallax-breakout) {
+  .journal-content :global(.fullwidth-breakout) {
     width: 100vw;
     position: relative;
     left: 50%;
@@ -275,6 +274,29 @@ const jsonLd = JSON.stringify({
     overflow: hidden;
     margin-top: 3rem;
     margin-bottom: 3rem;
+  }
+
+  /* Stacked parallax breakout — image sticks while content scrolls over.
+     Uses margin instead of transform to avoid breaking position:sticky. */
+  .journal-content :global(.parallax-breakout) {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-top: 0;
+    margin-bottom: 0;
+    z-index: 0;
+  }
+
+  /* Content sections between parallax images — solid background scrolls over sticky images */
+  .journal-content :global(.parallax-content-section) {
+    position: relative;
+    z-index: 1;
+    background-color: white;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  :global(.dark) .journal-content :global(.parallax-content-section) {
+    background-color: rgb(3, 7, 18);
   }
 
   /* On tablet and below: hide sidenotes inline, show at bottom */
@@ -307,9 +329,41 @@ const jsonLd = JSON.stringify({
     onScroll();
   }
 
+  // Wrap content between parallax images into sections with solid backgrounds
+  // so they visually scroll over the sticky parallax images
+  function initParallaxSections() {
+    const content = document.getElementById("journal-content");
+    if (!content) return;
+
+    const children = Array.from(content.children);
+    const hasParallax = children.some((c) =>
+      c.classList.contains("parallax-breakout"),
+    );
+    if (!hasParallax) return;
+
+    let wrapper: HTMLDivElement | null = null;
+
+    children.forEach((child) => {
+      if (child.classList.contains("parallax-breakout")) {
+        // End current wrapper, leave parallax as a direct child
+        wrapper = null;
+        return;
+      }
+
+      if (!wrapper) {
+        wrapper = document.createElement("div");
+        wrapper.className = "parallax-content-section";
+        child.parentNode!.insertBefore(wrapper, child);
+      }
+      wrapper.appendChild(child);
+    });
+  }
+
   initNav();
+  initParallaxSections();
   document.addEventListener("astro:after-swap", () => {
     initNav();
+    initParallaxSections();
     const event = new CustomEvent("reset-footnotes");
     window.dispatchEvent(event);
   });
