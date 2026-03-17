@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Footer from "@/components/Footer.astro";
 import GalleryCard from "@/components/photo/GalleryCard.astro";
+import ResponsiveImage from "@/components/photo/ResponsiveImage.astro";
 import { getCollection } from "astro:content";
 
 const photos = await getCollection("photo");
@@ -83,11 +84,10 @@ const sortedGallery = galleryEntries.sort(
     >
       {
         sortedPhotos.map((photo) => (
-          <img
+          <ResponsiveImage
             src={photo.data.filepath}
             alt={photo.data.alt || photo.data.title}
-            loading="lazy"
-            decoding="async"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
           />
         ))
       }

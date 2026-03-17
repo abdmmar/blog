@@ -1,4 +1,6 @@
 ---
+import ResponsiveImage from "./ResponsiveImage.astro";
+
 type Props = {
   src: string;
   alt: string;
@@ -12,19 +14,17 @@ const { src, alt, caption, credit, layout = "content" } = Astro.props;
 
 <figure class:list={[layout === "full" ? "fullwidth-breakout" : "max-w-[70ch]"]}>
   {layout === "full" ? (
-    <img
+    <ResponsiveImage
       src={src}
       alt={alt}
-      loading="lazy"
-      decoding="async"
+      sizes="100vw"
       class="w-full max-h-screen object-cover"
     />
   ) : (
-    <img
+    <ResponsiveImage
       src={src}
       alt={alt}
-      loading="lazy"
-      decoding="async"
+      sizes="min(70ch, 100vw)"
       class="max-w-full max-h-screen h-auto mx-auto block rounded-sm"
     />
   )}

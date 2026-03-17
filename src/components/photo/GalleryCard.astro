@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import ResponsiveImage from "./ResponsiveImage.astro";
 
 type Props = {
   entry: CollectionEntry<"photoGallery">;
@@ -26,11 +27,10 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     data.type === "single" && (
       <div class="flex flex-col gap-2">
         <div class="overflow-hidden">
-          <img
+          <ResponsiveImage
             src={data.coverImage}
             alt={data.alt || data.title}
-            loading="lazy"
-            decoding="async"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
@@ -51,19 +51,17 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
       <div class="flex flex-col gap-2">
         <div class="overflow-hidden">
           <div class="grid grid-cols-2 gap-1">
-            <img
+            <ResponsiveImage
               src={data.coverImage}
               alt={data.title}
-              loading="lazy"
-              decoding="async"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               class="col-span-2 w-full h-48 sm:h-32 object-cover transition-transform duration-300 group-hover:scale-105"
             />
             {data.images.slice(1, 3).map((img) => (
-              <img
+              <ResponsiveImage
                 src={img.src}
                 alt={img.alt || ""}
-                loading="lazy"
-                decoding="async"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 12.5vw"
                 class="w-full h-20 sm:h-14 object-cover"
               />
             ))}
@@ -85,11 +83,10 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     data.type === "journal" && (
       <div class="col-span-2 sm:col-span-1">
         <div class="grid grid-cols-2 sm:grid-cols-1 gap-4 bg-gray-950 dark:bg-gray-900 overflow-hidden">
-          <img
+          <ResponsiveImage
             src={data.coverImage}
             alt={data.title}
-            loading="lazy"
-            decoding="async"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div class="flex flex-col justify-between gap-2 py-4 pr-4 sm:px-4 sm:pb-4 text-white">
