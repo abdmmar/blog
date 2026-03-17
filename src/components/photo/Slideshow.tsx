@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import ResponsiveImg from "./ResponsiveImg";
 
 type ImageItem = {
   src: string;
@@ -138,11 +139,12 @@ export default function Slideshow({ images, title, exif }: Props) {
             className="flex flex-col items-center gap-3 max-h-full"
           >
             <Zoom>
-              <img
+              <ResponsiveImg
                 src={img.src}
                 alt={img.alt || title}
                 className="max-h-[calc(100vh-180px)] max-w-full object-contain"
                 loading="eager"
+                sizes="100vw"
               />
             </Zoom>
             {img.caption && (

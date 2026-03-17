@@ -1,0 +1,38 @@
+---
+import { getResponsiveVariants } from "@/lib/responsive-image";
+
+type Props = {
+  src: string;
+  alt: string;
+  class?: string;
+  loading?: "lazy" | "eager";
+  decoding?: "async" | "sync" | "auto";
+  sizes?: string;
+  style?: Record<string, string>;
+};
+
+const {
+  src,
+  alt,
+  class: className,
+  loading = "lazy",
+  decoding = "async",
+  sizes = "(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px",
+  style,
+} = Astro.props;
+
+const { srcsetWebp, srcsetJpeg, fallbackSrc } = getResponsiveVariants(src);
+---
+
+<picture>
+  <source type="image/webp" srcset={srcsetWebp} sizes={sizes} />
+  <source type="image/jpeg" srcset={srcsetJpeg} sizes={sizes} />
+  <img
+    src={fallbackSrc}
+    alt={alt}
+    class={className}
+    loading={loading}
+    decoding={decoding}
+    style={style}
+  />
+</picture>

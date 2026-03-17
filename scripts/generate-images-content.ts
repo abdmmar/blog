@@ -64,7 +64,7 @@ const generateMdxContent = ({
   shutterspeed,
   lens,
   aperture,
-  path,
+  path: imgPath,
 }: {
   id: string;
   date: string;
@@ -75,7 +75,7 @@ const generateMdxContent = ({
   path: string;
 }) => `---
 id: "${id}"
-filepath: "${path}"
+filepath: "${imgPath}"
 title: "Unknown"
 alt: ""
 date: "${date}"
@@ -95,7 +95,12 @@ const processImages = async () => {
 
     const images = fs
       .readdirSync(dirPath)
-      .filter((file) => /\.(webp|png|jpg|jpeg)$/i.test(file));
+      .filter((file) => {
+        if (!/\.(webp|png|jpg|jpeg)$/i.test(file)) return false;
+        // Skip generated variants — only process original files
+        const stem = path.parse(file).name;
+        return !/_(?:sm|md|lg|resized)$/.test(stem);
+      });
 
     for (const image of images) {
       const imagePath = path.join(dirPath, image);
@@ -109,6 +114,14 @@ const processImages = async () => {
 
       const { date, iso, shutterspeed, aperture, lens } =
         await getExifData(imagePath);
+
+      // Reference the _lg.jpg variant as the main filepath (local relative path)
+      const lgPath = path.join(
+        path.dirname(imagePath),
+        `${filename}_lg.jpg`,
+      );
+      const relativePath = lgPath.replace("src/", "../../");
+
       const mdxContent = generateMdxContent({
         id: filename,
         date,
@@ -116,7 +129,7 @@ const processImages = async () => {
         shutterspeed,
         aperture,
         lens,
-        path: imagePath.replace("src/", "../../"),
+        path: relativePath,
       });
       fs.writeFileSync(outputFilePath, mdxContent);
       console.log(`Generated: ${outputFilePath}`);

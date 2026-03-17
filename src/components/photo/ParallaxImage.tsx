@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ResponsiveImg from "./ResponsiveImg";
 
 type Props = {
   src: string;
@@ -41,11 +42,10 @@ export default function ParallaxImage({
           overflow: "hidden",
         }}
       >
-        <img
+        <ResponsiveImg
           src={src}
           alt={alt}
-          loading="lazy"
-          decoding="async"
+          sizes="100vw"
           style={{
             position: "absolute",
             inset: 0,

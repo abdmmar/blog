@@ -2,6 +2,7 @@
 import Footer from "@/components/Footer.astro";
 import { ArrowLeft, ArrowRight } from "@/components/icons";
 import FootnotesSidebar from "@/components/photo/FootnotesSidebar.tsx";
+import ResponsiveImage from "@/components/photo/ResponsiveImage.astro";
 import type { MarkdownHeading } from "astro";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
@@ -81,11 +82,11 @@ const jsonLd = JSON.stringify({
 
   <!-- Hero: full-viewport cover image with title overlay -->
   <header class="journal-hero relative w-screen h-screen -mt-10 -mx-10 sm:-mt-5 sm:-mx-5">
-    <img
+    <ResponsiveImage
       src={coverImage}
       alt={title}
       loading="eager"
-      decoding="async"
+      sizes="100vw"
       class="absolute inset-0 w-full h-full object-cover"
     />
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />

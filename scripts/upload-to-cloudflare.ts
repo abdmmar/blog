@@ -7,6 +7,7 @@ dotenv.config();
 
 const MANIFEST_PATH = "scripts/cloudflare-images-manifest.json";
 const CONTENT_DIR = "src/content/photo";
+const IMAGE_DIR = "src/assets/photo";
 
 interface ManifestEntry {
   key: string;
@@ -20,6 +21,23 @@ const CONTENT_TYPES: Record<string, string> = {
   jpeg: "image/jpeg",
   png: "image/png",
   webp: "image/webp",
+};
+
+/**
+ * Find all responsive image variants (_sm, _md, _lg in .jpg and .webp)
+ * in the image directory that haven't been uploaded yet.
+ */
+const findVariants = (dir: string): string[] => {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  return entries.flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return findVariants(full);
+    if (!/\.(jpg|jpeg|png|webp)$/i.test(entry.name)) return [];
+    // Only include responsive variants
+    const stem = path.parse(entry.name).name;
+    if (/_(?:sm|md|lg)$/.test(stem)) return [full];
+    return [];
+  });
 };
 
 const run = async () => {
@@ -46,11 +64,43 @@ const run = async () => {
     fs.readFileSync(MANIFEST_PATH, "utf-8"),
   );
 
+  let changed = false;
+
+  // 1. Upload all responsive variants from the image directory
+  const variants = findVariants(IMAGE_DIR);
+  console.log(`Found ${variants.length} responsive variant(s) to check`);
+
+  for (const variantPath of variants) {
+    const filename = path.basename(variantPath);
+    const stem = path.parse(filename).name;
+
+    if (manifest[stem]) {
+      continue; // Already uploaded
+    }
+
+    const ext = path.extname(filename).slice(1).toLowerCase();
+    const contentType = CONTENT_TYPES[ext] ?? "application/octet-stream";
+
+    console.log(`Uploading ${filename}...`);
+    await client.send(
+      new PutObjectCommand({
+        Bucket: bucketName,
+        Key: filename,
+        Body: fs.readFileSync(variantPath),
+        ContentType: contentType,
+      }),
+    );
+
+    const entry = { key: filename, url: `${publicUrl}/${filename}` };
+    manifest[stem] = entry;
+    changed = true;
+    console.log(`Uploaded ${filename} → ${entry.url}`);
+  }
+
+  // 2. Update MDX content files to point to R2 URLs (using _lg.jpg as main filepath)
   const mdxFiles = fs
     .readdirSync(CONTENT_DIR)
     .filter((f) => f.endsWith(".mdx"));
-
-  let changed = false;
 
   for (const mdxFile of mdxFiles) {
     const mdxPath = path.join(CONTENT_DIR, mdxFile);
@@ -64,42 +114,22 @@ const run = async () => {
 
     const filepath = filepathMatch[1];
 
+    // Skip if already pointing to a cloud URL
     if (!filepath.startsWith("../../")) {
       console.log(`Skipping ${mdxFile}: already uploaded (${filepath})`);
       continue;
     }
 
-    const stem = path.parse(filepath).name;
-    let entry = manifest[stem];
+    // Derive the _lg stem from the local path
+    const originalStem = path.parse(filepath).name;
+    // Remove _resized suffix if present to get the base stem
+    const baseStem = originalStem.replace(/_resized$/, "");
+    const lgStem = `${baseStem}_lg`;
+    const entry = manifest[lgStem];
 
     if (!entry) {
-      const localPath = path.resolve(CONTENT_DIR, filepath);
-
-      if (!fs.existsSync(localPath)) {
-        console.error(`File not found: ${localPath} (referenced in ${mdxFile})`);
-        continue;
-      }
-
-      const filename = path.basename(localPath);
-      const ext = path.extname(filename).slice(1).toLowerCase();
-      const contentType = CONTENT_TYPES[ext] ?? "application/octet-stream";
-
-      console.log(`Uploading ${filename}...`);
-      await client.send(
-        new PutObjectCommand({
-          Bucket: bucketName,
-          Key: filename,
-          Body: fs.readFileSync(localPath),
-          ContentType: contentType,
-        }),
-      );
-
-      entry = { key: filename, url: `${publicUrl}/${filename}` };
-      manifest[stem] = entry;
-      changed = true;
-      console.log(`Uploaded ${filename} → ${entry.url}`);
-    } else {
-      console.log(`Found in manifest: ${stem}`);
+      console.error(`No manifest entry for ${lgStem} (referenced in ${mdxFile})`);
+      continue;
     }
 
     const updated = content.replace(
