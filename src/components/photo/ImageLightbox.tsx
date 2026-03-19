@@ -2,26 +2,47 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
-import ImageLightbox, { type LightboxImage } from "./ImageLightbox";
 import ResponsiveImg from "./ResponsiveImg";
 
-type ExifData = {
-  iso?: string;
-  shutterspeed?: string;
-  aperture?: string;
-  lens?: string;
-  author?: string;
+export type LightboxImage = {
+  src: string;
+  alt?: string;
+  caption?: string;
 };
 
 type Props = {
   images: LightboxImage[];
-  title: string;
-  exif?: ExifData;
+  initialIndex?: number;
+  open: boolean;
+  onClose: () => void;
 };
 
-export default function Slideshow({ images, title, exif }: Props) {
-  const [current, setCurrent] = useState(0);
+export default function ImageLightbox({
+  images,
+  initialIndex = 0,
+  open,
+  onClose,
+}: Props) {
+  const [current, setCurrent] = useState(initialIndex);
   const [direction, setDirection] = useState(0);
+
+  // Reset to initialIndex when modal opens
+  useEffect(() => {
+    if (open) {
+      setCurrent(initialIndex);
+      setDirection(0);
+    }
+  }, [open, initialIndex]);
+
+  // Lock body scroll when open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }
+  }, [open]);
 
   const goNext = useCallback(() => {
     if (current < images.length - 1) {
@@ -37,19 +58,18 @@ export default function Slideshow({ images, title, exif }: Props) {
     }
   }, [current]);
 
-  const goBack = useCallback(() => {
-    window.location.href = "/photo";
-  }, []);
-
   useEffect(() => {
+    if (!open) return;
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") goNext();
       else if (e.key === "ArrowLeft") goPrev();
-      else if (e.key === "Escape") goBack();
+      else if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [goNext, goPrev, goBack]);
+  }, [open, goNext, goPrev, onClose]);
+
+  if (!open || images.length === 0) return null;
 
   const img = images[current];
 
@@ -66,13 +86,22 @@ export default function Slideshow({ images, title, exif }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black flex flex-col z-50">
+    <div
+      className="fixed inset-0 bg-black/95 flex flex-col z-50"
+      onClick={(e) => {
+        // Close when clicking the backdrop (not image/buttons)
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       {/* Top bar */}
       <div className="flex items-center justify-between px-6 py-4 text-white/80">
+        <span className="text-sm tabular-nums">
+          {images.length > 1 ? `${current + 1} / ${images.length}` : ""}
+        </span>
         <button
-          onClick={goBack}
-          className="flex items-center gap-2 hover:text-white transition-colors"
-          aria-label="Back to gallery"
+          onClick={onClose}
+          className="p-1 hover:text-white transition-colors"
+          aria-label="Close lightbox"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -80,24 +109,24 @@ export default function Slideshow({ images, title, exif }: Props) {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-5 h-5"
+            className="w-6 h-6"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-          <span className="text-sm">Back</span>
         </button>
-        <span className="text-sm font-medium">{title}</span>
-        <span className="text-sm tabular-nums">
-          {images.length > 1 ? `${current + 1} / ${images.length}` : ""}
-        </span>
       </div>
 
       {/* Image area */}
-      <div className="flex-1 relative flex items-center justify-center overflow-hidden px-16 sm:px-4">
+      <div
+        className="flex-1 relative flex items-center justify-center overflow-hidden px-16 sm:px-4"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
         {/* Prev button */}
         {current > 0 && (
           <button
@@ -136,14 +165,16 @@ export default function Slideshow({ images, title, exif }: Props) {
             <Zoom>
               <ResponsiveImg
                 src={img.src}
-                alt={img.alt || title}
-                className="max-h-[calc(100vh-180px)] max-w-full object-contain"
+                alt={img.alt || ""}
+                className="max-h-[calc(100vh-160px)] max-w-full object-contain"
                 loading="eager"
                 sizes="100vw"
               />
             </Zoom>
             {img.caption && (
-              <p className="text-white/60 text-sm text-center">{img.caption}</p>
+              <p className="text-white/60 text-sm text-center max-w-[70ch] px-4">
+                {img.caption}
+              </p>
             )}
           </motion.div>
         </AnimatePresence>
@@ -172,16 +203,6 @@ export default function Slideshow({ images, title, exif }: Props) {
           </button>
         )}
       </div>
-
-      {/* EXIF metadata panel */}
-      {exif && (exif.iso || exif.aperture || exif.shutterspeed || exif.lens) && (
-        <div className="px-6 py-3 flex items-center justify-center gap-6 text-white/50 text-xs">
-          {exif.lens && <span>{exif.lens}</span>}
-          {exif.aperture && <span>{exif.aperture}</span>}
-          {exif.shutterspeed && <span>{exif.shutterspeed}</span>}
-          {exif.iso && <span>ISO {exif.iso}</span>}
-        </div>
-      )}
     </div>
   );
 }

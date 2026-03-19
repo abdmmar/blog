@@ -2,6 +2,7 @@
 import Footer from "@/components/Footer.astro";
 import { ArrowLeft, ArrowRight } from "@/components/icons";
 import FootnotesSidebar from "@/components/photo/FootnotesSidebar.tsx";
+import JournalLightbox from "@/components/photo/JournalLightbox.tsx";
 import ResponsiveImage from "@/components/photo/ResponsiveImage.astro";
 import type { MarkdownHeading } from "astro";
 import type { CollectionEntry } from "astro:content";
@@ -121,6 +122,9 @@ const jsonLd = JSON.stringify({
       <slot />
     </div>
   </article>
+
+  <!-- Image lightbox for journal content -->
+  <JournalLightbox client:load />
 
   <!-- Mobile footnotes -->
   <div class="journal-body mt-16 sm:block hidden">
