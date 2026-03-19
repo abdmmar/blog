@@ -12,7 +12,12 @@ type Props = {
 const { src, alt, caption, credit, layout = "content" } = Astro.props;
 ---
 
-<figure class:list={[layout === "full" ? "fullwidth-breakout" : "max-w-[70ch]"]}>
+<figure
+  class:list={[layout === "full" ? "fullwidth-breakout" : "max-w-[70ch]"]}
+  data-lightbox-src={src}
+  data-lightbox-alt={alt}
+  data-lightbox-caption={caption || undefined}
+>
   {layout === "full" ? (
     <ResponsiveImage
       src={src}

@@ -32,6 +32,8 @@ export default function ParallaxImage({
     <div
       className="parallax-breakout parallax-stack-wrapper"
       style={{ height }}
+      data-lightbox-src={src}
+      data-lightbox-alt={alt}
     >
       <div
         className="parallax-stack-sticky"

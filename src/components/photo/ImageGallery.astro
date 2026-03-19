@@ -32,7 +32,11 @@ const sizesMap = {
   <div class={`grid ${gridClass} gap-2`}>
     {
       images.map((img) => (
-        <figure>
+        <figure
+          data-lightbox-src={img.src}
+          data-lightbox-alt={img.alt || undefined}
+          data-lightbox-caption={img.caption || undefined}
+        >
           <ResponsiveImage
             src={img.src}
             alt={img.alt || ""}

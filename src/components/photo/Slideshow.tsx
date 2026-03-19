@@ -1,14 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
-import Zoom from "react-medium-image-zoom";
-import "react-medium-image-zoom/dist/styles.css";
-import ResponsiveImg from "./ResponsiveImg";
-
-type ImageItem = {
-  src: string;
-  alt?: string;
-  caption?: string;
-};
+import ImageViewer, { type LightboxImage } from "./ImageViewer";
 
 type ExifData = {
   iso?: string;
@@ -19,28 +10,21 @@ type ExifData = {
 };
 
 type Props = {
-  images: ImageItem[];
+  images: LightboxImage[];
   title: string;
   exif?: ExifData;
 };
 
 export default function Slideshow({ images, title, exif }: Props) {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(0);
 
   const goNext = useCallback(() => {
-    if (current < images.length - 1) {
-      setDirection(1);
-      setCurrent((c) => c + 1);
-    }
-  }, [current, images.length]);
+    setCurrent((c) => Math.min(c + 1, images.length - 1));
+  }, [images.length]);
 
   const goPrev = useCallback(() => {
-    if (current > 0) {
-      setDirection(-1);
-      setCurrent((c) => c - 1);
-    }
-  }, [current]);
+    setCurrent((c) => Math.max(c - 1, 0));
+  }, []);
 
   const goBack = useCallback(() => {
     window.location.href = "/photo";
@@ -55,20 +39,6 @@ export default function Slideshow({ images, title, exif }: Props) {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [goNext, goPrev, goBack]);
-
-  const img = images[current];
-
-  const variants = {
-    enter: (dir: number) => ({
-      x: dir > 0 ? 100 : -100,
-      opacity: 0,
-    }),
-    center: { x: 0, opacity: 1 },
-    exit: (dir: number) => ({
-      x: dir < 0 ? 100 : -100,
-      opacity: 0,
-    }),
-  };
 
   return (
     <div className="fixed inset-0 bg-black flex flex-col z-50">
@@ -101,82 +71,14 @@ export default function Slideshow({ images, title, exif }: Props) {
         </span>
       </div>
 
-      {/* Image area */}
-      <div className="flex-1 relative flex items-center justify-center overflow-hidden px-16 sm:px-4">
-        {/* Prev button */}
-        {current > 0 && (
-          <button
-            onClick={goPrev}
-            className="absolute left-4 z-10 p-2 text-white/50 hover:text-white transition-colors"
-            aria-label="Previous image"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-8 h-8"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
-          </button>
-        )}
-
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={current}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-3 max-h-full"
-          >
-            <Zoom>
-              <ResponsiveImg
-                src={img.src}
-                alt={img.alt || title}
-                className="max-h-[calc(100vh-180px)] max-w-full object-contain"
-                loading="eager"
-                sizes="100vw"
-              />
-            </Zoom>
-            {img.caption && (
-              <p className="text-white/60 text-sm text-center">{img.caption}</p>
-            )}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Next button */}
-        {current < images.length - 1 && (
-          <button
-            onClick={goNext}
-            className="absolute right-4 z-10 p-2 text-white/50 hover:text-white transition-colors"
-            aria-label="Next image"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-8 h-8"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </button>
-        )}
-      </div>
+      {/* Shared image viewer */}
+      <ImageViewer
+        images={images}
+        current={current}
+        onPrev={goPrev}
+        onNext={goNext}
+        fallbackAlt={title}
+      />
 
       {/* EXIF metadata panel */}
       {exif && (exif.iso || exif.aperture || exif.shutterspeed || exif.lens) && (
