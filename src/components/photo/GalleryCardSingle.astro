@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ResponsiveImage from "./ResponsiveImage.astro";
+
+type Props = {
+  entry: CollectionEntry<"photoGallery"> & { data: { type: "single" } };
+};
+
+const { entry } = Astro.props;
+const { data } = entry;
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<div class="flex flex-col gap-2">
+  <div class="overflow-hidden">
+    <ResponsiveImage
+      src={data.coverImage}
+      alt={data.alt || data.title}
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+      class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+    />
+  </div>
+  <div class="flex flex-row flex-wrap justify-between gap-1 items-center">
+    <strong class="font-semibold text-sm text-gray-900 dark:text-gray-100">
+      {data.title}
+    </strong>
+    <span class="text-xs text-gray-500 dark:text-gray-400">
+      {dateFormatter.format(data.date)}
+    </span>
+  </div>
+</div>

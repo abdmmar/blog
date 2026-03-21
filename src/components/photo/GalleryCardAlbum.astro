@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ResponsiveImage from "./ResponsiveImage.astro";
+
+type Props = {
+  entry: CollectionEntry<"photoGallery"> & { data: { type: "album" } };
+};
+
+const { entry } = Astro.props;
+const { data } = entry;
+
+const previewImages = data.images;
+const count = previewImages.length;
+---
+
+<div class="flex flex-col gap-2">
+  <div class="overflow-hidden aspect-square">
+    {count === 1 && (
+      <ResponsiveImage
+        src={previewImages[0].src}
+        alt={previewImages[0].alt || ""}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+    )}
+
+    {count === 2 && (
+      <div class="grid grid-cols-2 gap-0.5 h-full transition-transform duration-300 group-hover:scale-105">
+        {previewImages.slice(0, 2).map((img) => (
+          <ResponsiveImage
+            src={img.src}
+            alt={img.alt || ""}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 12.5vw"
+            class="w-full h-full object-cover"
+          />
+        ))}
+      </div>
+    )}
+
+    {count === 3 && (
+      <div class="grid grid-cols-2 grid-rows-2 gap-0.5 h-full transition-transform duration-300 group-hover:scale-105">
+        <ResponsiveImage
+          src={previewImages[0].src}
+          alt={previewImages[0].alt || ""}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 12.5vw"
+          class="w-full h-full object-cover"
+        />
+        <ResponsiveImage
+          src={previewImages[2].src}
+          alt={previewImages[2].alt || ""}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 12.5vw"
+          class="row-span-2 w-full h-full object-cover"
+        />
+        <ResponsiveImage
+          src={previewImages[1].src}
+          alt={previewImages[1].alt || ""}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 12.5vw"
+          class="w-full h-full object-cover"
+        />
+      </div>
+    )}
+
+    {count >= 4 && (
+      <div class="grid grid-cols-2 grid-rows-2 gap-0.5 h-full transition-transform duration-300 group-hover:scale-105">
+        {previewImages.slice(0, 4).map((img) => (
+          <ResponsiveImage
+            src={img.src}
+            alt={img.alt || ""}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 12.5vw"
+            class="w-full h-full object-cover"
+          />
+        ))}
+      </div>
+    )}
+  </div>
+  <div class="flex flex-row flex-wrap justify-between gap-1 items-center">
+    <strong class="font-semibold text-sm text-gray-900 dark:text-gray-100">
+      {data.title}
+    </strong>
+    <span class="text-xs text-gray-500 dark:text-gray-400">
+      {data.images.length} Photos
+    </span>
+  </div>
+</div>

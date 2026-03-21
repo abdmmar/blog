@@ -24,7 +24,7 @@ const {
 const { srcsetWebp, srcsetJpeg, fallbackSrc } = getResponsiveVariants(src);
 ---
 
-<picture>
+<picture class="block">
   <source type="image/webp" srcset={srcsetWebp} sizes={sizes} />
   <source type="image/jpeg" srcset={srcsetJpeg} sizes={sizes} />
   <img
