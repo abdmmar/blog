@@ -31,7 +31,7 @@ const processImage = async (filePath: string) => {
   const stem = path.basename(filePath, ext);
 
   // Skip already-processed files
-  if (/_(?:sm|md|lg|resized)$/.test(stem)) {
+  if (/_(?:sm|md|lg)$/.test(stem)) {
     return;
   }
 
@@ -80,7 +80,7 @@ const findOriginalImages = (dir: string): string[] => {
     if (!/\.(jpg|jpeg|png|webp)$/i.test(entry.name)) return [];
     // Skip generated variants
     const stem = path.parse(entry.name).name;
-    if (/_(?:sm|md|lg|resized)$/.test(stem)) return [];
+    if (/_(?:sm|md|lg)$/.test(stem)) return [];
     return [full];
   });
 };

@@ -72,9 +72,8 @@ const run = async () => {
 
   for (const variantPath of variants) {
     const filename = path.basename(variantPath);
-    const stem = path.parse(filename).name;
 
-    if (manifest[stem]) {
+    if (manifest[filename]) {
       continue; // Already uploaded
     }
 
@@ -92,7 +91,7 @@ const run = async () => {
     );
 
     const entry = { key: filename, url: `${publicUrl}/${filename}` };
-    manifest[stem] = entry;
+    manifest[filename] = entry;
     changed = true;
     console.log(`Uploaded ${filename} → ${entry.url}`);
   }
@@ -124,11 +123,11 @@ const run = async () => {
     const originalStem = path.parse(filepath).name;
     // Remove _resized suffix if present to get the base stem
     const baseStem = originalStem.replace(/_resized$/, "");
-    const lgStem = `${baseStem}_lg`;
-    const entry = manifest[lgStem];
+    const lgFilename = `${baseStem}_lg.jpg`;
+    const entry = manifest[lgFilename];
 
     if (!entry) {
-      console.error(`No manifest entry for ${lgStem} (referenced in ${mdxFile})`);
+      console.error(`No manifest entry for ${lgFilename} (referenced in ${mdxFile})`);
       continue;
     }
 
